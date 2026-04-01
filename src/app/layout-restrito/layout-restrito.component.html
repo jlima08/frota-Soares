@@ -1,0 +1,20 @@
+<app-topbar (toggleSidebar)="toggleSidebar()"></app-topbar>
+
+<div class="layout">
+  <div 
+    class="overlay" 
+    *ngIf="sidebarOpen"
+    (click)="toggleSidebar()">
+  </div>
+
+  <app-sidebar  [open]="sidebarOpen"
+  [class.open]="sidebarOpen"></app-sidebar>
+
+  <main >
+    <div>
+      <router-outlet></router-outlet>
+    </div>
+    <app-footer></app-footer>
+  </main>
+
+</div>

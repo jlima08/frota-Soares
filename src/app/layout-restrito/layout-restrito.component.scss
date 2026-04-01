@@ -1,0 +1,77 @@
+.layout {
+     display: flex;
+  
+  height: calc(100dvh - 72px);
+}
+// app-topbar {
+//     position: fixed;
+//     z-index: 1000;
+//     width: 100%;
+//     }
+
+main {
+    
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    overflow: auto;
+
+    div {
+        width: 100%;
+        flex: 1;
+        padding: 12px;
+        background-color: #f1f1f1;
+    }
+
+    router-outlet {
+        width: 100%;
+    }
+
+    app-footer {
+        width: 100%;
+    }
+    
+}
+
+/* SIDEBAR BASE */
+app-sidebar {
+    width: 240px;
+    height: calc(100dvh - 72px);
+    transition: all 0.3s ease;
+    background: white;
+    
+    
+}
+
+/* DESKTOP */
+@media (min-width: 768px) {
+    app-sidebar {
+        position: relative;
+        transform: translateX(0);
+    }
+
+    .overlay {
+        display: none;
+    }
+}
+
+/* MOBILE */
+@media (max-width: 767px) {
+    app-sidebar {
+        position: fixed;
+        top: 72px;
+        left: 0;
+        height: 100%;
+        width: 240px;
+        transform: translateX(-100%);
+        transition: transform 0.3s ease;
+        background: white;
+        z-index: 1000;
+    }
+
+    app-sidebar.open {
+        transform: translateX(0);
+    }
+
+
+}
