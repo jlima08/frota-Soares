@@ -1,10 +1,11 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { CardModule } from 'primeng/card';
 import { ButtonModule } from 'primeng/button';
 import { ToastModule } from 'primeng/toast';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { CommonModule } from '@angular/common';
+import { VeiculoService } from '../../service/veiculo.service';
 
 interface Carro {
   id: number;
@@ -29,26 +30,9 @@ interface Carro {
   providers: [ConfirmationService, MessageService]
 })
 export class VeiculosComponent {
+  public veiculoService = inject(VeiculoService);
 
 
-  carros: Carro[] = [
-    {
-      id: 1, modelo: 'Gol bolinha', ano: '2000', placa: 'OVG2441', cor: 'Prata'
-    },
-    {
-      id: 2, modelo: 'Gol g4', ano: '2001', placa: 'OVG2441', cor: 'Prata'
-    },
-    {
-      id: 3, modelo: 'Strada', ano: '2002', placa: 'OVG2441', cor: 'Branco'
-    },   
-    {
-      id: 3, modelo: 'Strada', ano: '2002', placa: 'OVG2441', cor: 'Branco'
-    },   
-    {
-      id: 3, modelo: 'Strada', ano: '2002', placa: 'OVG2441', cor: 'Branco'
-    },   
-
-  ]
 
    constructor(private confirmationService: ConfirmationService, private messageService: MessageService) {}
 

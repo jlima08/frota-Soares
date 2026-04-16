@@ -26,7 +26,13 @@ export const routes: Routes = [
         loadComponent: () =>
           import('./layout-restrito/motorista/motorista.component')
             .then(m => m.MotoristaComponent)
-      }
+      },
+      {
+        path: 'gerenciar-veiculos',
+        loadComponent: () =>
+          import('./layout-restrito/gerenciar-veiculos/gerenciar-veiculos.component')
+            .then(m => m.GerenciarVeiculosComponent)
+      },
     ]
   }
 

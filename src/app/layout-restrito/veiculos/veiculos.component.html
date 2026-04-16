@@ -13,7 +13,7 @@
 <div class="main">
     
     
-    @for (carro of carros; track carro.id){
+    @for (carro of veiculoService.veiculos(); track carro.id){
         <p-card  >
             
             <ng-template #header>

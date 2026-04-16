@@ -1,0 +1,80 @@
+<app-card-page title="Gerenciar Veiculos" icon="pi-cog">
+    <p-button label="Novo Motorista" severity="contrast" icon="pi pi-plus" cardPageRight (onClick)="showCadastrarVeiculo()" />
+
+     @if (cadastrarVeiculo) {
+    <div class="cadastrarVeiculo">
+        <h2 class=""><i class="pi pi-info-circle"></i> Insira as informações do veiculo para cadastrar.</h2>
+        <form action="">
+            <div>
+                <p-floatlabel>
+                    <input pInputText id="over_label" autocomplete="off" />
+                    <label for="over_label">Modelo</label>
+                </p-floatlabel>
+            </div>
+            <div>
+                <p-floatlabel>
+                    <input pInputText id="over_label" autocomplete="off" />
+                    <label for="over_label">Ano</label>
+                </p-floatlabel>
+            </div>
+            <div>
+                <p-floatlabel>
+                    <input pInputText id="over_label" autocomplete="off" />
+                    <label for="over_label">Placa</label>
+                </p-floatlabel>
+            </div>
+            <div>
+               <p-floatlabel>
+                    <input pInputText id="over_label" autocomplete="off" />
+                    <label for="over_label">Cor</label>
+                </p-floatlabel>
+            </div>
+
+            <div class="btn-form">
+                <p-button icon="pi pi-check" label="Salvar" [loading]="loading" (onClick)="load()" [raised]="true"  ></p-button>
+                <p-button icon="pi pi-times" label="Cancelar" severity="secondary" [raised]="true" ></p-button>
+            </div>
+            
+        </form>
+    </div>
+
+    }
+
+    <div class="card">
+  <p-table [value]="veiculoService.veiculos()" stripedRows [paginator]="true" [rows]="10" [showCurrentPageReport]="true"
+    currentPageReportTemplate="Mostrando {first} a {last} de {totalRecords} veiculos" [rowsPerPageOptions]="[10, 25, 50]"
+     [loading]="loading">
+    <!-- <ng-template pTemplate="caption">
+      
+    </ng-template> -->
+    <ng-template pTemplate="header">
+      <tr>
+          <th pSortableColumn="modelo">Modelo <p-sortIcon field="modelo"></p-sortIcon></th>
+          <th pSortableColumn="ano">Ano <p-sortIcon field="ano"></p-sortIcon></th>
+          <th pSortableColumn="placa">Placa <p-sortIcon field="placa"></p-sortIcon></th>
+          <th pSortableColumn="cor">Cor <p-sortIcon field="cor"></p-sortIcon></th>
+          <th pSortableColumn="id">ID <p-sortIcon field="id"></p-sortIcon></th>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-veiculo>
+      <tr>
+          <td>{{ veiculo.modelo }}</td>
+          <td>{{ veiculo.ano }}</td>
+          <td>{{ veiculo.placa }}</td>
+          <td>{{ veiculo.cor }}</td>
+          <td class="flex gap-2">
+            <p-button severity="info" [rounded]="true"  [raised]="true" [outlined]="true" icon="pi pi-pencil" (click)="editarVeiculo(veiculo)" ></p-button>
+            <p-button severity="danger" [rounded]="true" [outlined]="true" [raised]="true" icon="pi pi-trash" (click)="excluirVeiculo(veiculo.id)" ></p-button>
+          </td>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="emptyMessage">
+      <tr>
+        <td colspan="5">Nenhum veículo encontrado.</td>
+      </tr>
+    </ng-template>
+  </p-table>
+</div>
+
+
+</app-card-page>

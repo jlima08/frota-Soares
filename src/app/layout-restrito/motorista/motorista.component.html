@@ -1,1 +1,66 @@
-<p>motorista works!</p>
+<app-card-page title="Gerenciar Motoristas" icon="pi-user">
+    <p-button label="Novo Motorista" severity="contrast" icon="pi pi-plus" cardPageRight (onClick)="showCadMotorista()" />
+
+     @if (CadMotorista) {
+    <div class="cadastrarMotorista">
+        <h2 class=""><i class="pi pi-info-circle"></i> Insira as informações do motorista para cadastrar.</h2>
+        <form action="">
+            <div>
+                <p-floatlabel>
+                    <input pInputText id="over_label" autocomplete="off" />
+                    <label for="over_label">Nome</label>
+                </p-floatlabel>
+            </div>
+            <div>
+                <p-floatlabel>
+                    <input pInputText id="over_label" autocomplete="off" />
+                    <label for="over_label">Sobrenome</label>
+                </p-floatlabel>
+            </div>
+            <div>
+                <p-floatlabel>
+                    <input pInputText id="over_label" autocomplete="off" />
+                    <label for="over_label">Celular</label>
+                </p-floatlabel>
+            </div>
+            <div>
+               <p-floatlabel>
+                    <input pInputText id="over_label" autocomplete="off" />
+                    <label for="over_label">Cargo</label>
+                </p-floatlabel>
+            </div>
+
+            <div class="btn-form">
+                <p-button icon="pi pi-check" label="Salvar" [loading]="loading" (onClick)="load()" [raised]="true"  ></p-button>
+                <p-button icon="pi pi-times" label="Cancelar" severity="secondary" [raised]="true" ></p-button>
+            </div>
+            
+        </form>
+    </div>
+
+    }
+
+    <div class="listaMotorista">
+        <p-table [value]="motoristaService.motoristas()" stripedRows [paginator]="true" [rows]="5" [tableStyle]="{ 'min-width': '50rem' }"
+            [rowsPerPageOptions]="[5, 10, 20]" [loading]="loading">
+            <ng-template pTemplate="header">
+                <tr>
+                    <th style="width:25%">Nome</th>
+                    <th style="width:25%">Celular</th>
+                    <th style="width:25%">Cargo</th>
+                    <th style="width:25%"></th>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-customer>
+                <tr>
+                    <td>{{ customer.nome }}</td>
+                    <td>{{ customer.celular }}</td>
+                    <td>{{ customer.cargo }}</td>
+                    <td></td>
+                </tr>
+            </ng-template>
+        </p-table>
+
+    </div>
+
+</app-card-page>
