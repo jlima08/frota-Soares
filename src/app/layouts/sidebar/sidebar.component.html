@@ -3,8 +3,10 @@
 
     <div class="links">
         <a routerLinkActive="link-ativo" routerLink="/restrito/veiculos"><i class="pi pi-car"></i> Veículos</a>
-        <a routerLinkActive="link-ativo" routerLink="/restrito/relatorio"><i class="pi pi-file"></i> Relatorios</a>
-        <a routerLinkActive="link-ativo" routerLink="/restrito/motorista"><i class="pi pi-user"></i> Motoristas</a>
-        <a class="text-[15px]" routerLinkActive="link-ativo" routerLink="/restrito/gerenciar-veiculos"><i class="pi pi-cog"></i> Gerenciar Veículos</a>
+        @if (isAdmin()) {
+            <a routerLinkActive="link-ativo" routerLink="/restrito/relatorio"><i class="pi pi-file"></i> Relatórios</a>
+            <a routerLinkActive="link-ativo" routerLink="/restrito/motorista"><i class="pi pi-user"></i> Motoristas</a>
+            <a routerLinkActive="link-ativo" routerLink="/restrito/gerenciar-veiculos"><i class="pi pi-cog"></i> Gerenciar Veículos</a>
+        }
     </div>
 </div>

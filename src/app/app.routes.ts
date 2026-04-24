@@ -5,8 +5,14 @@ import { VeiculosComponent } from './layout-restrito/veiculos/veiculos.component
 export const routes: Routes = [
   {
         path: '',
-        redirectTo: 'restrito',
+        redirectTo: 'login',
         pathMatch: 'full',
+      },
+      {
+        path: 'login',
+        loadComponent: () =>
+          import('./login/login.component')
+            .then(m => m.LoginComponent)
       },
     {
     path: 'restrito',
