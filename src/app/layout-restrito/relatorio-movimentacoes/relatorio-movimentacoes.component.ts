@@ -16,12 +16,14 @@ import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { Auth } from '@angular/fire/auth';
 import { MotoristasService } from '../../service/motoristas.service';
 import { DialogModule } from "primeng/dialog";
+import { FileUploadModule } from "primeng/fileupload";
+import { Textarea, TextareaModule } from "primeng/textarea";
 
 
 
 @Component({
   selector: 'app-relatorio-movimentacoes',
-  imports: [ButtonModule, CommonModule, TableModule, MessageModule, CardPageComponent, TooltipModule, FormsModule, InputTextModule, CommonModule, ToastModule, ConfirmDialogModule, DialogModule],
+  imports: [ButtonModule, CommonModule, TableModule, MessageModule, CardPageComponent, TooltipModule, FormsModule, InputTextModule, CommonModule, ToastModule, ConfirmDialogModule, DialogModule, FileUploadModule, TextareaModule],
   templateUrl: './relatorio-movimentacoes.component.html',
   styleUrl: './relatorio-movimentacoes.component.scss',
   providers: [MessageService, ConfirmationService]
@@ -50,11 +52,62 @@ export class RelatorioMovimentacoesComponent {
   filtroDataRetirada = '';
   filtroDataDevolucao = '';
 
+  //imgs devolução
+  fotoPainelDevolucao?: File;
+fotoFrenteDevolucao?: File;
+fotoTraseiraDevolucao?: File;
+fotoLateralEsquerdaDevolucao?: File;
+fotoLateralDireitaDevolucao?: File;
+
+previewPainelDevolucao = '';
+previewFrenteDevolucao = '';
+previewTraseiraDevolucao = '';
+previewLateralEsquerdaDevolucao = '';
+previewLateralDireitaDevolucao = '';
+
+// imgs comparacao
+modalComparacao = false;
+imagemAntes = '';
+imagemDepois = '';
+tituloComparacao = '';
+
+modalDevolucao = false;
+movimentacaoDevolucao?: Movimentacao;
+observacaoDevolucao = '';
+
   showFiltrosAvancados = false
 
-  abrirObservacao(observacao: string) {
+  movimentacaoSelecionada?:Movimentacao;
 
-  this.observacaoSelecionada = observacao;
+  abrirComparacao(
+
+  titulo: string,
+
+  antes?: string,
+
+  depois?: string
+
+) {
+
+  this.tituloComparacao =
+    titulo;
+
+  this.imagemAntes =
+    antes || '';
+
+  this.imagemDepois =
+    depois || '';
+
+  this.modalComparacao =
+    true;
+}
+
+  abrirObservacao(
+  movimentacao: Movimentacao
+) {
+
+  this.movimentacaoSelecionada =
+    movimentacao;
 
   this.modalObservacao = true;
 }
@@ -214,36 +267,286 @@ limparFiltros() {
     this.movimentacoesOriginais;
 }
 
-confirmarDevolucao(event: Event, mov: Movimentacao) {
-        this.confirmationService.confirm({
-            target: event.target as EventTarget,
-            message: 'Ao devolver o veículo ficará disponível para outro motorista',
-            header: 'Confirmação',
-            closable: true,
-            closeOnEscape: true,
-            icon: 'pi pi-exclamation-triangle',
-            rejectButtonProps: {
-                label: 'Cancelar',
-                severity: 'danger',
-                outlined: true,
-            },
-            acceptButtonProps: {
-                label: 'Devolver',
-                severity: 'info'
-            },
-            accept: () => {
-                this.messageService.add({ severity: 'info', summary: 'Veículo devolvido', detail: 'O veiculo voltarar a ficar disponivel' });
-                this.finalizar(mov);
-            },
-            reject: () => {
-                this.messageService.add({
-                    severity: 'error',
-                    summary: 'Rejected',
-                    detail: 'You have rejected',
-                    life: 3000,
-                });
-            },
-        });
-    }
+abrirDialogDevolucao(
+  mov: Movimentacao
+) {
+
+  this.movimentacaoDevolucao =
+    mov;
+
+  this.modalDevolucao = true;
+}
+
+selecionarImagemDevolucao(
+  event: any,
+  tipo: string
+) {
+
+  const file =
+    event.files[0];
+
+  if (!file) return;
+
+  const preview =
+    URL.createObjectURL(file);
+
+  switch(tipo) {
+
+    case 'painel':
+
+      this.fotoPainelDevolucao =
+        file;
+
+      this.previewPainelDevolucao =
+        preview;
+
+    break;
+
+    case 'frente':
+
+      this.fotoFrenteDevolucao =
+        file;
+
+      this.previewFrenteDevolucao =
+        preview;
+
+    break;
+
+    case 'traseira':
+
+      this.fotoTraseiraDevolucao =
+        file;
+
+      this.previewTraseiraDevolucao =
+        preview;
+
+    break;
+
+    case 'lateralEsquerda':
+
+      this.fotoLateralEsquerdaDevolucao =
+        file;
+
+      this.previewLateralEsquerdaDevolucao =
+        preview;
+
+    break;
+
+    case 'lateralDireita':
+
+      this.fotoLateralDireitaDevolucao =
+        file;
+
+      this.previewLateralDireitaDevolucao =
+        preview;
+
+    break;
+  }
+}
+
+confirmarDevolucaoFinal() {
+
+  if (
+    !this.movimentacaoDevolucao
+  ) return;
+
+  if (
+    !this.fotoPainelDevolucao
+  ) {
+
+    this.messageService.add({
+
+      severity: 'error',
+
+      summary: 'Imagem obrigatória',
+
+      detail:
+        'Adicione a foto do painel'
+    });
+
+    return;
+  }
+
+  Promise.all([
+
+    this.movimentacaoService
+      .uploadImagem(
+        this.fotoPainelDevolucao
+      ),
+
+    this.movimentacaoService
+      .uploadImagem(
+        this.fotoFrenteDevolucao!
+      ),
+
+    this.movimentacaoService
+      .uploadImagem(
+        this.fotoTraseiraDevolucao!
+      ),
+
+    this.movimentacaoService
+      .uploadImagem(
+        this.fotoLateralEsquerdaDevolucao!
+      ),
+
+    this.movimentacaoService
+      .uploadImagem(
+        this.fotoLateralDireitaDevolucao!
+      )
+
+  ])
+
+  .then(([
+
+    urlPainel,
+    urlFrente,
+    urlTraseira,
+    urlLateralEsquerda,
+    urlLateralDireita
+
+  ]) => {
+
+    return this.movimentacaoService
+      .atualizar(
+
+        this.movimentacaoDevolucao!.id!,
+
+        {
+
+          status: 'Finalizado',
+
+          dataDevolucao:
+            new Date().toISOString(),
+
+          observacaoDevolucao:
+            this.observacaoDevolucao,
+
+          fotosDevolucao: {
+
+            painel: urlPainel,
+
+            frente: urlFrente,
+
+            traseira: urlTraseira,
+
+            lateralEsquerda:
+              urlLateralEsquerda,
+
+            lateralDireita:
+              urlLateralDireita
+          }
+        }
+      );
+  })
+
+  .then(() => {
+
+    return this.veiculoService
+      .atualizar(
+
+        this.movimentacaoDevolucao!
+          .veiculoId!,
+
+        {
+          status: 'Ativo'
+        }
+      );
+  })
+
+  .then(() => {
+
+    this.messageService.add({
+
+      severity: 'success',
+
+      summary:
+        'Veículo devolvido'
+    });
+
+    this.resetarDevolucao();
+  })
+
+  .catch(error => {
+
+    console.error(error);
+
+    this.messageService.add({
+
+      severity: 'error',
+
+      summary: 'Erro',
+
+      detail:
+        'Erro ao finalizar devolução'
+    });
+  });
+}
+
+// confirmarDevolucao(event: Event, mov: Movimentacao) {
+//         this.confirmationService.confirm({
+//             target: event.target as EventTarget,
+//             message: 'Ao devolver o veículo ficará disponível para outro motorista',
+//             header: 'Confirmação',
+//             closable: true,
+//             closeOnEscape: true,
+//             icon: 'pi pi-exclamation-triangle',
+//             rejectButtonProps: {
+//                 label: 'Cancelar',
+//                 severity: 'danger',
+//                 outlined: true,
+//             },
+//             acceptButtonProps: {
+//                 label: 'Devolver',
+//                 severity: 'info'
+//             },
+//             accept: () => {
+//                 this.messageService.add({ severity: 'info', summary: 'Veículo devolvido', detail: 'O veiculo voltarar a ficar disponivel' });
+//                 this.finalizar(mov);
+//             },
+//             reject: () => {
+//                 this.messageService.add({
+//                     severity: 'error',
+//                     summary: 'Rejected',
+//                     detail: 'You have rejected',
+//                     life: 3000,
+//                 });
+//             },
+//         });
+//     }
+
+resetarDevolucao() {
+
+  this.modalDevolucao = false;
+
+  this.movimentacaoDevolucao =
+    undefined;
+
+  this.observacaoDevolucao = '';
+
+  this.fotoPainelDevolucao =
+    undefined;
+
+  this.fotoFrenteDevolucao =
+    undefined;
+
+  this.fotoTraseiraDevolucao =
+    undefined;
+
+  this.fotoLateralEsquerdaDevolucao =
+    undefined;
+
+  this.fotoLateralDireitaDevolucao =
+    undefined;
+
+  this.previewPainelDevolucao = '';
+
+  this.previewFrenteDevolucao = '';
+
+  this.previewTraseiraDevolucao = '';
+
+  this.previewLateralEsquerdaDevolucao = '';
+
+  this.previewLateralDireitaDevolucao = '';
+}
 
 }

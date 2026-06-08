@@ -1,20 +1,553 @@
+<!-- modal de detalhes da mov -->
 <p-dialog
-  header="Observação"
+  header="Detalhes da movimentação"
   [(visible)]="modalObservacao"
   [modal]="true"
-  [style]="{ width: '30rem' }">
+  [style]="{ width: '50rem' }">
+  <div class="flex flex-col gap-5">
 
-  <div class="flex flex-col gap-4">
+    <!-- OBSERVAÇÃO -->
+    <div>
+      <p class="font-bold text-lg">
+        Observação
+      </p>
+      <p class="leading-7">
+        {{
+          movimentacaoSelecionada
+            ?.observacao || 'Sem observações'
+        }}
+      </p>
+    </div>
 
-    <!-- <i class="pi pi-file-edit"></i> -->
+    <!-- FOTOS -->
+    <div>
+      <p class="font-bold text-lg mb-3">
+        Fotos da retirada
+      </p>
+      <div class="flex flex-col gap-4">
+        <!-- Painel -->
+        <div>
+          <p class="font-semibold mb-2">
+            Painel
+          </p>
+          <img
+            [src]="
+              movimentacaoSelecionada
+              ?.fotosRetirada?.painel
+            "
+            class="w-full rounded-lg border"
+          />
+        </div>
 
-    <p class="leading-7">
-      {{ observacaoSelecionada }}
+        <!-- Frente -->
+        <div>
+          <p class="font-semibold mb-2">
+            Frente
+          </p>
+          <img
+            [src]="
+              movimentacaoSelecionada
+              ?.fotosRetirada?.frente
+            "
+            class="w-full rounded-lg border"
+          />
+        </div>
+
+        <!-- Traseira -->
+        <div>
+          <p class="font-semibold mb-2">
+            Traseira
+          </p>
+          <img
+            [src]="
+              movimentacaoSelecionada
+              ?.fotosRetirada?.traseira
+            "
+            class="w-full rounded-lg border"
+          />
+        </div>
+
+        <!-- Lateral esquerda -->
+        <div>
+          <p class="font-semibold mb-2">
+            Lateral esquerda
+          </p>
+          <img
+            [src]="
+              movimentacaoSelecionada
+              ?.fotosRetirada
+              ?.lateralEsquerda
+            "
+            class="w-full rounded-lg border"
+          />
+        </div>
+
+        <!-- Lateral direita -->
+        <div>
+          <p class="font-semibold mb-2">
+            Lateral direita
+          </p>
+          <img
+            [src]="
+              movimentacaoSelecionada
+              ?.fotosRetirada
+              ?.lateralDireita
+            "
+            class="w-full rounded-lg border"
+          />
+        </div>
+
+        <div>
+
+  <div class="border-t-2 pt-4">
+
+    <p class="font-bold text-[32px]">
+      Devolução
+    </p>
+
+    <p class="font-bold">
+      Observação
+    </p>
+
+    <p class="leading-7 mb-6">
+
+      {{
+        movimentacaoSelecionada
+        ?.observacaoDevolucao
+        || 'Sem observações'
+      }}
+
     </p>
 
   </div>
 
+  <!-- GRID IMAGENS -->
+
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+
+    <!-- PAINEL -->
+
+    <div>
+
+      <label class="font-bold">
+        Painel
+      </label>
+
+      <img
+        pTooltip="Clicar para ver comparação"
+        [src]="
+          movimentacaoSelecionada
+          ?.fotosDevolucao
+          ?.painel
+        "
+
+        class="w-full rounded-lg border cursor-pointer"
+
+        (click)="
+          abrirComparacao(
+
+            'Painel',
+
+            movimentacaoSelecionada
+            ?.fotosRetirada
+            ?.painel,
+
+            movimentacaoSelecionada
+            ?.fotosDevolucao
+            ?.painel
+          )
+        "
+      />
+    </div>
+
+    <!-- FRENTE -->
+
+    <div>
+
+      <label class="font-bold">
+        Frente
+      </label>
+
+      <img
+        pTooltip="Clicar para ver comparação"
+        [src]="
+          movimentacaoSelecionada
+          ?.fotosDevolucao
+          ?.frente
+        "
+
+        class="w-full rounded-lg border cursor-pointer"
+
+        (click)="
+          abrirComparacao(
+
+            'Frente',
+
+            movimentacaoSelecionada
+            ?.fotosRetirada
+            ?.frente,
+
+            movimentacaoSelecionada
+            ?.fotosDevolucao
+            ?.frente
+          )
+        "
+      />
+    </div>
+
+    <!-- TRASEIRA -->
+
+    <div>
+
+      <label class="font-bold">
+        Traseira
+      </label>
+
+      <img
+      pTooltip="Clicar para ver comparação"
+        [src]="
+          movimentacaoSelecionada
+          ?.fotosDevolucao
+          ?.traseira
+        "
+
+        class="w-full rounded-lg border cursor-pointer"
+
+        (click)="
+          abrirComparacao(
+
+            'Traseira',
+
+            movimentacaoSelecionada
+            ?.fotosRetirada
+            ?.traseira,
+
+            movimentacaoSelecionada
+            ?.fotosDevolucao
+            ?.traseira
+          )
+        "
+      />
+    </div>
+
+    <!-- LATERAL ESQUERDA -->
+
+    <div>
+
+      <label class="font-bold">
+        Lateral esquerda
+      </label>
+
+      <img
+      pTooltip="Clicar para ver comparação"
+        [src]="
+          movimentacaoSelecionada
+          ?.fotosDevolucao
+          ?.lateralEsquerda
+        "
+
+        class="w-full rounded-lg border cursor-pointer"
+
+        (click)="
+          abrirComparacao(
+
+            'Lateral esquerda',
+
+            movimentacaoSelecionada
+            ?.fotosRetirada
+            ?.lateralEsquerda,
+
+            movimentacaoSelecionada
+            ?.fotosDevolucao
+            ?.lateralEsquerda
+          )
+        "
+      />
+    </div>
+
+    <!-- LATERAL DIREITA -->
+
+    <div>
+
+      <label class="font-bold">
+        Lateral direita
+      </label>
+
+      <img
+      pTooltip="Clicar para ver comparação"
+        [src]="
+          movimentacaoSelecionada
+          ?.fotosDevolucao
+          ?.lateralDireita
+        "
+
+        class="w-full rounded-lg border cursor-pointer"
+
+        (click)="
+          abrirComparacao(
+
+            'Lateral direita',
+
+            movimentacaoSelecionada
+            ?.fotosRetirada
+            ?.lateralDireita,
+
+            movimentacaoSelecionada
+            ?.fotosDevolucao
+            ?.lateralDireita
+          )
+        "
+      />
+    </div>
+
+  </div>
+
+</div>
+
+      </div>
+
+    </div>
+
+  </div>
+
 </p-dialog>
+
+<!-- modal de devolução -->
+ <p-dialog
+  header="Devolução do veículo"
+  [(visible)]="modalDevolucao"
+  [modal]="true"
+  [style]="{ width: '50rem' }">
+  <div class="flex flex-col gap-5">
+
+    <!-- OBSERVAÇÃO -->
+    <div class="flex flex-col gap-2">
+      <label class="font-bold">
+        Observações da devolução
+      </label>
+      <textarea
+        pTextarea
+        rows="4"
+        [(ngModel)]="observacaoDevolucao"
+        placeholder="Descreva avarias, combustível, quilometragem...">
+      </textarea>
+    </div>
+
+    <!-- PAINEL -->
+    <div class="flex flex-col gap-2">
+      <label class="font-bold">
+        Foto do painel
+      </label>
+      <p-fileupload
+        accept="image/*"
+        [multiple]="false"
+        [customUpload]="true"
+        chooseLabel="Selecionar foto"
+        cancelLabel="Remover"
+        [showUploadButton]="false"
+        (onSelect)="
+          selecionarImagemDevolucao(
+            $event,
+            'painel'
+          )
+        ">
+      </p-fileupload>
+      @if (previewPainelDevolucao) {
+        <img
+          [src]="previewPainelDevolucao"
+          class="w-full rounded-lg border"
+        />
+      }
+    </div>
+
+    <!-- FRENTE -->
+    <div class="flex flex-col gap-2">
+      <label class="font-bold">
+        Foto da frente
+      </label>
+      <p-fileupload
+        accept="image/*"
+        [multiple]="false"
+        [customUpload]="true"
+        chooseLabel="Selecionar foto"
+        cancelLabel="Remover"
+        [showUploadButton]="false"
+        (onSelect)="
+          selecionarImagemDevolucao(
+            $event,
+            'frente'
+          )
+        ">
+      </p-fileupload>
+      @if (previewFrenteDevolucao) {
+        <img
+          [src]="previewFrenteDevolucao"
+          class="w-full rounded-lg border"/>
+      }
+
+    </div>
+
+    <!-- TRASEIRA -->
+    <div class="flex flex-col gap-2">
+      <label class="font-bold">
+        Foto da traseira
+      </label>
+      <p-fileupload
+        accept="image/*"
+        [multiple]="false"
+        [customUpload]="true"
+        chooseLabel="Selecionar foto"
+        cancelLabel="Remover"
+        [showUploadButton]="false"
+        (onSelect)="
+          selecionarImagemDevolucao(
+            $event,
+            'traseira'
+          )
+        ">
+
+      </p-fileupload>
+      @if (previewTraseiraDevolucao) {
+        <img
+          [src]="previewTraseiraDevolucao"
+          class="w-full rounded-lg border"
+        />
+      }
+
+    </div>
+
+    <!-- LATERAL ESQUERDA -->
+    <div class="flex flex-col gap-2">
+      <label class="font-bold">
+        Lateral esquerda
+      </label>
+      <p-fileupload
+        accept="image/*"
+        [multiple]="false"
+        [customUpload]="true"
+        chooseLabel="Selecionar foto"
+        cancelLabel="Remover"
+        [showUploadButton]="false"
+        (onSelect)="
+          selecionarImagemDevolucao(
+            $event,
+            'lateralEsquerda'
+          )
+        ">
+
+      </p-fileupload>
+      @if (previewLateralEsquerdaDevolucao) {
+        <img
+          [src]="previewLateralEsquerdaDevolucao"
+          class="w-full rounded-lg border"
+        />
+      }
+
+    </div>
+
+    <!-- LATERAL DIREITA -->
+    <div class="flex flex-col gap-2">
+      <label class="font-bold">
+        Lateral direita
+      </label>
+      <p-fileupload
+        accept="image/*"
+        [multiple]="false"
+        [customUpload]="true"
+        chooseLabel="Selecionar foto"
+        cancelLabel="Remover"
+        [showUploadButton]="false"
+        (onSelect)="
+          selecionarImagemDevolucao(
+            $event,
+            'lateralDireita'
+          )
+        ">
+
+      </p-fileupload>
+      @if (previewLateralDireitaDevolucao) {
+        <img
+          [src]="previewLateralDireitaDevolucao"
+          class="w-full rounded-lg border"
+        />
+      }
+    </div>
+
+  </div>
+
+  <ng-template pTemplate="footer">
+    <div class="flex justify-end gap-2">
+      <p-button
+        label="Cancelar"
+        severity="danger"
+        outlined="true"
+        (onClick)="resetarDevolucao()">
+      </p-button>
+
+      <p-button
+        label="Confirmar devolução"
+        severity="info"
+        icon="pi pi-check"
+        (onClick)="confirmarDevolucaoFinal()">
+      </p-button>
+    </div>
+  </ng-template>
+
+</p-dialog>
+
+<!-- modal comparação -->
+ <p-dialog
+
+  [header]="tituloComparacao"
+
+  [(visible)]="modalComparacao"
+
+  [modal]="true"
+
+  [style]="{ width: '70rem' }">
+
+  <div class="grid md:grid-cols-2 grid-cols-1 gap-6">
+
+    <!-- RETIRADA -->
+
+    <div class="flex flex-col gap-3">
+
+      <p class="font-bold text-center">
+
+        Retirada
+
+      </p>
+
+      <img
+
+        [src]="imagemAntes"
+
+        class="w-full rounded-lg border shadow"
+      />
+    </div>
+
+    <!-- DEVOLUÇÃO -->
+
+    <div class="flex flex-col gap-3">
+
+      <p class="font-bold text-center">
+
+        Devolução
+
+      </p>
+
+      <img
+
+        [src]="imagemDepois"
+
+        class="w-full rounded-lg border shadow"
+      />
+    </div>
+
+  </div>
+
+</p-dialog>
+
 <app-card-page title="Relatorios" icon="pi-file">
   <p-toast />
   <p-confirmdialog />
@@ -156,7 +689,7 @@
               icon="pi pi-eye"
               severity="contrast"
               size="small"
-              (onClick)="abrirObservacao(mov.observacao)">
+              (onClick)="abrirObservacao(mov)">
             </p-button>
 
           } @else {
@@ -179,7 +712,7 @@
             severity="success"
             (onClick)="finalizar(mov)">
           </p-button> -->
-          <button class="pButton-sombra-azul pButton-sombra" (click)="confirmarDevolucao($event, mov)">
+          <button class="pButton-sombra-azul pButton-sombra" (click)="abrirDialogDevolucao(mov)">
             <i class="pi pi-check"></i>
             Devolver
           </button>

@@ -6,13 +6,13 @@
     [style]="{ width: '30rem' }">
 
     <div class="flex flex-col gap-4">
-        <p>
+        <div>
             Você ficará responsável pelo veículo:
             <br>
             <b>{{ veiculoSelecionado?.modelo }}</b>
-        </p>
+        </div>
         
-        <label for="">Observação:</label>
+        <label for="">Preencha o campo de Observação e adicione as imagens:</label>
         <textarea
             pInputTextarea
             [(ngModel)]="observacao"
@@ -22,16 +22,100 @@
             placeholder="Digite uma observação">
         </textarea>
 
+        <!-- //foto painel -->
+        <p-fileupload
+            accept="image/*"
+            [multiple]="false"
+            [customUpload]="true"
+            chooseLabel="Painel"
+            cancelLabel="Remover"
+            [showUploadButton]="false"
+            (onSelect)="selecionarImagem($event, 'painel')">
+            </p-fileupload>
+            @if (previewPainel) {
+            <img
+                [src]="previewPainel"
+                class="w-full rounded-lg border"
+            />
+            }
+            <!-- //foto frente -->
+            <p-fileupload
+                accept="image/*"
+                [multiple]="false"
+                [customUpload]="true"
+                chooseLabel="Frente"
+                cancelLabel="Remover"
+                [showUploadButton]="false"
+                (onSelect)="selecionarImagem($event, 'frente')">
+                </p-fileupload>
+                @if (previewFrente) {
+                <img
+                    [src]="previewFrente"
+                    class="w-full rounded-lg border"
+                />
+                }
+            <!-- //foto traseira -->
+            <p-fileupload
+                accept="image/*"
+                [multiple]="false"
+                [customUpload]="true"
+                chooseLabel="Traseira"
+                cancelLabel="Remover"
+                [showUploadButton]="false"
+                (onSelect)="selecionarImagem($event, 'traseira')">
+                </p-fileupload>
+                @if (previewTraseira) {
+                <img
+                    [src]="previewTraseira"
+                    class="w-full rounded-lg border"
+                />
+                }
+            <!-- //foto lateral esquerda -->
+            <p-fileupload
+                accept="image/*"
+                [multiple]="false"
+                [customUpload]="true"
+                chooseLabel="Lateral Esquerda"
+                cancelLabel="Remover"
+                [showUploadButton]="false"
+                (onSelect)="selecionarImagem($event, 'lateralEsquerda')">
+                </p-fileupload>
+                @if (previewLateralEsquerda) {
+                <img
+                    [src]="previewLateralEsquerda"
+                    class="w-full rounded-lg border"
+                />
+                }
+            <!-- //foto lateral direita -->
+            <p-fileupload
+                accept="image/*"
+                [multiple]="false"
+                [customUpload]="true"
+                chooseLabel="Lateral direita"
+                cancelLabel="Remover"
+                [showUploadButton]="false"
+                (onSelect)="selecionarImagem($event, 'lateralDireita')">
+                </p-fileupload>
+                @if (previewLateralDireita) {
+                <img
+                    [src]="previewLateralDireita"
+                    class="w-full rounded-lg border"
+                />
+                }
+
         <div class="flex justify-end gap-2">
 
             <p-button
                 label="Cancelar"
-                severity="secondary"
+                severity="danger"
                 (click)="dialogVisible = false">
             </p-button>
 
             <p-button
                 label="Confirmar"
+                severity="contrast"
+                [loading]="loadingConfirmar"
+                 [disabled]="loadingConfirmar"
                 (click)="confirmarSelecionado()">
             </p-button>
 
@@ -40,12 +124,10 @@
     </div>
 
 </p-dialog>
-<div class="main">
-    
+<div class="main">    
     
     @for (carro of veiculos; track carro.id){
-        <p-card  >
-            
+        <p-card  >            
             <ng-template #header>
                 <!-- <img alt="Card" class="w-full" src="https://primefaces.org/cdn/primeng/images/card-ng.jpg" /> -->
                  <div class="w-full h-[100px] flex justify-center">

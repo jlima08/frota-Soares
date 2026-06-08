@@ -10,12 +10,15 @@ import Aura from '@primeng/themes/aura';
 import { environment } from '../enviroments/environments';
 
 import { routes } from './app.routes';
+import { provideHttpClient } from '@angular/common/http';
+import { getStorage, provideStorage } from '@angular/fire/storage';
 
 export const appConfig: ApplicationConfig = {
   providers: [
     provideZoneChangeDetection({ eventCoalescing: true }),
     provideRouter(routes),
     provideAnimationsAsync(),
+     provideHttpClient(),
     providePrimeNG({
       theme: {
         preset: Aura,
@@ -30,6 +33,10 @@ export const appConfig: ApplicationConfig = {
 
     provideAuth(() => getAuth()),
 
-    provideFirestore(() => getFirestore())
+    provideFirestore(() => getFirestore()),
+
+    provideStorage(() =>
+  getStorage()
+),
   ]
 };

@@ -58,6 +58,11 @@ th{
     background-color: #181818 !important;
     color: #ffffff !important;
 }
+textarea{
+    padding: 6px;
+    border-radius: 8px;
+    border: 1px solid #818181;
+}
 
 @media screen and (max-width: 600px) {
     .filtros{

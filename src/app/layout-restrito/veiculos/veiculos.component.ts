@@ -15,6 +15,9 @@ import { MotoristasService } from '../../service/motoristas.service';
 import { Movimentacao } from '../../interfaces/movimentacao.interface';
 import { FormsModule } from '@angular/forms';
 import { TextareaModule } from 'primeng/textarea';
+import { FileUploadModule } from 'primeng/fileupload';
+import imageCompression
+from 'browser-image-compression';
 
 
 @Component({
@@ -28,7 +31,8 @@ import { TextareaModule } from 'primeng/textarea';
     MessageModule,
     DialogModule,
     FormsModule,
-    TextareaModule
+    TextareaModule,
+    FileUploadModule
   ],
   templateUrl: './veiculos.component.html',
   styleUrl: './veiculos.component.scss',
@@ -47,6 +51,19 @@ export class VeiculosComponent {
   veiculos: Veiculo[] = [];
   usuario: any;
    veiculo = this.veiculoSelecionado;
+
+   //imagens
+   fotoPainel?: File;
+fotoFrente?: File;
+fotoTraseira?: File;
+fotoLateralEsquerda?: File;
+fotoLateralDireita?: File;
+
+previewPainel = '';
+previewFrente = '';
+previewTraseira = '';
+previewLateralEsquerda = '';
+previewLateralDireita = '';
 
  ngOnInit(): void {
 
@@ -82,55 +99,105 @@ export class VeiculosComponent {
     this.dialogVisible = true;
   }
 
+  loadingConfirmar = false;
+
   confirmarSelecionado() {
 
-    const usuario = this.usuario;
+    this.loadingConfirmar = true;
 
-    if (!usuario || !this.veiculoSelecionado) {
-      return;
-    }    
+  const usuario = this.usuario;
 
-   const veiculo =
-  this.veiculoSelecionado;
+  if (!usuario || !this.veiculoSelecionado) {
+    return;
+  }
 
-const movimentacao: Movimentacao = {
+  if (
+    !this.fotoPainel ||
+    !this.fotoFrente ||
+    !this.fotoTraseira ||
+    !this.fotoLateralDireita ||
+    !this.fotoLateralEsquerda
+  ) {
 
-  motoristaId: usuario.id,
+    this.messageService.add({
 
-  motoristaNome:
-    usuario.nome + ' ' + usuario.sobrenome,
+      severity: 'error',
 
-  veiculoId:
-    veiculo.id!,
+      summary: 'Fotos obrigatórias',
 
-  modelo:
-    veiculo.modelo,
+      detail:
+        'Adicione as fotos do veículo'
+    });
 
-  placa:
-    veiculo.placa,
+    this.loadingConfirmar = false;
+    return;
 
-  observacao:
-    this.observacao,
+  }
 
-  dataRetirada:
-    new Date().toISOString(),
+  const veiculo =
+    this.veiculoSelecionado;
 
-  dataDevolucao: '',
+  // 🚀 PASSO 8 AQUI
+  Promise.all([
 
-  status: 'Em uso'
-};
+    this.movimentacaoService.uploadImagem(this.fotoPainel),
+    this.movimentacaoService.uploadImagem(this.fotoFrente),
+    this.movimentacaoService.uploadImagem(this.fotoTraseira),
+    this.movimentacaoService.uploadImagem(this.fotoLateralDireita),
+    this.movimentacaoService.uploadImagem(this.fotoLateralEsquerda),
 
-this.movimentacaoService
-  .cadastrar(movimentacao)
+
+  ])
+
+  .then(([
+    urlPainel,
+    urlFrente,
+    urlTraseira,
+    urlLateralDireita,
+    urlLateralEsquerda
+  ]) => {
+
+    // 🚀 AGORA cria movimentação
+    const movimentacao: Movimentacao = {
+
+      motoristaId: usuario.id,
+
+      motoristaNome: usuario.nome + ' ' + usuario.sobrenome,
+
+      veiculoId: veiculo.id!,
+
+      modelo: veiculo.modelo,
+
+      placa: veiculo.placa,
+
+      observacao: this.observacao,
+
+      dataRetirada: new Date().toISOString(),
+
+      dataDevolucao: '',
+      status: 'Em uso',
+      fotosRetirada: {
+        painel: urlPainel,
+        frente: urlFrente,
+        traseira: urlTraseira,
+        lateralDireita: urlLateralDireita,
+        lateralEsquerda:urlLateralEsquerda
+      }
+    };
+
+    return this.movimentacaoService
+      .cadastrar(movimentacao);
+  })
 
   .then(() => {
 
-    return this.veiculoService.atualizar(
-      veiculo.id!,
-      {
-        status: 'Em uso'
-      }
-    );
+    return this.veiculoService
+      .atualizar(
+        veiculo.id!,
+        {
+          status: 'Em uso'
+        }
+      );
   })
 
   .then(() => {
@@ -139,43 +206,142 @@ this.movimentacaoService
 
       severity: 'success',
 
-      summary: 'Veículo selecionado',
+      summary:
+        'Veículo selecionado',
 
-      detail: 'Movimentação registrada'
+      detail:
+        'Movimentação registrada'
     });
 
     this.dialogVisible = false;
 
     this.observacao = '';
-  });
-  }
+    this.loadingConfirmar = false;
+  })
 
-  confirmarCar(carros: Veiculo) {
-    this.confirmationService.confirm({
-      header: 'Confirmação',
-      message: `Ao confirmar você ficará responsável pelo ${carros.modelo}`,
-      icon: 'pi pi-exclamation-circle',
-      rejectButtonProps: {
-        label: 'Cancelar',
-        icon: 'pi pi-times',
-        outlined: true,
-        size: 'small',
-        severity: 'danger'
-      },
-      acceptButtonProps: {
-        label: 'Selecionar',
-        icon: 'pi pi-check',
-        size: 'small'
-      },
-      accept: () => {
-        this.messageService.add({ severity: 'info', summary: 'Confirmed', detail: 'You have accepted', life: 3000 });
-        console.log('Carro selecionado:', carros);
-      },
-      reject: () => {
-        this.messageService.add({ severity: 'error', summary: 'Rejected', detail: 'You have rejected', life: 3000 });
-      }
+  .catch(error => {
+
+    console.error(error);
+
+    this.loadingConfirmar = false;
+
+    this.messageService.add({
+
+      severity: 'error',
+
+      summary: 'Erro',
+
+      detail:
+        'Erro ao enviar imagens'
     });
+  });
+}
+
+  // confirmarCar(carros: Veiculo) {
+  //   this.confirmationService.confirm({
+  //     header: 'Confirmação',
+  //     message: `Ao confirmar você ficará responsável pelo ${carros.modelo}`,
+  //     icon: 'pi pi-exclamation-circle',
+  //     rejectButtonProps: {
+  //       label: 'Cancelar',
+  //       icon: 'pi pi-times',
+  //       outlined: true,
+  //       size: 'small',
+  //       severity: 'danger'
+  //     },
+  //     acceptButtonProps: {
+  //       label: 'Selecionar',
+  //       icon: 'pi pi-check',
+  //       size: 'small'
+  //     },
+  //     accept: () => {
+  //       this.messageService.add({ severity: 'info', summary: 'Confirmed', detail: 'You have accepted', life: 3000 });
+  //       console.log('Carro selecionado:', carros);
+  //     },
+  //     reject: () => {
+  //       this.messageService.add({ severity: 'error', summary: 'Rejected', detail: 'You have rejected', life: 3000 });
+  //     }
+  //   });
+  // }
+
+  async selecionarImagem(
+  event: any,
+  tipo: string
+) {
+
+  const file = event.files[0];
+
+  if (!file) return;
+
+  // 🚀 compressão
+  const compressedFile =
+    await imageCompression(file, {
+
+      maxSizeMB: 0.3,
+
+      maxWidthOrHeight: 1280,
+
+      useWebWorker: true
+    });
+
+  const preview =
+    URL.createObjectURL(
+      compressedFile
+    );
+
+  switch(tipo) {
+
+    case 'painel':
+
+      this.fotoPainel =
+        compressedFile;
+
+      this.previewPainel =
+        preview;
+
+    break;
+
+    case 'frente':
+
+      this.fotoFrente =
+        compressedFile;
+
+      this.previewFrente =
+        preview;
+
+    break;
+
+    case 'traseira':
+
+      this.fotoTraseira =
+        compressedFile;
+
+      this.previewTraseira =
+        preview;
+
+    break;
+
+    case 'lateralEsquerda':
+
+      this.fotoLateralEsquerda =
+        compressedFile;
+
+      this.previewLateralEsquerda =
+        preview;
+
+    break;
+
+    case 'lateralDireita':
+
+      this.fotoLateralDireita =
+        compressedFile;
+
+      this.previewLateralDireita =
+        preview;
+
+    break;
   }
+}
 
 
 }

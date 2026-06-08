@@ -10,4 +10,19 @@ export interface Movimentacao {
   dataRetirada: string;
   dataDevolucao?: string | null;
   status: 'Em uso' | 'Finalizado';
+  fotosRetirada?: {
+  painel?: string;
+  frente?: string;
+  traseira?: string;
+  lateralEsquerda?: string;
+  lateralDireita?: string;
+};
+fotosDevolucao?: {
+  painel?: string;
+  frente?: string;
+  traseira?: string;
+  lateralEsquerda?: string;
+  lateralDireita?: string;
+};
+observacaoDevolucao?: string;
 }
