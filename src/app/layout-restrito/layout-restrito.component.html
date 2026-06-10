@@ -3,7 +3,10 @@
 <p-confirmdialog />
 <div class="layout">
 
-  <div class="sidebar " [class.closed]="open">    
+  <div class="sidebar " [class.closed]="open">
+    <div class="logo">
+      <img src="/LogoSoares-Titulo.jpeg" alt="" srcset="">
+    </div>    
     <!-- <p class="title">Administrador</p> -->
     <div class="links">
       @if (usuario.role == 'Administrador') { 

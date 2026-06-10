@@ -18,12 +18,24 @@ import { MotoristasService } from '../../service/motoristas.service';
 import { DialogModule } from "primeng/dialog";
 import { FileUploadModule } from "primeng/fileupload";
 import { Textarea, TextareaModule } from "primeng/textarea";
+import { CheckboxModule } from 'primeng/checkbox';
+import { PaginatorModule } from "primeng/paginator";
 
 
 
 @Component({
   selector: 'app-relatorio-movimentacoes',
-  imports: [ButtonModule, CommonModule, TableModule, MessageModule, CardPageComponent, TooltipModule, FormsModule, InputTextModule, CommonModule, ToastModule, ConfirmDialogModule, DialogModule, FileUploadModule, TextareaModule],
+  imports: [
+    ButtonModule,
+    CommonModule,
+    TableModule,
+    MessageModule,
+    CardPageComponent,
+    TooltipModule,
+    FormsModule,
+    InputTextModule, CommonModule, ToastModule, ConfirmDialogModule, DialogModule, FileUploadModule, TextareaModule, CheckboxModule,
+    PaginatorModule
+],
   templateUrl: './relatorio-movimentacoes.component.html',
   styleUrl: './relatorio-movimentacoes.component.scss',
   providers: [MessageService, ConfirmationService]
@@ -44,6 +56,10 @@ export class RelatorioMovimentacoesComponent {
   modalObservacao = false;
 
   observacaoSelecionada = '';
+
+  // /paginação
+  paginaAtual = 0;
+  itensPorPagina = 10;
 
     //filtros
   filtroMotorista = '';
@@ -75,9 +91,39 @@ modalDevolucao = false;
 movimentacaoDevolucao?: Movimentacao;
 observacaoDevolucao = '';
 
+//abastecimento
+modalAbastecimento = false;
+movimentacaoAbastecimento?: Movimentacao;
+houveAbastecimento = false;
+kmAbastecimento?: number;
+fotoNota?: File;
+fotoPainelAbastecimento?: File;
+previewNota = '';
+previewPainelAbastecimento = '';
+
   showFiltrosAvancados = false
 
-  movimentacaoSelecionada?:Movimentacao;
+modalDetalhesAbastecimento = false;
+abastecimentoSelecionado?: Movimentacao;
+verAbastecimento(
+  mov: Movimentacao
+) {
+
+  this.abastecimentoSelecionado = mov;
+
+  this.modalDetalhesAbastecimento = true;
+}  
+
+movimentacaoSelecionada?:Movimentacao;
+
+  abrirAbastecimento(
+  mov: Movimentacao
+) {
+
+  this.movimentacaoAbastecimento = mov;
+
+  this.modalAbastecimento = true;
+}
 
   abrirComparacao(
 
@@ -249,6 +295,8 @@ observacaoDevolucao = '';
         dataDevolucao
       );
     });
+
+    this.paginaAtual = 0;
 }
 
 limparFiltros() {
@@ -265,6 +313,8 @@ limparFiltros() {
 
   this.movimentacoes =
     this.movimentacoesOriginais;
+
+    this.paginaAtual = 0;
 }
 
 abrirDialogDevolucao(
@@ -482,38 +532,6 @@ confirmarDevolucaoFinal() {
   });
 }
 
-// confirmarDevolucao(event: Event, mov: Movimentacao) {
-//         this.confirmationService.confirm({
-//             target: event.target as EventTarget,
-//             message: 'Ao devolver o veículo ficará disponível para outro motorista',
-//             header: 'Confirmação',
-//             closable: true,
-//             closeOnEscape: true,
-//             icon: 'pi pi-exclamation-triangle',
-//             rejectButtonProps: {
-//                 label: 'Cancelar',
-//                 severity: 'danger',
-//                 outlined: true,
-//             },
-//             acceptButtonProps: {
-//                 label: 'Devolver',
-//                 severity: 'info'
-//             },
-//             accept: () => {
-//                 this.messageService.add({ severity: 'info', summary: 'Veículo devolvido', detail: 'O veiculo voltarar a ficar disponivel' });
-//                 this.finalizar(mov);
-//             },
-//             reject: () => {
-//                 this.messageService.add({
-//                     severity: 'error',
-//                     summary: 'Rejected',
-//                     detail: 'You have rejected',
-//                     life: 3000,
-//                 });
-//             },
-//         });
-//     }
-
 resetarDevolucao() {
 
   this.modalDevolucao = false;
@@ -547,6 +565,134 @@ resetarDevolucao() {
   this.previewLateralEsquerdaDevolucao = '';
 
   this.previewLateralDireitaDevolucao = '';
+}
+
+selecionarImagemAbastecimento(
+  event: any,
+  tipo: string
+) {
+
+  const file = event.files[0];
+
+  if (!file) return;
+
+  const preview =
+    URL.createObjectURL(file);
+
+  if (tipo === 'nota') {
+
+    this.fotoNota = file;
+
+    this.previewNota = preview;
+  }
+
+  if (tipo === 'painel') {
+
+    this.fotoPainelAbastecimento = file;
+
+    this.previewPainelAbastecimento = preview;
+  }
+}
+
+salvarAbastecimento() {
+
+  if (!this.movimentacaoAbastecimento) {
+    return;
+  }
+
+  if (!this.houveAbastecimento) {
+
+    this.movimentacaoService.atualizar(
+
+      this.movimentacaoAbastecimento.id!,
+
+      {
+        abastecimento: {
+          houveAbastecimento: false
+        }
+      }
+
+    );
+
+    this.modalAbastecimento = false;
+
+    return;
+  }
+
+  Promise.all([
+
+    this.movimentacaoService
+      .uploadImagem(this.fotoNota!),
+
+    this.movimentacaoService
+      .uploadImagem(
+        this.fotoPainelAbastecimento!
+      )
+
+  ])
+
+  .then(([
+
+    urlNota,
+
+    urlPainel
+
+  ]) => {
+
+    return this.movimentacaoService
+      .atualizar(
+
+        this.movimentacaoAbastecimento!.id!,
+
+        {
+
+          abastecimento: {
+
+            houveAbastecimento: true,
+
+            km: this.kmAbastecimento,
+
+            fotoNota: urlNota,
+
+            fotoPainel: urlPainel,
+
+            data: new Date()
+              .toISOString()
+          }
+        }
+      );
+  })
+
+  .then(() => {
+
+    this.modalAbastecimento = false;
+
+    this.messageService.add({
+
+      severity: 'success',
+
+      summary:
+        'Abastecimento registrado'
+    });
+  });
+}
+
+get movimentacoesPaginadas() {
+
+  const inicio =
+    this.paginaAtual * this.itensPorPagina;
+
+  const fim =
+    inicio + this.itensPorPagina;
+
+  return this.movimentacoes.slice(
+    inicio,
+    fim
+  );
+}
+trocarPagina(event: any) {
+
+  this.paginaAtual = event.page;
 }
 
 }

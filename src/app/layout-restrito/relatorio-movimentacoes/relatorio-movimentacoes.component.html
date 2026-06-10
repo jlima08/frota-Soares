@@ -463,7 +463,6 @@
             'lateralDireita'
           )
         ">
-
       </p-fileupload>
       @if (previewLateralDireitaDevolucao) {
         <img
@@ -474,6 +473,8 @@
     </div>
 
   </div>
+  
+  
 
   <ng-template pTemplate="footer">
     <div class="flex justify-end gap-2">
@@ -548,6 +549,229 @@
 
 </p-dialog>
 
+<!-- modal abastecimento -->
+ <p-dialog
+
+  header="Registrar abastecimento"
+
+  [(visible)]="modalAbastecimento"
+
+  [modal]="true"
+
+  [style]="{ width: '40rem' }">
+
+  <div class="flex flex-col gap-4">
+
+    <div class="flex items-center gap-2">
+
+      <p-checkbox
+
+        [(ngModel)]="houveAbastecimento"
+
+        [binary]="true">
+
+      </p-checkbox>
+
+      <label>
+
+        Houve abastecimento?
+
+      </label>
+
+    </div>
+
+    @if (houveAbastecimento) {
+
+      <div>
+
+        <label>
+
+          KM do abastecimento
+
+        </label>
+
+        <input
+
+          pInputText
+
+          type="number"
+
+          [(ngModel)]="kmAbastecimento"
+        />
+      </div>
+
+      <div>
+
+        <label>
+
+          Nota fiscal
+
+        </label>
+
+        <p-fileupload
+
+          accept="image/*"
+
+          [customUpload]="true"
+
+          [showUploadButton]="false"
+
+          chooseLabel="Selecionar"
+
+          cancelLabel="Remover"
+
+          (onSelect)="
+            selecionarImagemAbastecimento(
+              $event,
+              'nota'
+            )
+          ">
+        </p-fileupload>
+
+      </div>
+
+      @if (previewNota) {
+
+        <img
+
+          [src]="previewNota"
+
+          class="w-full rounded-lg border"
+        />
+      }
+
+      <div>
+
+        <label>
+
+          Painel no abastecimento
+
+        </label>
+
+        <p-fileupload
+
+          accept="image/*"
+
+          [customUpload]="true"
+
+          [showUploadButton]="false"
+
+          chooseLabel="Selecionar"
+
+          cancelLabel="Remover"
+
+          (onSelect)="
+            selecionarImagemAbastecimento(
+              $event,
+              'painel'
+            )
+          ">
+        </p-fileupload>
+
+      </div>
+
+      @if (previewPainelAbastecimento) {
+
+        <img
+
+          [src]="previewPainelAbastecimento"
+
+          class="w-full rounded-lg border"
+        />
+      }
+
+    }
+
+  </div>
+
+  <ng-template pTemplate="footer">
+
+    <p-button
+
+      label="Cancelar"
+
+      severity="secondary"
+
+      (onClick)="modalAbastecimento = false">
+
+    </p-button>
+
+    <p-button
+
+      label="Salvar"
+
+      severity="success"
+
+      (onClick)="salvarAbastecimento()">
+
+    </p-button>
+
+  </ng-template>
+
+</p-dialog>
+
+<!-- modal detalhes do abastecimento -->
+ <p-dialog
+
+  header="Detalhes do abastecimento"
+
+  [(visible)]="modalDetalhesAbastecimento"
+
+  [modal]="true"
+
+  [style]="{ width: '40rem' }">
+
+  @if (abastecimentoSelecionado?.abastecimento; as abastecimento) {
+
+  <div class="flex flex-col gap-4">
+
+    <div>
+      <strong>Houve abastecimento:</strong>
+      {{ abastecimento.houveAbastecimento ? 'Sim' : 'Não' }}
+    </div>
+
+    @if (abastecimento.houveAbastecimento) {
+
+      <div>
+        <strong>KM:</strong>
+        {{ abastecimento.km }}
+      </div>
+
+      <div>
+        <strong>Data:</strong>
+        {{ abastecimento.data | date:'dd/MM/yyyy HH:mm' }}
+      </div>
+
+      <div>
+        <p class="font-bold mb-2">
+          Nota Fiscal
+        </p>
+
+        <img
+          [src]="abastecimento.fotoNota"
+          class="w-full rounded-lg border"
+        />
+      </div>
+
+      <div>
+        <p class="font-bold mb-2">
+          Painel
+        </p>
+
+        <img
+          [src]="abastecimento.fotoPainel"
+          class="w-full rounded-lg border"
+        />
+      </div>
+
+    }
+
+  </div>
+
+}
+
+</p-dialog>
+
 <app-card-page title="Relatorios" icon="pi-file">
   <p-toast />
   <p-confirmdialog />
@@ -562,12 +786,7 @@
         }
     </button>
     <div class="filtros">
-
-        <input
-            pInputText
-            placeholder="Buscar por motorista"
-            [(ngModel)]="filtroMotorista">
-
+        <input pInputText placeholder="Buscar por motorista" [(ngModel)]="filtroMotorista">
             
         <div class="filtrosAvancados " [ngClass]=" {'sm:invisible': !showFiltrosAvancados }">
             <input
@@ -582,8 +801,7 @@
                 <label for="">Data de retirada: </label>
                 <input
                     pInputText
-                    type="date"
-            
+                    type="date"            
                     [(ngModel)]="filtroDataRetirada">
             </div>
             <div class="datas">
@@ -593,8 +811,7 @@
                     type="date"
                     [(ngModel)]="filtroDataDevolucao">
             </div>
-        </div>
-    
+        </div>    
 
         <div class="btns">
             <p-button
@@ -612,7 +829,129 @@
         </div>
 
 </div>
-<p-table
+<div class="movs">
+@for (mov of movimentacoesPaginadas; track mov.id){
+    <div class="card-mov">
+      <div class=" flex flex-col gap-2">
+         @if (mov.status === 'Em uso') {
+            <!-- <p-message styleClass="sm:w-[40%] min-w-[134px]"  severity="warn" icon="pi pi-exclamation-circle" variant="outlined"></p-message> -->
+            <span pTooltip="Em uso" class="w-full flex justify-end">
+              <i  class="pi-yellow pi pi-exclamation-circle"></i>
+            </span>
+          } @else {
+            <!-- <p-message styleClass="sm:w-[12%] !border-none"  severity="info" icon="pi pi-check-circle" variant="outlined"></p-message>  -->
+            <span pTooltip="Finalizado" class="w-full flex justify-end text-blue">
+               <i class="pi-blue pi pi-check-circle"></i>
+             </span>
+        }
+        <div class="flex w-full justify-between">
+          <span class="flex">
+            <strong>Modelo: </strong>
+            <p> {{ mov.modelo | uppercase }} </p>
+          </span>
+          <span class="flex ">
+            <strong>Placa: </strong>
+            <p> {{ mov.placa | uppercase }} </p>
+          </span>
+        </div>
+        <span class="flex gap-1">
+          <strong>Motorista: </strong>
+          <p> {{ mov.motoristaNome }} </p>
+        </span>
+        
+        <span class="flex">
+          <strong>Data de retira: </strong>
+          <p> {{ mov.dataRetirada | date:'dd/MM/yyyy HH:mm' }} </p>
+        </span>
+        <span class="flex">
+          <strong>Data de devolução: </strong>
+          <p>  @if (mov.dataDevolucao) {
+          {{ mov.dataDevolucao
+            | date:'dd/MM/yyyy HH:mm'
+          }}
+        } @else {
+          <span>
+            Em aberto
+          </span>
+        }
+          </p>
+        </span>
+        <div class="">
+          <strong>Data e KM do último abasteciemento:</strong>
+           @if (mov.abastecimento?.houveAbastecimento) {
+          <span class="flex">
+            <p>KM:</p>
+            <p>             
+                {{ mov.abastecimento?.km }} km               
+            </p>
+          </span>
+          <span class="flex">
+            <p>Data: </p>
+            <p>
+              {{ mov.abastecimento?.data | date:'dd/MM/yyyy HH:mm' }}
+            </p>
+          </span>
+          }@else {
+                <p>Não abasteceu</p>
+              }
+        </div>
+        <span>
+           @if (mov.observacao) {
+
+            <div class="flex gap-2">
+
+  <p-button
+    label="Detalhes"
+    icon="pi pi-eye"
+    severity="contrast"
+    size="small"
+    (onClick)="abrirObservacao(mov)">
+  </p-button>
+
+ @if (!mov.abastecimento) {
+
+  <p-button
+    label="Abastecimento"
+    icon="pi pi-car"
+    severity="info"
+    size="small"
+    (onClick)="abrirAbastecimento(mov)">
+  </p-button>
+
+} @else {
+
+  <p-button
+    label="Ver Abastecimento"
+    icon="pi pi-eye"
+    severity="success"
+    size="small"
+    (onClick)="verAbastecimento(mov)">
+  </p-button>
+
+}
+
+</div>
+
+          } @else {
+            <span class="w-[300px]">
+              <p-message size="small" styleClass="w-[130px]" severity="warn">Sem observação</p-message>
+            </span>
+          }
+        </span>
+        
+        
+      </div>
+    </div>
+
+  }
+</div>
+<p-paginator
+ styleClass="!font-bold"
+  [rows]="itensPorPagina"
+  [totalRecords]="movimentacoes.length"
+  (onPageChange)="trocarPagina($event)">
+</p-paginator>
+<!-- <p-table
   [value]="movimentacoes"
   [rowsPerPageOptions]="[5, 10, 20]"
   stripedRows
@@ -706,12 +1045,6 @@
         @if (
           mov.status === 'Em uso'
         ) {
-          <!-- <p-button          
-            label="Devolver"
-            icon="pi pi-check"
-            severity="success"
-            (onClick)="finalizar(mov)">
-          </p-button> -->
           <button class="pButton-sombra-azul pButton-sombra" (click)="abrirDialogDevolucao(mov)">
             <i class="pi pi-check"></i>
             Devolver
@@ -722,5 +1055,5 @@
 
     </tr>
   </ng-template>
-</p-table>
+</p-table> -->
 </app-card-page>

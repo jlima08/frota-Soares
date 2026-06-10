@@ -28,21 +28,25 @@ export class LoginComponent {
 
    email = '';
   senha = '';
+  loading: boolean = false;
 
   entrar() {
     this.authService.login(this.email, this.senha)
       .then(() => {
         // alert('Login realizado');
          this.messageService.add({ severity: 'contrast', summary: 'Login realizado!', detail: 'Você será redirecionado para a areá restrita do sistema' });
-
+         this.loading = true;
+         
          setTimeout(() => {
+           this.loading = false;
            this.router.navigate(['restrito/dashboard']);
-         }, 2000);
-      })
-      .catch(error => {
-        console.error(error);
+          }, 2000);
+        })
+        .catch(error => {
+          console.error(error);
+          this.messageService.add({ severity: 'error', summary: 'Erro no login!', detail: 'Email ou senha incorretos!' });
 
-        alert('Erro no login');
+        // alert('Erro no login');
       });
   }
 

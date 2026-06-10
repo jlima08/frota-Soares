@@ -20,7 +20,14 @@
             </div>
             <div>
                 <p-floatlabel>
-                    <input pInputText type="number" id="over_label"  autocomplete="off" [(ngModel)]="veiculo.ano" name="ano" />
+                    <p-inputmask
+                    styleClass="w-full"
+                        id="ano"
+                        mask="9999"
+                        [(ngModel)]="veiculo.ano"
+                        name="ano">
+                    </p-inputmask>
+
                     <label for="over_label">Ano</label>
                 </p-floatlabel>
             </div>
@@ -32,7 +39,15 @@
             </div>
             <div>
                <p-floatlabel>
-                    <input pInputText id="over_label" autocomplete="off" maxlength="18"  [(ngModel)]="veiculo.cor" name="cor" />
+                     <p-select
+            inputId="cor"
+            [options]="cores"
+            optionLabel="nome"
+            optionValue="nome"
+            [(ngModel)]="veiculo.cor"
+            name="cor"
+            class="w-full">
+        </p-select>
                     <label for="over_label">Cor</label>
                 </p-floatlabel>
             </div>

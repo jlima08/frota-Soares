@@ -64,7 +64,41 @@ textarea{
     border: 1px solid #818181;
 }
 
+.movs{
+    width: 100%;
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-bottom: 15px;
+    .card-mov{
+        width: 24.5%;
+        border: 1px solid #dfdfdf;
+        box-shadow: 1px 1px 10px #e0e0e0;
+        border-radius: 8px;
+        padding: 18px;
+        transition: all 0.5s;
+        .pi-blue{
+            color: #22ac16;
+            font-size: 20px;
+        }
+        .pi-yellow{
+            color: #afbb01;
+            font-size: 20px;
+        }
+    }
+    .card-mov:hover{
+        scale: 1.02;
+        box-shadow: 1px 1px 10px #cacaca;
+    }
+}
+
 @media screen and (max-width: 600px) {
+    .movs{
+        flex-direction: column;
+        .card-mov{
+            width: 100%;
+        }
+    }
     .filtros{
         flex-direction: column;
         align-items: start;

@@ -14,13 +14,19 @@ import { CommonModule } from '@angular/common';
 import { MessageModule } from 'primeng/message';
 import { TooltipModule } from 'primeng/tooltip';
 import { ConfirmDialogModule } from "primeng/confirmdialog";
+import { InputNumberModule } from 'primeng/inputnumber';
+import { InputMaskModule } from 'primeng/inputmask';
+
 // import { v4 as uuid } from 'uuid';
 
 
 
 @Component({
   selector: 'app-gerenciar-veiculos',
-  imports: [CardPageComponent, TableModule, ButtonModule, FloatLabelModule, InputTextModule, FormsModule, SelectModule, ToastModule, CommonModule, MessageModule, TooltipModule, ConfirmDialogModule],
+  imports: [
+    CardPageComponent, 
+    TableModule, 
+    ButtonModule, FloatLabelModule, InputTextModule, FormsModule, SelectModule, ToastModule, CommonModule, MessageModule, TooltipModule, ConfirmDialogModule, InputNumberModule, InputMaskModule],
   templateUrl: './gerenciar-veiculos.component.html',
   styleUrl: './gerenciar-veiculos.component.scss',
   providers: [ConfirmationService, MessageService]
@@ -29,6 +35,20 @@ export class GerenciarVeiculosComponent {
  private veiculoService = inject(
   VeiculosService
 );
+cores = [
+  { nome: 'Branco' },
+  { nome: 'Preto' },
+  { nome: 'Prata' },
+  { nome: 'Cinza' },
+  { nome: 'Vermelho' },
+  { nome: 'Azul' },
+  { nome: 'Verde' },
+  { nome: 'Amarelo' },
+  { nome: 'Marrom' },
+  { nome: 'Bege' },
+  { nome: 'Laranja' },
+  { nome: 'Roxo' }
+];
 
 
 veiculos: Veiculo[] = [];

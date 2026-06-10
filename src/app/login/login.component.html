@@ -2,6 +2,7 @@
 <div class="main">
     <div class="cardLeft">
         <h2>Gerenciamento de Frota</h2>
+        <img src="/logoSoares.png" alt="" srcset="">
     </div>
     <div class="cardRight">
         <span class="sm:hidden block titulo">
@@ -21,7 +22,7 @@
             </p-floatlabel>
 
             <div class="w-[55%]">
-                <p-button styleClass="w-[100%] " icon="pi pi-sign-in" label="Entrar"  [raised]="true" severity="info" (click)="entrar()" />
+                <p-button styleClass="w-[100%] " icon="pi pi-sign-in" label="Entrar"  [raised]="true" severity="info" [loading]="loading" (click)="entrar()" />
             </div>
 
 

@@ -25,4 +25,16 @@ fotosDevolucao?: {
   lateralDireita?: string;
 };
 observacaoDevolucao?: string;
+ abastecimento?: {
+
+    houveAbastecimento: boolean;
+
+    km?: number;
+
+    fotoNota?: string;
+
+    fotoPainel?: string;
+
+    data?: string;
+  };
 }
