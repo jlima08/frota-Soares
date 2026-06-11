@@ -16,6 +16,8 @@ import { TooltipModule } from 'primeng/tooltip';
 import { ConfirmDialogModule } from "primeng/confirmdialog";
 import { InputNumberModule } from 'primeng/inputnumber';
 import { InputMaskModule } from 'primeng/inputmask';
+import { FileUploadModule } from "primeng/fileupload";
+import { MovimentacaoService } from '../../service/movimentacao.service';
 
 // import { v4 as uuid } from 'uuid';
 
@@ -24,9 +26,11 @@ import { InputMaskModule } from 'primeng/inputmask';
 @Component({
   selector: 'app-gerenciar-veiculos',
   imports: [
-    CardPageComponent, 
-    TableModule, 
-    ButtonModule, FloatLabelModule, InputTextModule, FormsModule, SelectModule, ToastModule, CommonModule, MessageModule, TooltipModule, ConfirmDialogModule, InputNumberModule, InputMaskModule],
+    CardPageComponent,
+    TableModule,
+    ButtonModule, FloatLabelModule, InputTextModule, FormsModule, SelectModule, ToastModule, CommonModule, MessageModule, TooltipModule, ConfirmDialogModule, InputNumberModule, InputMaskModule,
+    FileUploadModule
+],
   templateUrl: './gerenciar-veiculos.component.html',
   styleUrl: './gerenciar-veiculos.component.scss',
   providers: [ConfirmationService, MessageService]
@@ -35,6 +39,8 @@ export class GerenciarVeiculosComponent {
  private veiculoService = inject(
   VeiculosService
 );
+private movimentacaoService =
+  inject(MovimentacaoService);
 cores = [
   { nome: 'Branco' },
   { nome: 'Preto' },
@@ -50,6 +56,8 @@ cores = [
   { nome: 'Roxo' }
 ];
 
+fotoVeiculo?: File;
+previewFotoVeiculo = '';
 
 veiculos: Veiculo[] = [];
 
@@ -113,7 +121,11 @@ salvarVeiculo() {
     !this.veiculo.cor
   ) {
 
-    this.messageService.add({ severity: 'error', summary: 'Preencha todos os campos', detail: '', life: 3000 });
+    this.messageService.add({
+      severity: 'error',
+      summary: 'Preencha todos os campos',
+      life: 3000
+    });
 
     return;
   }
@@ -123,37 +135,136 @@ salvarVeiculo() {
   // EDITAR
 
   if (
-    this.editando &&
-    this.veiculo.id
-  ) {
+  this.editando &&
+  this.veiculo.id
+) {
+
+  // SE ESCOLHEU NOVA FOTO
+  if (this.fotoVeiculo) {
+
+    this.movimentacaoService
+      .uploadImagem(this.fotoVeiculo)
+
+      .then(urlFoto => {
+
+        this.veiculo.foto = urlFoto;
+
+        return this.veiculoService.atualizar(
+          this.veiculo.id!,
+          this.veiculo
+        );
+      })
+
+      .then(() => {
+
+        this.messageService.add({
+          severity: 'info',
+          summary: 'Veículo editado com sucesso',
+          life: 3000
+        });
+
+        this.resetFormulario();
+
+        this.loading = false;
+      })
+
+      .catch(error => {
+
+        console.error(error);
+
+        this.loading = false;
+      });
+
+  } else {
+
+    // EDITAR SEM TROCAR FOTO
 
     this.veiculoService
       .atualizar(
         this.veiculo.id,
         this.veiculo
       )
+
       .then(() => {
 
-        this.messageService.add({ severity: 'info', summary: 'Veículo editado com sucesso', detail: '', life: 3000 });
+        this.messageService.add({
+          severity: 'info',
+          summary: 'Veículo editado com sucesso',
+          life: 3000
+        });
 
         this.resetFormulario();
+
+        this.loading = false;
+      })
+
+      .catch(error => {
+
+        console.error(error);
+
+        this.loading = false;
+      });
+  }
+
+  return;
+}
+
+  // CADASTRAR COM FOTO
+
+  if (this.fotoVeiculo) {
+
+    this.movimentacaoService
+      .uploadImagem(this.fotoVeiculo)
+
+      .then(urlFoto => {
+
+        this.veiculo.foto = urlFoto;
+
+        return this.veiculoService
+          .cadastrar(this.veiculo);
+      })
+
+      .then(() => {
+
+        this.messageService.add({
+          severity: 'success',
+          summary: 'Veículo cadastrado com sucesso',
+          life: 3000
+        });
+
+        this.resetFormulario();
+
+        this.loading = false;
+      })
+
+      .catch(error => {
+
+        console.error(error);
+
+        this.loading = false;
       });
 
     return;
   }
 
-  // CADASTRAR
-
-  // const id = uuid();
+  // CADASTRAR SEM FOTO
 
   this.veiculoService
-    .cadastrar( this.veiculo)
+    .cadastrar(this.veiculo)
+
     .then(() => {
 
-      this.messageService.add({ severity: 'success', summary: 'Veículo cadastrado com sucesso', detail: '', life: 3000 });
+      this.messageService.add({
+        severity: 'success',
+        summary: 'Veículo cadastrado com sucesso',
+        life: 3000
+      });
 
       this.resetFormulario();
+
+      this.loading = false;
     })
+
     .catch(error => {
 
       console.error(error);
@@ -230,6 +341,17 @@ resetFormulario() {
   this.loading = false;
 }
 
+selecionarFotoVeiculo(event: any) {
+
+  const file = event.files[0];
+
+  if (!file) return;
+
+  this.fotoVeiculo = file;
+
+  this.previewFotoVeiculo =
+    URL.createObjectURL(file);
+}
 
 
 

@@ -237,33 +237,6 @@ previewLateralDireita = '';
   });
 }
 
-  // confirmarCar(carros: Veiculo) {
-  //   this.confirmationService.confirm({
-  //     header: 'Confirmação',
-  //     message: `Ao confirmar você ficará responsável pelo ${carros.modelo}`,
-  //     icon: 'pi pi-exclamation-circle',
-  //     rejectButtonProps: {
-  //       label: 'Cancelar',
-  //       icon: 'pi pi-times',
-  //       outlined: true,
-  //       size: 'small',
-  //       severity: 'danger'
-  //     },
-  //     acceptButtonProps: {
-  //       label: 'Selecionar',
-  //       icon: 'pi pi-check',
-  //       size: 'small'
-  //     },
-  //     accept: () => {
-  //       this.messageService.add({ severity: 'info', summary: 'Confirmed', detail: 'You have accepted', life: 3000 });
-  //       console.log('Carro selecionado:', carros);
-  //     },
-  //     reject: () => {
-  //       this.messageService.add({ severity: 'error', summary: 'Rejected', detail: 'You have rejected', life: 3000 });
-  //     }
-  //   });
-  // }
-
   async selecionarImagem(
   event: any,
   tipo: string

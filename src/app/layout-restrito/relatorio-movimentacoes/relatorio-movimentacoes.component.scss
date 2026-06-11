@@ -69,15 +69,23 @@ textarea{
     display: flex;
     gap: 10px;
     flex-wrap: wrap;
-    margin-bottom: 15px;
+    margin: 15px 0;
     .card-mov{
+        min-width: 332px;
         width: 24.5%;
         border: 1px solid #dfdfdf;
         box-shadow: 1px 1px 10px #e0e0e0;
         border-radius: 8px;
         padding: 18px;
         transition: all 0.5s;
-        .pi-blue{
+        
+    }
+    .card-mov:hover{
+        scale: 1.02;
+        box-shadow: 1px 1px 10px #cacaca;
+    }
+}
+.pi-blue{
             color: #22ac16;
             font-size: 20px;
         }
@@ -85,14 +93,8 @@ textarea{
             color: #afbb01;
             font-size: 20px;
         }
-    }
-    .card-mov:hover{
-        scale: 1.02;
-        box-shadow: 1px 1px 10px #cacaca;
-    }
-}
 
-@media screen and (max-width: 600px) {
+@media screen and (max-width: 800px) {
     .movs{
         flex-direction: column;
         .card-mov{

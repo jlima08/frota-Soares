@@ -6,4 +6,5 @@ export interface Veiculo {
   cor: string;
   status: 'Ativo' | 'Em uso' | 'Inativo';
   tipo: 'Carro' | 'Moto';
+  foto?:string
 }

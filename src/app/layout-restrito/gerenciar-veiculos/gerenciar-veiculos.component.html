@@ -72,6 +72,30 @@
                 <label>Tipo do veículo</label>
                 </p-floatlabel>
             </div>
+            <div class="flex  gap-2">
+                <!-- <label>
+                    Foto do veículo
+                </label> -->
+                <p-fileupload
+                    mode="basic"
+                    accept="image/*"
+                    chooseLabel="Selecionar foto"
+                    [auto]="false"
+                    [customUpload]="true"
+                    (onSelect)="selecionarFotoVeiculo($event)">
+                </p-fileupload>
+            </div>
+
+<!-- @if (previewFotoVeiculo) {
+
+    <img
+
+        [src]="previewFotoVeiculo"
+
+        class="w-full max-w-sm rounded-lg border mt-2"
+    />
+
+} -->
 
             <div class="btn-form">
                 <p-button icon="pi pi-save" label="Salvar" [loading]="loading" (onClick)="salvarVeiculo()" [raised]="true"  ></p-button>

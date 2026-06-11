@@ -127,36 +127,55 @@
 <div class="main">    
     
     @for (carro of veiculos; track carro.id){
-        <p-card  >            
+        <p-card >            
             <ng-template #header>
                 <!-- <img alt="Card" class="w-full" src="https://primefaces.org/cdn/primeng/images/card-ng.jpg" /> -->
-                 <div class="w-full h-[100px] flex justify-center">
-                    @if (carro.tipo == 'Moto') {
-                        <span class="material-symbols-outlined icone-moto">two_wheeler</span>
-                    }@else {
-                        <i class="pi pi-car text-[100px]"></i>
-                    }
+                 <div class="w-full flex justify-center">
+                    @if (carro.foto) {
+                        <img [src]="carro.foto" class="w-full h-50 object-cover rounded-lg" />
+                    }@else{
+                        <div class="flex justify-center items-center h-50">
+                            @if (carro.tipo == 'Moto') {
+                            <span class="material-symbols-outlined icone-moto ">two_wheeler</span>
+                            }@else {
+                            <i class="pi pi-car text-[100px] "></i>
+                            }
+                        </div> 
+                }
                  </div>
             </ng-template>
-            <ng-template #title> {{ carro.modelo }} </ng-template>
+            <ng-template #title> 
+                <div class="w-full flex justify-between flex-wrap">
+                    <p>
+                        {{ carro.modelo }}
+                    </p>
+                     <span >
+                 @if (carro.status == 'Ativo') {
+                <p-message styleClass="sm:w-[22%] min-w-[100px]" severity="success" size="small" icon="pi pi-check-circle">{{ carro.status}}</p-message>
+                
+            }@else if (carro.status == 'Em uso') {
+                <p-message styleClass="sm:w-[22%] min-w-[100px]" severity="warn" size="small" icon="pi pi-info-circle">Em uso</p-message>
+            }
+            @else {
+                <p-message styleClass="sm:w-[22%] min-w-[100px]" severity="error" size="small" icon="pi pi-times-circle">{{ carro.status}}</p-message>
+            }
+            </span>
+                </div>
+            </ng-template>
             <ng-template #subtitle> {{ carro.placa | uppercase}} </ng-template>
+            
             <p>
                 Ano: <b>{{ carro.ano }}</b>, Cor do veiculo: <b>{{ carro.cor }}</b>
             </p>
-            <span >
-                 @if (carro.status == 'Ativo') {
-                <p-message styleClass="sm:w-[30%] min-w-[110px]" severity="success" size="small" icon="pi pi-check-circle">{{ carro.status}}</p-message>
-                
-            }@else if (carro.status == 'Em uso') {
-                <p-message styleClass="sm:w-[30%] min-w-[110px]" severity="warn" size="small" icon="pi pi-info-circle">{{ carro.status}}</p-message>
-            }
-            @else {
-                <p-message styleClass="sm:w-[30%] min-w-[110px]" severity="error" size="small" icon="pi pi-times-circle">{{ carro.status}}</p-message>
-            }
-            </span>
+           
             <ng-template #footer>
                 <div class="flex gap-10 mt-1">
-                    <p-button label="Selecionar" severity="contrast" (click)="abrirDialog(carro)" class="w-full" styleClass="w-full" [disabled]="carro.status !== 'Ativo'" />
+                    @if (carro.status != 'Ativo') {
+                        <p-button label="Selecionar" severity="contrast" (click)="abrirDialog(carro)" disabled class="w-full " styleClass="w-full !cursor-not-allowed" />
+                        
+                    }@else {
+                        <p-button label="Selecionar" severity="contrast" (click)="abrirDialog(carro)" class="w-full" styleClass="w-full"/>
+                    }
                 </div>
             </ng-template>
             
