@@ -1,6 +1,82 @@
 
 <p-toast />
 <p-confirmdialog />
+<p-dialog
+
+  header="Alertas de manutenção"
+
+  [(visible)]="modalAlertas"
+
+  [modal]="true"
+
+  [style]="{ width: '50rem' }">
+
+  @if (alertas.length === 0) {
+
+    <p-message
+      severity="success">
+
+      Nenhum alerta pendente
+
+    </p-message>
+
+  } @else {
+
+    <div class="flex flex-col gap-3">
+
+      @for (
+        alerta of alertas;
+        track alerta.id
+      ) {
+
+        <div
+          class="border rounded-lg p-3">
+
+          <div class="flex items-center gap-2">
+
+            <i
+              class="pi pi-exclamation-triangle text-red-500">
+            </i>
+
+            <strong>
+              {{ alerta.modelo }}
+            </strong>
+
+          </div>
+
+          <p>
+            Placa:
+            {{ alerta.placa }}
+          </p>
+
+          <p>
+            KM Atual:
+            {{ alerta.kmAtual }}
+          </p>
+
+          <p>
+            KM da troca:
+            {{ alerta.kmLimite }}
+          </p>
+
+          <p>
+            Excedeu:
+            {{
+              alerta.kmAtual -
+              alerta.kmLimite
+            }}
+            km
+          </p>
+
+        </div>
+
+      }
+
+    </div>
+
+  }
+
+</p-dialog>
 <div class="layout">
 
   <div class="sidebar " [class.closed]="open">
@@ -44,13 +120,32 @@
     <header>
       <div class="gradiente"></div>
         <div class="btns-header" >
-          <button class="cursor-pointer md:invisible" (click)="toggleSidebar()">
-            @if (open == false) {
-              <p-button icon="pi pi-bars" severity="contrast" outlined="true" ></p-button>
-            }@else {
-              <p-button icon="pi pi-times" severity="contrast"  ></p-button>
-            }
-          </button>
+         
+          <div class="flex gap-4 items-center">
+            <button class="cursor-pointer btn-none" (click)="toggleSidebar()">
+              @if (open == false) {
+                <p-button icon="pi pi-bars" severity="contrast" outlined="true" ></p-button>
+              }@else {
+                <p-button icon="pi pi-times" severity="contrast"  ></p-button>
+              }
+            </button>
+             <div class="relative cursor-pointer">
+                <i
+                  class="pi pi-bell alerta"
+                  (click)="abrirAlertas()">
+                </i>
+                @if (quantidadeAlertas > 0) {
+                  <span
+                    class="absolute -top-2 -right-2
+                          bg-red-500 text-white
+                          text-xs rounded-full
+                          w-5 h-5 flex
+                          items-center justify-center">
+                    {{ quantidadeAlertas }}
+                  </span>
+                }
+              </div>
+          </div>
           <p-button
           size="small"
           variant="outlined"

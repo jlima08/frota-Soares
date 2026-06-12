@@ -12,11 +12,14 @@ import { Tooltip, TooltipModule } from "primeng/tooltip";
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { ToastModule } from "primeng/toast";
 import { ConfirmDialogModule } from "primeng/confirmdialog";
+import { DialogModule } from "primeng/dialog";
+import { MovimentacaoService } from '../service/movimentacao.service';
+import { MessageModule } from "primeng/message";
 
 
 @Component({
   selector: 'app-layout-restrito',
-  imports: [RouterOutlet, CommonModule, ButtonModule, RouterLink, RouterLinkActive, AvatarModule, AvatarGroupModule, TooltipModule, ToastModule, ConfirmDialogModule],
+  imports: [RouterOutlet, CommonModule, ButtonModule, RouterLink, RouterLinkActive, AvatarModule, AvatarGroupModule, TooltipModule, ToastModule, ConfirmDialogModule, DialogModule, MessageModule],
   templateUrl: './layout-restrito.component.html',
   styleUrl: './layout-restrito.component.scss',
   providers: [ConfirmationService, MessageService]
@@ -24,6 +27,7 @@ import { ConfirmDialogModule } from "primeng/confirmdialog";
 export class LayoutRestritoComponent {
   anoAtual = new Date().getFullYear();
   private authService = inject(AuthService);
+  private movimentacaoService = inject(MovimentacaoService);
 
 private router = inject(Router);
 private auth = inject(Auth);
@@ -36,6 +40,8 @@ usuario: any;
    open: boolean = false;
 
    private timeout: any;
+
+   
    
 
   ngOnInit(): void {
@@ -54,6 +60,15 @@ usuario: any;
           // console.log(this.usuario);
         });
     }
+  });
+  this.movimentacaoService
+  .listarAlertas()
+  .subscribe(alertas => {
+
+    this.alertas = alertas;
+
+    this.quantidadeAlertas =
+      alertas.length;
   });
 
   this.iniciarMonitoramento();
@@ -162,6 +177,15 @@ resetarTempo() {
     this.logout();
 
   }, 1000 * 60 * 20 );
+}
+
+modalAlertas = false;
+quantidadeAlertas = 0;
+alertas: any[] = [];
+
+abrirAlertas() {
+
+  this.modalAlertas = true;
 }
 
 }

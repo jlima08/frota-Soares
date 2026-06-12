@@ -5,7 +5,10 @@ import {
   addDoc,
   collectionData,
   doc,
-  updateDoc
+  updateDoc,
+  query,
+  where,
+  getDocs
 } from '@angular/fire/firestore';
 import {
   Storage,
@@ -108,5 +111,64 @@ async uploadImagem(file: File) {
   return await getDownloadURL(
     storageRef
   );
+}
+
+criarAlerta(alerta: any) {
+
+  const ref = collection(
+    this.firestore,
+    'alertas'
+  );
+
+  return addDoc(
+    ref,
+    alerta
+  );
+}
+listarAlertas() {
+
+  const ref = collection(
+    this.firestore,
+    'alertas'
+  );
+
+  return collectionData(
+    ref,
+    { idField: 'id' }
+  );
+}
+
+async verificarAlertaTrocaOleo(
+  veiculoId: string
+): Promise<boolean> {
+
+  const ref = collection(
+    this.firestore,
+    'alertas'
+  );
+
+  const q = query(
+    ref,
+    where(
+      'veiculoId',
+      '==',
+      veiculoId
+    ),
+    where(
+      'tipo',
+      '==',
+      'troca_oleo'
+    ),
+    where(
+      'ativo',
+      '==',
+      true
+    )
+  );
+
+  const resultado =
+    await getDocs(q);
+
+  return !resultado.empty;
 }
 }

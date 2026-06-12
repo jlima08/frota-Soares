@@ -107,7 +107,7 @@ kmRetirada?: number;
 
   loadingConfirmar = false;
 
-  confirmarSelecionado() {
+  async confirmarSelecionado() {
 
   this.loadingConfirmar = true;
 
@@ -159,62 +159,94 @@ kmRetirada?: number;
     return;
   }
 
-  const veiculo =
-    this.veiculoSelecionado;
+  const veiculo = this.veiculoSelecionado;
 
-  // ALERTA TROCA DE ÓLEO
+  // ALERTA DE TROCA DE ÓLEO
 
   if (
     veiculo.kmProximaTrocaOleo &&
     this.kmRetirada >= veiculo.kmProximaTrocaOleo
   ) {
 
-    this.messageService.add({
+    const existeAlerta =
+      await this.movimentacaoService
+        .verificarAlertaTrocaOleo(
+          veiculo.id!
+        );
 
-      severity: 'warn',
+    if (!existeAlerta) {
 
-      summary: 'Troca de óleo pendente',
+      await this.movimentacaoService
+        .criarAlerta({
 
-      detail:
-        `Veículo ultrapassou o KM da próxima troca (${veiculo.kmProximaTrocaOleo} km)`
-    });
+          tipo: 'troca_oleo',
 
-    // Futuramente:
-    // salvar alerta no Firestore
+          ativo: true,
+
+          veiculoId:
+            veiculo.id,
+
+          modelo:
+            veiculo.modelo,
+
+          placa:
+            veiculo.placa,
+
+          kmAtual:
+            this.kmRetirada,
+
+          kmLimite:
+            veiculo.kmProximaTrocaOleo,
+
+          data:
+            new Date().toISOString()
+        });
+
+      this.messageService.add({
+
+        severity: 'warn',
+
+        summary:
+          'Troca de óleo pendente',
+
+        detail:
+          `Veículo ultrapassou ${veiculo.kmProximaTrocaOleo} km`
+      });
+    }
   }
 
-  Promise.all([
+  try {
 
-    this.movimentacaoService
-      .uploadImagem(this.fotoPainel),
+    const [
 
-    this.movimentacaoService
-      .uploadImagem(this.fotoFrente),
+      urlPainel,
 
-    this.movimentacaoService
-      .uploadImagem(this.fotoTraseira),
+      urlFrente,
 
-    this.movimentacaoService
-      .uploadImagem(this.fotoLateralDireita),
+      urlTraseira,
 
-    this.movimentacaoService
-      .uploadImagem(this.fotoLateralEsquerda)
+      urlLateralDireita,
 
-  ])
+      urlLateralEsquerda
 
-  .then(([
+    ] = await Promise.all([
 
-    urlPainel,
+      this.movimentacaoService
+        .uploadImagem(this.fotoPainel),
 
-    urlFrente,
+      this.movimentacaoService
+        .uploadImagem(this.fotoFrente),
 
-    urlTraseira,
+      this.movimentacaoService
+        .uploadImagem(this.fotoTraseira),
 
-    urlLateralDireita,
+      this.movimentacaoService
+        .uploadImagem(this.fotoLateralDireita),
 
-    urlLateralEsquerda
+      this.movimentacaoService
+        .uploadImagem(this.fotoLateralEsquerda)
 
-  ]) => {
+    ]);
 
     const movimentacao: Movimentacao = {
 
@@ -222,7 +254,9 @@ kmRetirada?: number;
         usuario.id,
 
       motoristaNome:
-        usuario.nome + ' ' + usuario.sobrenome,
+        usuario.nome +
+        ' ' +
+        usuario.sobrenome,
 
       veiculoId:
         veiculo.id!,
@@ -267,13 +301,10 @@ kmRetirada?: number;
       }
     };
 
-    return this.movimentacaoService
+    await this.movimentacaoService
       .cadastrar(movimentacao);
-  })
 
-  .then(() => {
-
-    return this.veiculoService
+    await this.veiculoService
       .atualizar(
 
         veiculo.id!,
@@ -282,9 +313,6 @@ kmRetirada?: number;
           status: 'Em uso'
         }
       );
-  })
-
-  .then(() => {
 
     this.messageService.add({
 
@@ -313,14 +341,9 @@ kmRetirada?: number;
 
     this.fotoLateralEsquerda = undefined;
 
-    this.loadingConfirmar = false;
-  })
-
-  .catch(error => {
+  } catch (error) {
 
     console.error(error);
-
-    this.loadingConfirmar = false;
 
     this.messageService.add({
 
@@ -331,7 +354,11 @@ kmRetirada?: number;
       detail:
         'Erro ao registrar movimentação'
     });
-  });
+
+  } finally {
+
+    this.loadingConfirmar = false;
+  }
 }
 
   async selecionarImagem(

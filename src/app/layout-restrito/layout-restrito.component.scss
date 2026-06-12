@@ -3,6 +3,12 @@
     height: 12px;
     background: linear-gradient( to left, #636363, #000000);
 }
+.alerta{
+    font-size: 20px;
+}
+.btn-none{
+    display: none;
+}
 
 header{
     display: flex;
@@ -149,6 +155,9 @@ footer {
 
 /* DESKTOP */
 @media (max-width: 768px) {
+    .btn-none{
+        display: block;
+    }
     .sidebar {
         position: relative;
         transform: translateX(0);
@@ -161,6 +170,9 @@ footer {
 
 /* MOBILE */
 @media (max-width: 767px) {
+    .btn-none{
+        display: block;
+    }
     .sidebar {
         position: fixed;
         top: 72px;
