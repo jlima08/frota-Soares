@@ -18,6 +18,8 @@ import { TextareaModule } from 'primeng/textarea';
 import { FileUploadModule } from 'primeng/fileupload';
 import imageCompression
 from 'browser-image-compression';
+import { FloatLabelModule } from "primeng/floatlabel";
+import { InputNumberModule } from 'primeng/inputnumber';
 
 
 @Component({
@@ -32,8 +34,10 @@ from 'browser-image-compression';
     DialogModule,
     FormsModule,
     TextareaModule,
-    FileUploadModule
-  ],
+    FileUploadModule,
+    FloatLabelModule,
+    InputNumberModule
+],
   templateUrl: './veiculos.component.html',
   styleUrl: './veiculos.component.scss',
   providers: [ConfirmationService, MessageService]
@@ -64,6 +68,8 @@ previewFrente = '';
 previewTraseira = '';
 previewLateralEsquerda = '';
 previewLateralDireita = '';
+
+kmRetirada?: number;
 
  ngOnInit(): void {
 
@@ -103,11 +109,30 @@ previewLateralDireita = '';
 
   confirmarSelecionado() {
 
-    this.loadingConfirmar = true;
+  this.loadingConfirmar = true;
 
   const usuario = this.usuario;
 
   if (!usuario || !this.veiculoSelecionado) {
+
+    this.loadingConfirmar = false;
+
+    return;
+  }
+
+  if (!this.kmRetirada) {
+
+    this.messageService.add({
+
+      severity: 'error',
+
+      summary: 'KM obrigatório',
+
+      detail: 'Informe o KM atual do veículo'
+    });
+
+    this.loadingConfirmar = false;
+
     return;
   }
 
@@ -126,62 +151,119 @@ previewLateralDireita = '';
       summary: 'Fotos obrigatórias',
 
       detail:
-        'Adicione as fotos do veículo'
+        'Adicione todas as fotos do veículo'
     });
 
     this.loadingConfirmar = false;
-    return;
 
+    return;
   }
 
   const veiculo =
     this.veiculoSelecionado;
 
-  // 🚀 PASSO 8 AQUI
+  // ALERTA TROCA DE ÓLEO
+
+  if (
+    veiculo.kmProximaTrocaOleo &&
+    this.kmRetirada >= veiculo.kmProximaTrocaOleo
+  ) {
+
+    this.messageService.add({
+
+      severity: 'warn',
+
+      summary: 'Troca de óleo pendente',
+
+      detail:
+        `Veículo ultrapassou o KM da próxima troca (${veiculo.kmProximaTrocaOleo} km)`
+    });
+
+    // Futuramente:
+    // salvar alerta no Firestore
+  }
+
   Promise.all([
 
-    this.movimentacaoService.uploadImagem(this.fotoPainel),
-    this.movimentacaoService.uploadImagem(this.fotoFrente),
-    this.movimentacaoService.uploadImagem(this.fotoTraseira),
-    this.movimentacaoService.uploadImagem(this.fotoLateralDireita),
-    this.movimentacaoService.uploadImagem(this.fotoLateralEsquerda),
+    this.movimentacaoService
+      .uploadImagem(this.fotoPainel),
 
+    this.movimentacaoService
+      .uploadImagem(this.fotoFrente),
+
+    this.movimentacaoService
+      .uploadImagem(this.fotoTraseira),
+
+    this.movimentacaoService
+      .uploadImagem(this.fotoLateralDireita),
+
+    this.movimentacaoService
+      .uploadImagem(this.fotoLateralEsquerda)
 
   ])
 
   .then(([
+
     urlPainel,
+
     urlFrente,
+
     urlTraseira,
+
     urlLateralDireita,
+
     urlLateralEsquerda
+
   ]) => {
 
-    // 🚀 AGORA cria movimentação
     const movimentacao: Movimentacao = {
 
-      motoristaId: usuario.id,
+      motoristaId:
+        usuario.id,
 
-      motoristaNome: usuario.nome + ' ' + usuario.sobrenome,
+      motoristaNome:
+        usuario.nome + ' ' + usuario.sobrenome,
 
-      veiculoId: veiculo.id!,
+      veiculoId:
+        veiculo.id!,
 
-      modelo: veiculo.modelo,
+      modelo:
+        veiculo.modelo,
 
-      placa: veiculo.placa,
+      placa:
+        veiculo.placa,
 
-      observacao: this.observacao,
+      observacao:
+        this.observacao,
 
-      dataRetirada: new Date().toISOString(),
+      kmRetirada:
+        this.kmRetirada,
 
-      dataDevolucao: '',
-      status: 'Em uso',
+      dataRetirada:
+        new Date().toISOString(),
+
+      dataDevolucao:
+        '',
+
+      status:
+        'Em uso',
+
       fotosRetirada: {
-        painel: urlPainel,
-        frente: urlFrente,
-        traseira: urlTraseira,
-        lateralDireita: urlLateralDireita,
-        lateralEsquerda:urlLateralEsquerda
+
+        painel:
+          urlPainel,
+
+        frente:
+          urlFrente,
+
+        traseira:
+          urlTraseira,
+
+        lateralDireita:
+          urlLateralDireita,
+
+        lateralEsquerda:
+          urlLateralEsquerda
       }
     };
 
@@ -193,7 +275,9 @@ previewLateralDireita = '';
 
     return this.veiculoService
       .atualizar(
+
         veiculo.id!,
+
         {
           status: 'Em uso'
         }
@@ -216,6 +300,19 @@ previewLateralDireita = '';
     this.dialogVisible = false;
 
     this.observacao = '';
+
+    this.kmRetirada = undefined;
+
+    this.fotoPainel = undefined;
+
+    this.fotoFrente = undefined;
+
+    this.fotoTraseira = undefined;
+
+    this.fotoLateralDireita = undefined;
+
+    this.fotoLateralEsquerda = undefined;
+
     this.loadingConfirmar = false;
   })
 
@@ -232,7 +329,7 @@ previewLateralDireita = '';
       summary: 'Erro',
 
       detail:
-        'Erro ao enviar imagens'
+        'Erro ao registrar movimentação'
     });
   });
 }

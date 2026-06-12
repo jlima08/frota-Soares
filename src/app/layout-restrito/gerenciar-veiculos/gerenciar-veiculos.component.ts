@@ -118,7 +118,9 @@ salvarVeiculo() {
     !this.veiculo.modelo ||
     !this.veiculo.ano ||
     !this.veiculo.placa ||
-    !this.veiculo.cor
+    !this.veiculo.cor ||
+    !this.veiculo.kmUltimaTrocaOleo ||
+  !this.veiculo.kmProximaTrocaOleo
   ) {
 
     this.messageService.add({
@@ -129,6 +131,21 @@ salvarVeiculo() {
 
     return;
   }
+  if (
+  this.veiculo.kmProximaTrocaOleo! <=
+  this.veiculo.kmUltimaTrocaOleo!
+) {
+
+  this.messageService.add({
+
+    severity: 'warn',
+
+    summary:
+      'KM da próxima troca deve ser maior'
+  });
+
+  return;
+}
 
   this.loading = true;
 

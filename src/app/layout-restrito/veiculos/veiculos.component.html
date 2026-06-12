@@ -5,7 +5,7 @@
     [modal]="true"
     [style]="{ width: '30rem' }">
 
-    <div class="flex flex-col gap-4">
+    <div class="flex flex-col gap-5">
         <div>
             Você ficará responsável pelo veículo:
             <br>
@@ -22,12 +22,35 @@
             placeholder="Digite uma observação">
         </textarea>
 
+        <div>
+  <p-floatlabel>
+
+    <p-inputnumber
+
+      inputId="kmAtual"
+
+      [(ngModel)]="kmRetirada"
+
+      [useGrouping]="false">
+
+    </p-inputnumber>
+
+    <label for="kmAtual">
+
+      KM atual do veículo
+
+    </label>
+
+  </p-floatlabel>
+</div>
+
         <!-- //foto painel -->
         <p-fileupload
             accept="image/*"
             [multiple]="false"
             [customUpload]="true"
             chooseLabel="Painel"
+            chooseIcon="pi pi-camera"
             cancelLabel="Remover"
             [showUploadButton]="false"
             (onSelect)="selecionarImagem($event, 'painel')">
@@ -44,6 +67,7 @@
                 [multiple]="false"
                 [customUpload]="true"
                 chooseLabel="Frente"
+                chooseIcon="pi pi-camera"
                 cancelLabel="Remover"
                 [showUploadButton]="false"
                 (onSelect)="selecionarImagem($event, 'frente')">
@@ -60,6 +84,7 @@
                 [multiple]="false"
                 [customUpload]="true"
                 chooseLabel="Traseira"
+                chooseIcon="pi pi-camera"
                 cancelLabel="Remover"
                 [showUploadButton]="false"
                 (onSelect)="selecionarImagem($event, 'traseira')">
@@ -76,6 +101,7 @@
                 [multiple]="false"
                 [customUpload]="true"
                 chooseLabel="Lateral Esquerda"
+                chooseIcon="pi pi-camera"
                 cancelLabel="Remover"
                 [showUploadButton]="false"
                 (onSelect)="selecionarImagem($event, 'lateralEsquerda')">
@@ -92,6 +118,7 @@
                 [multiple]="false"
                 [customUpload]="true"
                 chooseLabel="Lateral direita"
+                chooseIcon="pi pi-camera"
                 cancelLabel="Remover"
                 [showUploadButton]="false"
                 (onSelect)="selecionarImagem($event, 'lateralDireita')">
@@ -166,6 +193,11 @@
             
             <p>
                 Ano: <b>{{ carro.ano }}</b>, Cor do veiculo: <b>{{ carro.cor }}</b>
+            </p>
+
+            <p class="kms">
+                KM da última troca de óleo: <strong>{{ carro.kmUltimaTrocaOleo }} km</strong><br>
+                Km da proxima troca de óleo: <strong>{{ carro.kmProximaTrocaOleo }} km</strong>
             </p>
            
             <ng-template #footer>

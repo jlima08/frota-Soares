@@ -72,6 +72,56 @@
                 <label>Tipo do veículo</label>
                 </p-floatlabel>
             </div>
+            <div>
+            <p-floatlabel>
+
+                <p-inputnumber
+                class="w-full"
+
+                inputId="kmUltimaTroca"
+
+                [(ngModel)]="veiculo.kmUltimaTrocaOleo"
+
+                name="kmUltimaTrocaOleo"
+
+                [useGrouping]="false">
+
+                </p-inputnumber>
+
+                <label for="kmUltimaTroca">
+
+                KM da última troca de óleo
+
+                </label>
+
+            </p-floatlabel>
+            </div>
+
+            <div>
+            <p-floatlabel >
+
+                <p-inputnumber
+                class="w-full"
+                
+
+                inputId="kmProximaTroca"
+
+                [(ngModel)]="veiculo.kmProximaTrocaOleo"
+
+                name="kmProximaTrocaOleo"
+
+                [useGrouping]="false">
+
+                </p-inputnumber>
+
+                <label for="kmProximaTroca">
+
+                KM da próxima troca de óleo
+
+                </label>
+
+            </p-floatlabel>
+            </div>
             <div class="flex  gap-2">
                 <!-- <label>
                     Foto do veículo

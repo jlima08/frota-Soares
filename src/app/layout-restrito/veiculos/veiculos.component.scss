@@ -6,6 +6,9 @@
   //   display: grid;
   // gap: 16px;
   // grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  .kms{
+  margin-top: 10px !important;
+}
 }
 .icone-moto{
   font-size: 100px;
@@ -30,6 +33,7 @@ p-card:hover{
     scale: 1.02;
     box-shadow: 1px 1px 10px #cacaca;
 }
+
 
 @media screen and (max-width: 700px) {
   .main {
