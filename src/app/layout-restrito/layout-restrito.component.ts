@@ -64,6 +64,7 @@ usuario: any;
   this.movimentacaoService
   .listarAlertas()
   .subscribe(alertas => {
+    console.log(alertas);
 
     this.alertas = alertas;
 
@@ -186,6 +187,17 @@ alertas: any[] = [];
 abrirAlertas() {
 
   this.modalAlertas = true;
+}
+async limparAlerta(id: string) {
+
+  console.log('Limpando alerta:', id);
+
+  try {
+    await this.movimentacaoService.limparAlerta(id);
+    console.log('Alerta atualizado com sucesso');
+  } catch (error) {
+    console.error(error);
+  }
 }
 
 }

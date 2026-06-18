@@ -102,6 +102,7 @@ previewNota = '';
 previewPainelAbastecimento = '';
 
   showFiltrosAvancados = false
+  loading = false;
 
 modalDetalhesAbastecimento = false;
 abastecimentoSelecionado?: Movimentacao;
@@ -396,121 +397,73 @@ selecionarImagemDevolucao(
 
 confirmarDevolucaoFinal() {
 
-  if (
-    !this.movimentacaoDevolucao
-  ) return;
+  this.loading = true;
 
-  if (
-    !this.fotoPainelDevolucao
-  ) {
+  if (!this.movimentacaoDevolucao) {
+    this.loading = false;
+    return;
+  }
+
+  if (!this.fotoPainelDevolucao) {
 
     this.messageService.add({
-
       severity: 'error',
-
       summary: 'Imagem obrigatória',
-
-      detail:
-        'Adicione a foto do painel'
+      detail: 'Adicione a foto do painel'
     });
 
+    this.loading = false;
     return;
   }
 
   Promise.all([
-
-    this.movimentacaoService
-      .uploadImagem(
-        this.fotoPainelDevolucao
-      ),
-
-    this.movimentacaoService
-      .uploadImagem(
-        this.fotoFrenteDevolucao!
-      ),
-
-    this.movimentacaoService
-      .uploadImagem(
-        this.fotoTraseiraDevolucao!
-      ),
-
-    this.movimentacaoService
-      .uploadImagem(
-        this.fotoLateralEsquerdaDevolucao!
-      ),
-
-    this.movimentacaoService
-      .uploadImagem(
-        this.fotoLateralDireitaDevolucao!
-      )
-
+    this.movimentacaoService.uploadImagem(this.fotoPainelDevolucao),
+    this.movimentacaoService.uploadImagem(this.fotoFrenteDevolucao!),
+    this.movimentacaoService.uploadImagem(this.fotoTraseiraDevolucao!),
+    this.movimentacaoService.uploadImagem(this.fotoLateralEsquerdaDevolucao!),
+    this.movimentacaoService.uploadImagem(this.fotoLateralDireitaDevolucao!)
   ])
 
   .then(([
-
     urlPainel,
     urlFrente,
     urlTraseira,
     urlLateralEsquerda,
     urlLateralDireita
-
   ]) => {
 
-    return this.movimentacaoService
-      .atualizar(
-
-        this.movimentacaoDevolucao!.id!,
-
-        {
-
-          status: 'Finalizado',
-
-          dataDevolucao:
-            new Date().toISOString(),
-
-          observacaoDevolucao:
-            this.observacaoDevolucao,
-
-          fotosDevolucao: {
-
-            painel: urlPainel,
-
-            frente: urlFrente,
-
-            traseira: urlTraseira,
-
-            lateralEsquerda:
-              urlLateralEsquerda,
-
-            lateralDireita:
-              urlLateralDireita
-          }
+    return this.movimentacaoService.atualizar(
+      this.movimentacaoDevolucao!.id!,
+      {
+        status: 'Finalizado',
+        dataDevolucao: new Date().toISOString(),
+        observacaoDevolucao: this.observacaoDevolucao,
+        fotosDevolucao: {
+          painel: urlPainel,
+          frente: urlFrente,
+          traseira: urlTraseira,
+          lateralEsquerda: urlLateralEsquerda,
+          lateralDireita: urlLateralDireita
         }
-      );
+      }
+    );
   })
 
   .then(() => {
 
-    return this.veiculoService
-      .atualizar(
-
-        this.movimentacaoDevolucao!
-          .veiculoId!,
-
-        {
-          status: 'Ativo'
-        }
-      );
+    return this.veiculoService.atualizar(
+      this.movimentacaoDevolucao!.veiculoId!,
+      {
+        status: 'Ativo'
+      }
+    );
   })
 
   .then(() => {
 
     this.messageService.add({
-
       severity: 'success',
-
-      summary:
-        'Veículo devolvido'
+      summary: 'Veículo devolvido'
     });
 
     this.resetarDevolucao();
@@ -521,14 +474,15 @@ confirmarDevolucaoFinal() {
     console.error(error);
 
     this.messageService.add({
-
       severity: 'error',
-
       summary: 'Erro',
-
-      detail:
-        'Erro ao finalizar devolução'
+      detail: 'Erro ao finalizar devolução'
     });
+  })
+
+  .finally(() => {
+    this.loading = false;
+
   });
 }
 

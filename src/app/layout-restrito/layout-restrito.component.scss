@@ -152,6 +152,14 @@ footer {
     }
     
 }
+.card-alertas{
+    display: flex;
+    padding: 8px;
+    border: 1px solid #d4d4d4;
+    border-radius: 8px;
+    justify-content: space-between;
+    align-items: center;
+}
 
 /* DESKTOP */
 @media (max-width: 768px) {
@@ -170,6 +178,9 @@ footer {
 
 /* MOBILE */
 @media (max-width: 767px) {
+    .card-alertas{
+        flex-direction: column;
+    }
     .btn-none{
         display: block;
     }

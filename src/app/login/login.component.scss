@@ -8,11 +8,12 @@
 
     .cardLeft{
         width: 30%;
-        background-color: #131313;
+        background-color: #000000;
         height: 100%;
         display: flex;
         flex-direction: column;
         align-items: center;
+        justify-content: center;
         h2{
             text-align: center;
             margin-top: 40px;
@@ -25,16 +26,34 @@
         }
         img{
             width: 80%;
-            margin-top: 60px;
+            // margin-top: 60px;
+            transition: all 0.5s;
+        }
+        img:hover{
+            scale: 1.05;
+            // box-shadow: 1px 1px 10px 10px #3a3a3a;
+            filter: drop-shadow(0 8px 16px #81818166);
         }
     }
     .cardRight{
         width: 70%;
         height: 100dvh;
         display: flex;
-        justify-content: center;
+        gap: 50px;
         align-items: center;
+        justify-content: space-evenly;
         background-color: #f1f1f1;
+        flex-direction: column;
+        .titulo{
+            display: flex;
+            align-items: center;
+            flex-direction: column;
+            margin-top: 55px;
+            h2{
+                font-size: 30px;
+                font-weight: 600;
+            }
+        }
         form{
             width: 40%;
             display: flex;
@@ -42,8 +61,10 @@
             flex-direction: column;
             gap: 20px;
             border-radius: 10px;
-            border: 1px solid #c0c0c0;
+            border: 1px solid #d8d8d8;
+            transition: all 0.5s;            
             padding: 50px;
+            
              p-floatlabel{
                 width: 80%;
             }
@@ -53,6 +74,10 @@
             h2{
                 margin-bottom: 20px;
             }
+        }
+        form:hover{
+            box-shadow: 1px 1px 10px 10px #cfcfcf;
+            scale: 1.03;
         }
     }
 }

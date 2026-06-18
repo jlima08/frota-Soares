@@ -33,6 +33,24 @@ p-card:hover{
     scale: 1.02;
     box-shadow: 1px 1px 10px #cacaca;
 }
+.file::file-selector-button {
+  background: #3b82f6;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 6px;
+  cursor: pointer;
+  margin-right: 12px;
+}
+
+.file::file-selector-button:hover {
+  background: #2563eb;
+}
+
+.file {
+  width: 100%;
+  font-size: 14px;
+}
 
 
 @media screen and (max-width: 700px) {

@@ -1,17 +1,17 @@
  <p-toast [showTransitionOptions]="'250ms'" [showTransformOptions]="'translateX(100%)'" [hideTransitionOptions]="'150ms'" [hideTransformOptions]="'translateX(100%)'" />
 <div class="main-desktop">
     <div class="cardLeft">
-        <h2>Bem-vindo ao Sistema</h2>
-            <p>Gerenciamento de veículos da <strong>Soares Segurança</strong></p>
+        <!-- <h2>Bem-vindo ao Sistema</h2> -->
+            <!-- <p>Gerenciamento de veículos da <strong>Soares Segurança</strong></p> -->
         <img src="/logoSoares.png" alt="" srcset="">
     </div>
     <div class="cardRight">
-        <span class="sm:hidden block titulo">
-            <img class="w-40% text-center" src="/LogoSoares-Titulo.jpeg" alt="" srcset="">
-            <!-- <i class="pi pi-car"></i> -->
-            <h2>Bem vindo </h2>
-            <p></p>
-        </span>
+        
+        <div class="titulo">
+            <h2>Bem-vindo ao Sistema</h2>
+            <p>Gerenciamento de veículos da <strong>Soares Segurança</strong></p> 
+                   
+        </div>
          <form >
             <h2>Use seu email e senha para fazer o login.</h2>
             <p-floatlabel variant="on">
@@ -31,8 +31,12 @@
                 <div class="p-error mt-3">{{ errorMessage() }}</div>
             }
         </form>
+        <div>
+            <span class="copy"> © Soares Segurança Eletrônica</span>
+        </div>
     </div>
 </div>
+
 <div class="main-mobile">
     <!-- <div class="cardLeft">
         <h2>Gerenciamento de Frota</h2>

@@ -55,12 +55,7 @@
             [showUploadButton]="false"
             (onSelect)="selecionarImagem($event, 'painel')">
             </p-fileupload>
-            @if (previewPainel) {
-            <img
-                [src]="previewPainel"
-                class="w-full rounded-lg border"
-            />
-            }
+           
             <!-- //foto frente -->
             <p-fileupload
                 accept="image/*"
@@ -72,12 +67,7 @@
                 [showUploadButton]="false"
                 (onSelect)="selecionarImagem($event, 'frente')">
                 </p-fileupload>
-                @if (previewFrente) {
-                <img
-                    [src]="previewFrente"
-                    class="w-full rounded-lg border"
-                />
-                }
+                
             <!-- //foto traseira -->
             <p-fileupload
                 accept="image/*"
@@ -89,12 +79,7 @@
                 [showUploadButton]="false"
                 (onSelect)="selecionarImagem($event, 'traseira')">
                 </p-fileupload>
-                @if (previewTraseira) {
-                <img
-                    [src]="previewTraseira"
-                    class="w-full rounded-lg border"
-                />
-                }
+                
             <!-- //foto lateral esquerda -->
             <p-fileupload
                 accept="image/*"
@@ -106,12 +91,7 @@
                 [showUploadButton]="false"
                 (onSelect)="selecionarImagem($event, 'lateralEsquerda')">
                 </p-fileupload>
-                @if (previewLateralEsquerda) {
-                <img
-                    [src]="previewLateralEsquerda"
-                    class="w-full rounded-lg border"
-                />
-                }
+                
             <!-- //foto lateral direita -->
             <p-fileupload
                 accept="image/*"
@@ -123,12 +103,6 @@
                 [showUploadButton]="false"
                 (onSelect)="selecionarImagem($event, 'lateralDireita')">
                 </p-fileupload>
-                @if (previewLateralDireita) {
-                <img
-                    [src]="previewLateralDireita"
-                    class="w-full rounded-lg border"
-                />
-                }
 
         <div class="flex justify-end gap-2">
 

@@ -132,8 +132,13 @@ listarAlertas() {
     'alertas'
   );
 
-  return collectionData(
+  const q = query(
     ref,
+    where('ativo', '==', true)
+  );
+
+  return collectionData(
+    q,
     { idField: 'id' }
   );
 }
@@ -170,5 +175,19 @@ async verificarAlertaTrocaOleo(
     await getDocs(q);
 
   return !resultado.empty;
+}
+async limparAlerta(id: string) {
+
+  const alertaDoc = doc(
+    this.firestore,
+    `alertas/${id}`
+  );
+
+  return updateDoc(
+    alertaDoc,
+    {
+      ativo: false
+    }
+  );
 }
 }

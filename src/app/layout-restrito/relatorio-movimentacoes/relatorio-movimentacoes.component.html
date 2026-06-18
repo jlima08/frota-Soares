@@ -346,19 +346,8 @@
         chooseIcon="pi pi-camera"
         cancelLabel="Remover"
         [showUploadButton]="false"
-        (onSelect)="
-          selecionarImagemDevolucao(
-            $event,
-            'painel'
-          )
-        ">
+        (onSelect)="selecionarImagemDevolucao($event,'painel')">
       </p-fileupload>
-      @if (previewPainelDevolucao) {
-        <img
-          [src]="previewPainelDevolucao"
-          class="w-full rounded-lg border"
-        />
-      }
     </div>
 
     <!-- FRENTE -->
@@ -375,18 +364,9 @@
         cancelLabel="Remover"
         [showUploadButton]="false"
         (onSelect)="
-          selecionarImagemDevolucao(
-            $event,
-            'frente'
-          )
-        ">
+          selecionarImagemDevolucao($event,'frente')">
       </p-fileupload>
-      @if (previewFrenteDevolucao) {
-        <img
-          [src]="previewFrenteDevolucao"
-          class="w-full rounded-lg border"/>
-      }
-
+     
     </div>
 
     <!-- TRASEIRA -->
@@ -403,19 +383,9 @@
         cancelLabel="Remover"
         [showUploadButton]="false"
         (onSelect)="
-          selecionarImagemDevolucao(
-            $event,
-            'traseira'
-          )
-        ">
+          selecionarImagemDevolucao($event, 'traseira')">
 
       </p-fileupload>
-      @if (previewTraseiraDevolucao) {
-        <img
-          [src]="previewTraseiraDevolucao"
-          class="w-full rounded-lg border"
-        />
-      }
 
     </div>
 
@@ -433,19 +403,9 @@
         cancelLabel="Remover"
         [showUploadButton]="false"
         (onSelect)="
-          selecionarImagemDevolucao(
-            $event,
-            'lateralEsquerda'
-          )
-        ">
+          selecionarImagemDevolucao($event,'lateralEsquerda')">
 
       </p-fileupload>
-      @if (previewLateralEsquerdaDevolucao) {
-        <img
-          [src]="previewLateralEsquerdaDevolucao"
-          class="w-full rounded-lg border"
-        />
-      }
 
     </div>
 
@@ -463,24 +423,13 @@
         cancelLabel="Remover"
         [showUploadButton]="false"
         (onSelect)="
-          selecionarImagemDevolucao(
-            $event,
-            'lateralDireita'
-          )
-        ">
+          selecionarImagemDevolucao($event,'lateralDireita')">
       </p-fileupload>
-      @if (previewLateralDireitaDevolucao) {
-        <img
-          [src]="previewLateralDireitaDevolucao"
-          class="w-full rounded-lg border"
-        />
-      }
+      
     </div>
 
   </div>
   
-  
-
   <ng-template pTemplate="footer">
     <div class="flex justify-end gap-2">
       <p-button
@@ -494,6 +443,8 @@
         label="Confirmar devolução"
         severity="info"
         icon="pi pi-check"
+        [loading]="loading"
+        [disabled]="loading"
         (onClick)="confirmarDevolucaoFinal()">
       </p-button>
     </div>
@@ -794,27 +745,15 @@
         <input pInputText placeholder="Buscar por motorista" [(ngModel)]="filtroMotorista">
             
         <div class="filtrosAvancados " [ngClass]=" {'sm:invisible': !showFiltrosAvancados }">
-            <input
-                pInputText
-                placeholder="Placa"
-                [(ngModel)]="filtroPlaca">
-            <input
-                pInputText
-                placeholder="Modelo"
-                [(ngModel)]="filtroModelo">
+            <input pInputText placeholder="Placa" [(ngModel)]="filtroPlaca">
+            <input pInputText placeholder="Modelo" [(ngModel)]="filtroModelo">
             <div class="datas">
                 <label for="">Data de retirada: </label>
-                <input
-                    pInputText
-                    type="date"            
-                    [(ngModel)]="filtroDataRetirada">
+                <input pInputText type="date" [(ngModel)]="filtroDataRetirada">
             </div>
             <div class="datas">
                 <label for="">Data de devolução: </label>
-                <input
-                pInputText
-                    type="date"
-                    [(ngModel)]="filtroDataDevolucao">
+                <input pInputText type="date" [(ngModel)]="filtroDataDevolucao">
             </div>
         </div>    
 
@@ -850,13 +789,13 @@
       <div class=" flex flex-col gap-2">
          @if (mov.status === 'Em uso') {
             <!-- <p-message styleClass="sm:w-[40%] min-w-[134px]"  severity="warn" icon="pi pi-exclamation-circle" variant="outlined"></p-message> -->
-            <span pTooltip="Em uso" class="w-full flex justify-end">
-              <i  class="pi-yellow pi pi-exclamation-circle"></i>
+            <span class="w-full flex justify-end">
+              <i pTooltip="Em uso" class="pi-yellow pi pi-exclamation-circle" ></i>
             </span>
           } @else {
             <!-- <p-message styleClass="sm:w-[12%] !border-none"  severity="info" icon="pi pi-check-circle" variant="outlined"></p-message>  -->
-            <span pTooltip="Finalizado" class="w-full flex justify-end text-blue">
-               <i class="pi-blue pi pi-check-circle"></i>
+            <span   class="w-full flex justify-end text-blue">
+               <i class="pi-blue pi pi-check-circle " pTooltip="Finalizado" ></i>
              </span>
         }
         <div class="flex w-full justify-between">
@@ -891,6 +830,10 @@
         }
           </p>
         </span>
+        <p>
+          <strong>KM na retirada: </strong>
+          {{ mov.kmRetirada }}
+        </p>
         <div class="">
           <strong>Data e KM do último abasteciemento:</strong>
            @if (mov.abastecimento?.houveAbastecimento) {
@@ -913,7 +856,7 @@
         <span>
            @if (mov.observacao) {
 
-          <div class="flex gap-2">
+          <div class="flex gap-2 flex-wrap">
             <p-button
               label="Detalhes"
               icon="pi pi-eye"
@@ -926,7 +869,7 @@
             <p-button
               label="Abastecimento"
               icon="pi pi-car"
-              severity="info"
+              severity="warn"
               size="small"
               (onClick)="abrirAbastecimento(mov)">
             </p-button>
@@ -939,16 +882,24 @@
               (onClick)="verAbastecimento(mov)">
             </p-button>
             }
+            @if (mov.status === 'Em uso'){
+              <p-button
+               label="Devolver" 
+               icon="pi pi-check" 
+               severity="info" 
+               size="small"
+               (onClick)="abrirDialogDevolucao(mov)">
+              </p-button>
+          }     
         </div>
           } @else {
             <span class="w-[300px]">
               <p-message size="small" styleClass="w-[130px]" severity="warn">Sem observação</p-message>
             </span>
-          }
-        </span>      
+          }                    
+        </span> 
       </div>
     </div>
-
   }
 </div>
 <p-paginator
