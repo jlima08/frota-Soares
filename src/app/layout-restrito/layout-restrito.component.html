@@ -66,6 +66,7 @@
 </p-dialog>
 <div class="layout">
 
+  <!-- **********sidebar********** -->
   <div class="sidebar " [class.closed]="open">
     <div class="logo">
       <img src="/LogoSoares-Titulo.jpeg" alt="" srcset="">
@@ -74,12 +75,42 @@
     <div class="links">
       @if (usuario.role == 'Administrador') { 
         <a routerLinkActive="link-ativo" (click)="fecharSidebarMobile()" routerLink="/restrito/dashboard"><i class="pi pi-chart-bar"></i> Dashboard</a>
+        <!-- <p-panelmenu [model]="items" class="text-[#fff] !bg-[#000]" /> -->
        }
         <a routerLinkActive="link-ativo" (click)="fecharSidebarMobile()" routerLink="/restrito/veiculos"><i class="pi pi-car"></i> Veículos</a>
-        <a routerLinkActive="link-ativo" (click)="fecharSidebarMobile()" routerLink="/restrito/relatorio"><i class="pi pi-file"></i> Relatórios</a>
+        <div class="flex flex-col">
+            <div class="subItens cursor-pointer" (click)="showSubmenu = !showSubmenu" >
+              <i class="pi pi-file"></i>
+              <p>Relatórios</p>
+              <span class="flex justify-end w-full">
+                <i [ngClass]="showSubmenu ? 'pi pi-chevron-up' : 'pi pi-chevron-down'"></i>
+              </span>
+            </div>
+            <div
+              class="sub overflow-hidden transition-all duration-300"
+              [ngClass]="showSubmenu ? 'max-h-40 opacity-100 mt-3' : 'max-h-0 opacity-0' ">
+              <a routerLink="/restrito/relatorio"
+                routerLinkActive="link-ativo"
+                (click)="fecharSidebarMobile()"
+                class="flex items-center gap-2">
+                <i class="pi pi-objects-column"></i>
+                Movimentações
+              </a>
+
+              <a
+                routerLink="/restrito/relatorio-manutencao"
+                routerLinkActive="link-ativo"
+                (click)="fecharSidebarMobile()"
+                class="flex items-center gap-2" >
+                <i class="pi pi-warehouse"></i>
+                Manutenções
+              </a>
+            </div>
+          </div>
+        <!-- <a routerLinkActive="link-ativo" (click)="fecharSidebarMobile()" routerLink="/restrito/relatorio"><i class="pi pi-file"></i> Relatórios</a> -->
         @if (usuario.role == 'Administrador') {        
           <a routerLinkActive="link-ativo " (click)="fecharSidebarMobile()" routerLink="/restrito/motorista"><i class="pi pi-user"></i> Motoristas</a>
-          <a routerLinkActive="link-ativo" (click)="fecharSidebarMobile()" routerLink="/restrito/gerenciar-veiculos">
+          <a class="gvei" routerLinkActive="link-ativo" (click)="fecharSidebarMobile()" routerLink="/restrito/gerenciar-veiculos">
             <div class="icone-carro" (click)="fecharSidebarMobile()">
               <span class="material-symbols-outlined">car_gear</span>
               <p>Gerenciar Veículos</p>
@@ -101,6 +132,7 @@
       </span>
     </div>    
   </div>
+  <!-- ********************************* -->
 
   <div class="centro">
 

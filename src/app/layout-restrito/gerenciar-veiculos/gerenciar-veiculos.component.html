@@ -74,52 +74,31 @@
             </div>
             <div>
             <p-floatlabel>
-
                 <p-inputnumber
                 class="w-full"
-
                 inputId="kmUltimaTroca"
-
                 [(ngModel)]="veiculo.kmUltimaTrocaOleo"
-
                 name="kmUltimaTrocaOleo"
-
                 [useGrouping]="false">
-
                 </p-inputnumber>
-
                 <label for="kmUltimaTroca">
-
                 KM da última troca de óleo
-
                 </label>
-
             </p-floatlabel>
             </div>
 
             <div>
             <p-floatlabel >
-
                 <p-inputnumber
-                class="w-full"
-                
-
+                class="w-full"              
                 inputId="kmProximaTroca"
-
                 [(ngModel)]="veiculo.kmProximaTrocaOleo"
-
                 name="kmProximaTrocaOleo"
-
                 [useGrouping]="false">
-
                 </p-inputnumber>
-
                 <label for="kmProximaTroca">
-
                 KM da próxima troca de óleo
-
                 </label>
-
             </p-floatlabel>
             </div>
             <div class="flex  gap-2">
@@ -136,17 +115,6 @@
                 </p-fileupload>
             </div>
 
-<!-- @if (previewFotoVeiculo) {
-
-    <img
-
-        [src]="previewFotoVeiculo"
-
-        class="w-full max-w-sm rounded-lg border mt-2"
-    />
-
-} -->
-
             <div class="btn-form">
                 <p-button icon="pi pi-save" label="Salvar" [loading]="loading" (onClick)="salvarVeiculo()" [raised]="true"  ></p-button>
                 <p-button icon="pi pi-times" label="Cancelar" severity="danger" (onClick)="resetFormulario()" outlined="true" [raised]="true" ></p-button>
@@ -154,7 +122,6 @@
             
         </form>
     </div>
-
     }
 
     <div class="card">
@@ -212,6 +179,17 @@
                 [raised]="true" 
                 icon="pi pi-trash" 
                 (onClick)="confirmDelete($event, veiculo.id)" >
+            </p-button>
+            <p-button 
+                pTooltip="Manutenção do veículo" 
+                tooltipPosition="top"
+                severity="warn" 
+                [rounded]="true" 
+                [outlined]="true" 
+                [raised]="true" 
+                icon="pi pi-cog"
+                [routerLink]="['/restrito/manutencao', veiculo.id]" 
+                 >
             </p-button>
           </td>
       </tr>

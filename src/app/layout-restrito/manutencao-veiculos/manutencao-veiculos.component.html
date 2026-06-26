@@ -1,0 +1,95 @@
+<p-toast />
+<app-card-page title="Manutenção do veículo" icon="pi pi-cog">
+
+    <div class="infoCar">
+        <div class="flex flex-col">
+            <label for="">Modelo</label>
+            <input pInputText type="text" value="{{veiculo?.modelo}}" disabled>
+        </div>
+        <div class="flex flex-col">
+            <label for="">Placa</label>
+            <input pInputText type="text" value="{{veiculo?.placa | uppercase}}" disabled>
+        </div>
+        <div class="flex flex-col">
+            <label for="">Cor</label>
+            <input pInputText type="text" value="{{ veiculo?.cor | uppercase}}" disabled>
+        </div>
+        <div class="flex flex-col">
+            <label for="">Situação</label>
+            <input pInputText type="text" value="{{ veiculo?.status | uppercase}}" disabled>
+        </div>
+    </div>
+
+    <div class="form-manutencao">
+
+        <p-floatlabel>
+            <p-select class="w-full" [options]="tiposManutencao" optionLabel="label" optionValue="value"
+                [(ngModel)]="manutencao.tipo">
+            </p-select>            
+            <label>
+                Tipo da manutenção
+            </label>
+        </p-floatlabel>
+
+        <p-floatlabel>
+            <p-inputNumber [(ngModel)]="manutencao.km" [useGrouping]="false">
+            </p-inputNumber>
+            <label>
+                KM do veículo
+            </label>
+        </p-floatlabel>
+
+        <p-floatlabel>
+            <textarea pInputTextarea rows="2" class="w-full" [(ngModel)]="manutencao.servicoRealizado">
+        </textarea>
+            <label>
+                Serviço realizado
+            </label>
+        </p-floatlabel>
+
+        <p-floatlabel>
+            <textarea pInputTextarea rows="2" class="w-full" [(ngModel)]="manutencao.produtosUtilizados">
+        </textarea>
+            <label>
+                Descrição dos produtos / Peças utilizadas / Marca
+            </label>
+        </p-floatlabel>
+
+        <p-floatlabel>
+              <p-select
+                class="w-full"
+                [options]="oficinas"
+                optionLabel="label"
+                optionValue="value"
+                [(ngModel)]="manutencao.oficina">
+            </p-select>
+            <label>
+                Oficina
+            </label>
+        </p-floatlabel>
+        @if (manutencao.oficina === 'Terceirizada') {
+
+            <p-floatlabel>
+                <input
+                    pInputText
+                    class="w-full"
+                    [(ngModel)]="outraOficina">
+                <label>
+                    Nome da oficina
+                </label>
+            </p-floatlabel>
+
+        }
+
+        <p-floatlabel>
+            <p-inputNumber mode="currency" currency="BRL" locale="pt-BR" [(ngModel)]="manutencao.valor">
+            </p-inputNumber>
+            <label>Valor gasto</label>
+        </p-floatlabel>
+
+        <p-button styleClass="transition-all delay-150 duration-300 ease-in-out  hover:shadow-xl hover:scale-[1.02]" severity="contrast" label="Salvar manutenção" icon="pi pi-save" [loading]="loading" (onClick)="salvar()">
+        </p-button>
+
+    </div>
+
+</app-card-page>

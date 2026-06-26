@@ -1,23 +1,26 @@
 import { Component, inject, signal } from '@angular/core';
-import { CardPageComponent } from "../components/card-page/card-page.component";
+import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
+import { RouterLink } from "@angular/router";
+
+import { MovimentacaoService } from '../../service/movimentacao.service';
 import { VeiculosService } from '../../service/veiculos.service';
+import { CardPageComponent } from "../components/card-page/card-page.component";
+import { Veiculo } from '../../interfaces/veiculo.interface';
+
 import { TableModule } from "primeng/table";
 import { ButtonModule } from "primeng/button";
 import { FloatLabelModule } from "primeng/floatlabel";
 import { InputTextModule } from 'primeng/inputtext';
-import { Veiculo } from '../../interfaces/veiculo.interface';
-import { FormsModule } from '@angular/forms';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { SelectModule } from 'primeng/select';
 import { ToastModule } from "primeng/toast";
-import { CommonModule } from '@angular/common';
 import { MessageModule } from 'primeng/message';
 import { TooltipModule } from 'primeng/tooltip';
 import { ConfirmDialogModule } from "primeng/confirmdialog";
 import { InputNumberModule } from 'primeng/inputnumber';
 import { InputMaskModule } from 'primeng/inputmask';
 import { FileUploadModule } from "primeng/fileupload";
-import { MovimentacaoService } from '../../service/movimentacao.service';
 
 // import { v4 as uuid } from 'uuid';
 
@@ -28,8 +31,16 @@ import { MovimentacaoService } from '../../service/movimentacao.service';
   imports: [
     CardPageComponent,
     TableModule,
-    ButtonModule, FloatLabelModule, InputTextModule, FormsModule, SelectModule, ToastModule, CommonModule, MessageModule, TooltipModule, ConfirmDialogModule, InputNumberModule, InputMaskModule,
-    FileUploadModule
+    ButtonModule,
+    FloatLabelModule, 
+    InputTextModule, 
+    FormsModule, 
+    SelectModule, 
+    ToastModule, 
+    CommonModule, 
+    MessageModule, TooltipModule, ConfirmDialogModule, InputNumberModule, InputMaskModule,
+    FileUploadModule,
+    RouterLink
 ],
   templateUrl: './gerenciar-veiculos.component.html',
   styleUrl: './gerenciar-veiculos.component.scss',

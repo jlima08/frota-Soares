@@ -1,0 +1,191 @@
+<app-card-page title="Relatorio de manutenções" icon="pi pi-warehouse">
+
+<!-- DASHBOARD -->
+
+<div class="gastos grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
+
+    <p-floatlabel>
+
+        <input
+            pInputText
+            disabled
+            [value]="(totalGeral | currency:'BRL') ?? ''">
+
+        <label>Total gasto</label>
+
+    </p-floatlabel>
+
+    <p-floatlabel>
+
+        <input
+            pInputText
+            disabled
+            [value]="(totalCarros | currency:'BRL') ?? ''">
+
+        <label>Gasto com carros</label>
+
+    </p-floatlabel>
+
+    <p-floatlabel>
+
+        <input
+            pInputText
+            disabled
+            [value]="(totalMotos | currency:'BRL') ?? ''">
+
+        <label>Gasto com motos</label>
+
+    </p-floatlabel>
+
+    <p-floatlabel>
+
+        <input
+            pInputText
+            disabled
+            [value]="(totalOleo | currency:'BRL') ?? ''">
+
+        <label>Troca de óleo</label>
+
+    </p-floatlabel>
+
+    <p-floatlabel>
+
+        <input
+            pInputText
+            disabled
+            [value]="(totalPneus | currency:'BRL') ?? ''">
+
+        <label>Troca de pneus</label>
+
+    </p-floatlabel>
+
+    <p-floatlabel>
+
+        <input
+            pInputText
+            disabled
+            [value]="(totalOutros | currency:'BRL') ?? ''">
+
+        <label>Outros serviços</label>
+
+    </p-floatlabel>
+
+    <p-floatlabel>
+
+        <input
+            pInputText
+            disabled
+            [value]="quantidadeManutencoes">
+
+        <label>Total de manutenções</label>
+
+    </p-floatlabel>
+
+    <p-floatlabel>
+
+        <input
+            pInputText
+            disabled
+            [value]="quantidadeCarros">
+
+        <label>Manutenções em carros</label>
+
+    </p-floatlabel>
+
+    <p-floatlabel>
+
+        <input
+            pInputText
+            disabled
+            [value]="quantidadeMotos">
+
+        <label>Manutenções em motos</label>
+
+    </p-floatlabel>
+
+</div>
+
+
+<div class="movs">
+
+@for (manutencao of manutencoes; track manutencao.id) {
+
+<div class="card-mov">
+    <div class="icone-card ">
+        <div class="flex items-center gap-4">
+            <div class="icone">
+                <span class="material-symbols-outlined">car_gear</span>
+            </div>
+            <div>
+                <h2 class="font-bold">{{ manutencao.modelo }}</h2>
+                <small>{{ manutencao.placa | uppercase}}</small>
+
+            </div>
+        </div>
+        <!-- <p-message size="small">{{ manutencao.tipo }}</p-message> -->
+        <p-tag
+        [rounded]="true"
+            severity="info"
+            [value]="manutencao.tipo">
+        </p-tag>
+    </div>
+    
+    <p>
+        <strong>KM</strong>
+        {{ manutencao.km }}
+    </p>
+    <p>
+        <strong>Oficina</strong>
+        {{ manutencao.oficina }}
+    </p>
+
+    <p>
+        <strong>Valor</strong>
+        {{ manutencao.valor | currency:'BRL' }}
+    </p>
+
+    <p>
+        <strong>Data</strong>
+        {{ manutencao.data | date:'dd/MM/yyyy HH:mm' }}
+    </p>
+
+   <p-accordion>
+
+    <p-accordion-panel value="0">
+
+        <p-accordion-header>
+            <!-- <i class="pi pi-eye mr-2"></i> -->
+            Ver detalhes
+        </p-accordion-header>
+
+        <p-accordion-content>
+            <div class="flex flex-col gap-4">
+                <div>
+                    <p class="font-bold">
+                        Serviço realizado
+                    </p>
+
+                    <div class="bg-surface-100 rounded-lg p-3">
+                        {{ manutencao.servicoRealizado }}
+                    </div>
+
+                </div>
+
+                <div>
+                    <p class="font-bold">
+                        Produtos utilizados
+                    </p>
+                    <div class="bg-surface-100 rounded-lg p-3">
+                        {{ manutencao.produtosUtilizados }}
+                    </div>
+
+                </div>
+            </div>
+        </p-accordion-content>
+    </p-accordion-panel>
+</p-accordion>
+</div>
+}
+
+</div>
+</app-card-page>

@@ -35,7 +35,7 @@ import { PaginatorModule } from "primeng/paginator";
     FormsModule,
     InputTextModule, CommonModule, ToastModule, ConfirmDialogModule, DialogModule, FileUploadModule, TextareaModule, CheckboxModule,
     PaginatorModule
-],
+  ],
   templateUrl: './relatorio-movimentacoes.component.html',
   styleUrl: './relatorio-movimentacoes.component.scss',
   providers: [MessageService, ConfirmationService]
@@ -45,7 +45,7 @@ export class RelatorioMovimentacoesComponent {
   private movimentacaoService = inject(MovimentacaoService);
   private veiculoService = inject(VeiculosService);
   private messageService = inject(MessageService)
-  private confirmationService =  inject(ConfirmationService);
+  private confirmationService = inject(ConfirmationService);
   private auth = inject(Auth);
   private motoristaService = inject(MotoristasService);
 
@@ -61,7 +61,7 @@ export class RelatorioMovimentacoesComponent {
   paginaAtual = 0;
   itensPorPagina = 10;
 
-    //filtros
+  //filtros
   filtroMotorista = '';
   filtroPlaca = '';
   filtroModelo = '';
@@ -70,583 +70,568 @@ export class RelatorioMovimentacoesComponent {
 
   //imgs devolução
   fotoPainelDevolucao?: File;
-fotoFrenteDevolucao?: File;
-fotoTraseiraDevolucao?: File;
-fotoLateralEsquerdaDevolucao?: File;
-fotoLateralDireitaDevolucao?: File;
+  fotoFrenteDevolucao?: File;
+  fotoTraseiraDevolucao?: File;
+  fotoLateralEsquerdaDevolucao?: File;
+  fotoLateralDireitaDevolucao?: File;
 
-previewPainelDevolucao = '';
-previewFrenteDevolucao = '';
-previewTraseiraDevolucao = '';
-previewLateralEsquerdaDevolucao = '';
-previewLateralDireitaDevolucao = '';
+  previewPainelDevolucao = '';
+  previewFrenteDevolucao = '';
+  previewTraseiraDevolucao = '';
+  previewLateralEsquerdaDevolucao = '';
+  previewLateralDireitaDevolucao = '';
 
-// imgs comparacao
-modalComparacao = false;
-imagemAntes = '';
-imagemDepois = '';
-tituloComparacao = '';
+  // imgs comparacao
+  modalComparacao = false;
+  imagemAntes = '';
+  imagemDepois = '';
+  tituloComparacao = '';
 
-modalDevolucao = false;
-movimentacaoDevolucao?: Movimentacao;
-observacaoDevolucao = '';
+  modalDevolucao = false;
+  movimentacaoDevolucao?: Movimentacao;
+  observacaoDevolucao = '';
 
-//abastecimento
-modalAbastecimento = false;
-movimentacaoAbastecimento?: Movimentacao;
-houveAbastecimento = false;
-kmAbastecimento?: number;
-fotoNota?: File;
-fotoPainelAbastecimento?: File;
-previewNota = '';
-previewPainelAbastecimento = '';
+  //abastecimento
+  modalAbastecimento = false;
+  movimentacaoAbastecimento?: Movimentacao;
+  houveAbastecimento = false;
+  kmAbastecimento?: number;
+  fotoNota?: File;
+  fotoPainelAbastecimento?: File;
+  previewNota = '';
+  previewPainelAbastecimento = '';
 
   showFiltrosAvancados = false
   loading = false;
 
-modalDetalhesAbastecimento = false;
-abastecimentoSelecionado?: Movimentacao;
-verAbastecimento(
-  mov: Movimentacao
-) {
+  modalDetalhesAbastecimento = false;
+  abastecimentoSelecionado?: Movimentacao;
+  verAbastecimento(
+    mov: Movimentacao
+  ) {
 
-  this.abastecimentoSelecionado = mov;
+    this.abastecimentoSelecionado = mov;
 
-  this.modalDetalhesAbastecimento = true;
-}  
+    this.modalDetalhesAbastecimento = true;
+  }
 
-movimentacaoSelecionada?:Movimentacao;
+  movimentacaoSelecionada?: Movimentacao;
 
   abrirAbastecimento(
-  mov: Movimentacao
-) {
+    mov: Movimentacao
+  ) {
 
-  this.movimentacaoAbastecimento = mov;
+    this.movimentacaoAbastecimento = mov;
 
-  this.modalAbastecimento = true;
-}
+    this.modalAbastecimento = true;
+  }
 
   abrirComparacao(
 
-  titulo: string,
+    titulo: string,
 
-  antes?: string,
+    antes?: string,
 
-  depois?: string
+    depois?: string
 
-) {
+  ) {
 
-  this.tituloComparacao =
-    titulo;
+    this.tituloComparacao =
+      titulo;
 
-  this.imagemAntes =
-    antes || '';
+    this.imagemAntes =
+      antes || '';
 
-  this.imagemDepois =
-    depois || '';
+    this.imagemDepois =
+      depois || '';
 
-  this.modalComparacao =
-    true;
-}
+    this.modalComparacao =
+      true;
+  }
 
   abrirObservacao(
-  movimentacao: Movimentacao
-) {
+    movimentacao: Movimentacao
+  ) {
 
-  this.movimentacaoSelecionada =
-    movimentacao;
+    this.movimentacaoSelecionada =
+      movimentacao;
 
-  this.modalObservacao = true;
-}
+    this.modalObservacao = true;
+  }
 
-  FiltrosAvancados(){
+  FiltrosAvancados() {
     this.showFiltrosAvancados = !this.showFiltrosAvancados
   }
 
   ngOnInit(): void {
 
-  const usuarioLogado = this.auth.currentUser;
+    const usuarioLogado = this.auth.currentUser;
 
-  if (!usuarioLogado) return;
+    if (!usuarioLogado) return;
 
-  this.motoristaService
-    .buscarPorUid(usuarioLogado.uid)
-    .subscribe(usuario => {
+    this.motoristaService
+      .buscarPorUid(usuarioLogado.uid)
+      .subscribe(usuario => {
 
-      this.usuario = usuario;
+        this.usuario = usuario;
 
-      this.movimentacaoService
-        .listar()
-        .subscribe(resposta => {
+        this.movimentacaoService
+          .listar()
+          .subscribe(resposta => {
 
-          let movimentacoesFiltradas = resposta;
+            let movimentacoesFiltradas = resposta;
 
-          // SE FOR MOTORISTA
-          if (this.usuario.role === 'Motorista') {
+            // SE FOR MOTORISTA
+            if (this.usuario.role === 'Motorista') {
 
-            movimentacoesFiltradas = resposta.filter(mov =>
+              movimentacoesFiltradas = resposta.filter(mov =>
 
-              mov.motoristaId === this.usuario.id
-            );
-          }
+                mov.motoristaId === this.usuario.id
+              );
+            }
 
-          // ORDENAR MAIS RECENTES
-          movimentacoesFiltradas.sort((a, b) => {
+            // ORDENAR MAIS RECENTES
+            movimentacoesFiltradas.sort((a, b) => {
 
-            return new Date(b.dataRetirada).getTime()
-              - new Date(a.dataRetirada).getTime();
+              return new Date(b.dataRetirada).getTime()
+                - new Date(a.dataRetirada).getTime();
+            });
+
+            this.movimentacoes = movimentacoesFiltradas;
+
+            this.movimentacoesOriginais =
+              movimentacoesFiltradas;
           });
-
-          this.movimentacoes = movimentacoesFiltradas;
-
-          this.movimentacoesOriginais =
-            movimentacoesFiltradas;
-        });
-    });
-}
-
- finalizar(movimentacao: Movimentacao) {
-
-  if (!movimentacao.id || !movimentacao.veiculoId) {
-    return;
+      });
   }
 
-  this.movimentacaoService.finalizarMovimentacao(movimentacao.id)
+  finalizar(movimentacao: Movimentacao) {
 
-    .then(() => {
+    if (!movimentacao.id || !movimentacao.veiculoId) {
+      return;
+    }
 
-      return this.veiculoService
-        .atualizar(
-          movimentacao.veiculoId,
+    this.movimentacaoService.finalizarMovimentacao(movimentacao.id)
+
+      .then(() => {
+
+        return this.veiculoService
+          .atualizar(
+            movimentacao.veiculoId,
+            {
+              status: 'Ativo'
+            }
+          );
+      })
+
+      .then(() => {
+
+        this.messageService.add({
+
+          severity: 'success',
+
+          summary: 'Veículo devolvido',
+
+          detail:
+            'Veículo disponível novamente'
+        });
+      })
+
+      .catch(error => {
+
+        console.error(error);
+      });
+  }
+
+  filtrar() {
+
+    this.movimentacoes =
+      this.movimentacoesOriginais.filter(mov => {
+
+        const motorista =
+          mov.motoristaNome
+            ?.toLowerCase()
+            .includes(
+              this.filtroMotorista
+                .toLowerCase()
+            );
+
+        const placa =
+          mov.placa
+            ?.toLowerCase()
+            .includes(
+              this.filtroPlaca
+                .toLowerCase()
+            );
+
+        const modelo =
+          mov.modelo
+            ?.toLowerCase()
+            .includes(
+              this.filtroModelo
+                .toLowerCase()
+            );
+
+        const dataRetirada =
+          !this.filtroDataRetirada ||
+
+          mov.dataRetirada
+            ?.includes(
+              this.filtroDataRetirada
+            );
+
+        const dataDevolucao =
+          !this.filtroDataDevolucao ||
+
+          mov.dataDevolucao
+            ?.includes(
+              this.filtroDataDevolucao
+            );
+
+        return (
+          motorista &&
+          placa &&
+          modelo &&
+          dataRetirada &&
+          dataDevolucao
+        );
+      });
+
+    this.paginaAtual = 0;
+  }
+
+  limparFiltros() {
+
+    this.filtroMotorista = '';
+
+    this.filtroPlaca = '';
+
+    this.filtroModelo = '';
+
+    this.filtroDataRetirada = '';
+
+    this.filtroDataDevolucao = '';
+
+    this.movimentacoes =
+      this.movimentacoesOriginais;
+
+    this.paginaAtual = 0;
+  }
+
+  abrirDialogDevolucao(
+    mov: Movimentacao
+  ) {
+
+    this.movimentacaoDevolucao =
+      mov;
+
+    this.modalDevolucao = true;
+  }
+
+  selecionarImagemDevolucao(
+    event: any,
+    tipo: string
+  ) {
+
+    const file =
+      event.files[0];
+
+    if (!file) return;
+
+    const preview =
+      URL.createObjectURL(file);
+
+    switch (tipo) {
+
+      case 'painel':
+
+        this.fotoPainelDevolucao =
+          file;
+
+        this.previewPainelDevolucao =
+          preview;
+
+        break;
+
+      case 'frente':
+
+        this.fotoFrenteDevolucao =
+          file;
+
+        this.previewFrenteDevolucao =
+          preview;
+
+        break;
+
+      case 'traseira':
+
+        this.fotoTraseiraDevolucao =
+          file;
+
+        this.previewTraseiraDevolucao =
+          preview;
+
+        break;
+
+      case 'lateralEsquerda':
+
+        this.fotoLateralEsquerdaDevolucao =
+          file;
+
+        this.previewLateralEsquerdaDevolucao =
+          preview;
+
+        break;
+
+      case 'lateralDireita':
+
+        this.fotoLateralDireitaDevolucao =
+          file;
+
+        this.previewLateralDireitaDevolucao =
+          preview;
+
+        break;
+    }
+  }
+
+  confirmarDevolucaoFinal() {
+
+    this.loading = true;
+
+    if (!this.movimentacaoDevolucao) {
+      this.loading = false;
+      return;
+    }
+
+    if (!this.fotoPainelDevolucao) {
+
+      this.messageService.add({
+        severity: 'error',
+        summary: 'Imagem obrigatória',
+        detail: 'Adicione a foto do painel'
+      });
+
+      this.loading = false;
+      return;
+    }
+
+    Promise.all([
+      this.movimentacaoService.uploadImagem(this.fotoPainelDevolucao),
+      this.movimentacaoService.uploadImagem(this.fotoFrenteDevolucao!),
+      this.movimentacaoService.uploadImagem(this.fotoTraseiraDevolucao!),
+      this.movimentacaoService.uploadImagem(this.fotoLateralEsquerdaDevolucao!),
+      this.movimentacaoService.uploadImagem(this.fotoLateralDireitaDevolucao!)
+    ])
+
+      .then(([
+        urlPainel,
+        urlFrente,
+        urlTraseira,
+        urlLateralEsquerda,
+        urlLateralDireita
+      ]) => {
+
+        return this.movimentacaoService.atualizar(
+          this.movimentacaoDevolucao!.id!,
+          {
+            status: 'Finalizado',
+            dataDevolucao: new Date().toISOString(),
+            observacaoDevolucao: this.observacaoDevolucao,
+            fotosDevolucao: {
+              painel: urlPainel,
+              frente: urlFrente,
+              traseira: urlTraseira,
+              lateralEsquerda: urlLateralEsquerda,
+              lateralDireita: urlLateralDireita
+            }
+          }
+        );
+      })
+
+      .then(() => {
+
+        return this.veiculoService.atualizar(
+          this.movimentacaoDevolucao!.veiculoId!,
           {
             status: 'Ativo'
           }
         );
-    })
+      })
 
-    .then(() => {
+      .then(() => {
 
-      this.messageService.add({
+        this.messageService.add({
+          severity: 'success',
+          summary: 'Veículo devolvido'
+        });
 
-        severity: 'success',
+        this.resetarDevolucao();
+      })
 
-        summary: 'Veículo devolvido',
+      .catch(error => {
 
-        detail:
-          'Veículo disponível novamente'
+        console.error(error);
+
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Erro',
+          detail: 'Erro ao finalizar devolução'
+        });
+      })
+
+      .finally(() => {
+        this.loading = false;
+
       });
-    })
-
-    .catch(error => {
-
-      console.error(error);
-    });
-}
-
-  filtrar() {
-
-  this.movimentacoes =
-    this.movimentacoesOriginais.filter(mov => {
-
-      const motorista =
-        mov.motoristaNome
-          ?.toLowerCase()
-          .includes(
-            this.filtroMotorista
-              .toLowerCase()
-          );
-
-      const placa =
-        mov.placa
-          ?.toLowerCase()
-          .includes(
-            this.filtroPlaca
-              .toLowerCase()
-          );
-
-      const modelo =
-        mov.modelo
-          ?.toLowerCase()
-          .includes(
-            this.filtroModelo
-              .toLowerCase()
-          );
-
-      const dataRetirada =
-        !this.filtroDataRetirada ||
-
-        mov.dataRetirada
-          ?.includes(
-            this.filtroDataRetirada
-          );
-
-      const dataDevolucao =
-        !this.filtroDataDevolucao ||
-
-        mov.dataDevolucao
-          ?.includes(
-            this.filtroDataDevolucao
-          );
-
-      return (
-        motorista &&
-        placa &&
-        modelo &&
-        dataRetirada &&
-        dataDevolucao
-      );
-    });
-
-    this.paginaAtual = 0;
-}
-
-limparFiltros() {
-
-  this.filtroMotorista = '';
-
-  this.filtroPlaca = '';
-
-  this.filtroModelo = '';
-
-  this.filtroDataRetirada = '';
-
-  this.filtroDataDevolucao = '';
-
-  this.movimentacoes =
-    this.movimentacoesOriginais;
-
-    this.paginaAtual = 0;
-}
-
-abrirDialogDevolucao(
-  mov: Movimentacao
-) {
-
-  this.movimentacaoDevolucao =
-    mov;
-
-  this.modalDevolucao = true;
-}
-
-selecionarImagemDevolucao(
-  event: any,
-  tipo: string
-) {
-
-  const file =
-    event.files[0];
-
-  if (!file) return;
-
-  const preview =
-    URL.createObjectURL(file);
-
-  switch(tipo) {
-
-    case 'painel':
-
-      this.fotoPainelDevolucao =
-        file;
-
-      this.previewPainelDevolucao =
-        preview;
-
-    break;
-
-    case 'frente':
-
-      this.fotoFrenteDevolucao =
-        file;
-
-      this.previewFrenteDevolucao =
-        preview;
-
-    break;
-
-    case 'traseira':
-
-      this.fotoTraseiraDevolucao =
-        file;
-
-      this.previewTraseiraDevolucao =
-        preview;
-
-    break;
-
-    case 'lateralEsquerda':
-
-      this.fotoLateralEsquerdaDevolucao =
-        file;
-
-      this.previewLateralEsquerdaDevolucao =
-        preview;
-
-    break;
-
-    case 'lateralDireita':
-
-      this.fotoLateralDireitaDevolucao =
-        file;
-
-      this.previewLateralDireitaDevolucao =
-        preview;
-
-    break;
-  }
-}
-
-confirmarDevolucaoFinal() {
-
-  this.loading = true;
-
-  if (!this.movimentacaoDevolucao) {
-    this.loading = false;
-    return;
   }
 
-  if (!this.fotoPainelDevolucao) {
+  resetarDevolucao() {
 
-    this.messageService.add({
-      severity: 'error',
-      summary: 'Imagem obrigatória',
-      detail: 'Adicione a foto do painel'
-    });
+    this.modalDevolucao = false;
 
-    this.loading = false;
-    return;
+    this.movimentacaoDevolucao =
+      undefined;
+
+    this.observacaoDevolucao = '';
+
+    this.fotoPainelDevolucao =
+      undefined;
+
+    this.fotoFrenteDevolucao =
+      undefined;
+
+    this.fotoTraseiraDevolucao =
+      undefined;
+
+    this.fotoLateralEsquerdaDevolucao =
+      undefined;
+
+    this.fotoLateralDireitaDevolucao =
+      undefined;
+
+    this.previewPainelDevolucao = '';
+
+    this.previewFrenteDevolucao = '';
+
+    this.previewTraseiraDevolucao = '';
+
+    this.previewLateralEsquerdaDevolucao = '';
+
+    this.previewLateralDireitaDevolucao = '';
   }
 
-  Promise.all([
-    this.movimentacaoService.uploadImagem(this.fotoPainelDevolucao),
-    this.movimentacaoService.uploadImagem(this.fotoFrenteDevolucao!),
-    this.movimentacaoService.uploadImagem(this.fotoTraseiraDevolucao!),
-    this.movimentacaoService.uploadImagem(this.fotoLateralEsquerdaDevolucao!),
-    this.movimentacaoService.uploadImagem(this.fotoLateralDireitaDevolucao!)
-  ])
+  selecionarImagemAbastecimento(
+    event: any,
+    tipo: string
+  ) {
 
-  .then(([
-    urlPainel,
-    urlFrente,
-    urlTraseira,
-    urlLateralEsquerda,
-    urlLateralDireita
-  ]) => {
+    const file = event.files[0];
 
-    return this.movimentacaoService.atualizar(
-      this.movimentacaoDevolucao!.id!,
-      {
-        status: 'Finalizado',
-        dataDevolucao: new Date().toISOString(),
-        observacaoDevolucao: this.observacaoDevolucao,
-        fotosDevolucao: {
-          painel: urlPainel,
-          frente: urlFrente,
-          traseira: urlTraseira,
-          lateralEsquerda: urlLateralEsquerda,
-          lateralDireita: urlLateralDireita
-        }
-      }
-    );
-  })
+    if (!file) return;
 
-  .then(() => {
+    const preview =
+      URL.createObjectURL(file);
 
-    return this.veiculoService.atualizar(
-      this.movimentacaoDevolucao!.veiculoId!,
-      {
-        status: 'Ativo'
-      }
-    );
-  })
+    if (tipo === 'nota') {
 
-  .then(() => {
+      this.fotoNota = file;
 
-    this.messageService.add({
-      severity: 'success',
-      summary: 'Veículo devolvido'
-    });
+      this.previewNota = preview;
+    }
 
-    this.resetarDevolucao();
-  })
+    if (tipo === 'painel') {
 
-  .catch(error => {
+      this.fotoPainelAbastecimento = file;
 
-    console.error(error);
-
-    this.messageService.add({
-      severity: 'error',
-      summary: 'Erro',
-      detail: 'Erro ao finalizar devolução'
-    });
-  })
-
-  .finally(() => {
-    this.loading = false;
-
-  });
-}
-
-resetarDevolucao() {
-
-  this.modalDevolucao = false;
-
-  this.movimentacaoDevolucao =
-    undefined;
-
-  this.observacaoDevolucao = '';
-
-  this.fotoPainelDevolucao =
-    undefined;
-
-  this.fotoFrenteDevolucao =
-    undefined;
-
-  this.fotoTraseiraDevolucao =
-    undefined;
-
-  this.fotoLateralEsquerdaDevolucao =
-    undefined;
-
-  this.fotoLateralDireitaDevolucao =
-    undefined;
-
-  this.previewPainelDevolucao = '';
-
-  this.previewFrenteDevolucao = '';
-
-  this.previewTraseiraDevolucao = '';
-
-  this.previewLateralEsquerdaDevolucao = '';
-
-  this.previewLateralDireitaDevolucao = '';
-}
-
-selecionarImagemAbastecimento(
-  event: any,
-  tipo: string
-) {
-
-  const file = event.files[0];
-
-  if (!file) return;
-
-  const preview =
-    URL.createObjectURL(file);
-
-  if (tipo === 'nota') {
-
-    this.fotoNota = file;
-
-    this.previewNota = preview;
+      this.previewPainelAbastecimento = preview;
+    }
   }
 
-  if (tipo === 'painel') {
+  salvarAbastecimento() {
 
-    this.fotoPainelAbastecimento = file;
+    if (!this.movimentacaoAbastecimento) {
+      return;
+    }
 
-    this.previewPainelAbastecimento = preview;
-  }
-}
+    if (!this.houveAbastecimento) {
 
-salvarAbastecimento() {
-
-  if (!this.movimentacaoAbastecimento) {
-    return;
-  }
-
-  if (!this.houveAbastecimento) {
-
-    this.movimentacaoService.atualizar(
-
-      this.movimentacaoAbastecimento.id!,
-
-      {
-        abastecimento: {
-          houveAbastecimento: false
-        }
-      }
-
-    );
-
-    this.modalAbastecimento = false;
-
-    return;
-  }
-
-  Promise.all([
-
-    this.movimentacaoService
-      .uploadImagem(this.fotoNota!),
-
-    this.movimentacaoService
-      .uploadImagem(
-        this.fotoPainelAbastecimento!
-      )
-
-  ])
-
-  .then(([
-
-    urlNota,
-
-    urlPainel
-
-  ]) => {
-
-    return this.movimentacaoService
-      .atualizar(
-
-        this.movimentacaoAbastecimento!.id!,
-
+      this.movimentacaoService.atualizar(
+        this.movimentacaoAbastecimento.id!,
         {
-
           abastecimento: {
-
-            houveAbastecimento: true,
-
-            km: this.kmAbastecimento,
-
-            fotoNota: urlNota,
-
-            fotoPainel: urlPainel,
-
-            data: new Date()
-              .toISOString()
+            houveAbastecimento: false
           }
         }
       );
-  })
+      this.modalAbastecimento = false;
 
-  .then(() => {
+      return;
+    }
 
-    this.modalAbastecimento = false;
+    Promise.all([
 
-    this.messageService.add({
+      this.movimentacaoService
+        .uploadImagem(this.fotoNota!),
 
-      severity: 'success',
+      this.movimentacaoService
+        .uploadImagem(
+          this.fotoPainelAbastecimento!
+        )
 
-      summary:
-        'Abastecimento registrado'
-    });
-  });
-}
+    ])
 
-get movimentacoesPaginadas() {
+      .then(([
+        urlNota,
+        urlPainel
+      ]) => {
 
-  const inicio =
-    this.paginaAtual * this.itensPorPagina;
+        return this.movimentacaoService
+          .atualizar(
+            this.movimentacaoAbastecimento!.id!,
+            {
+              abastecimento: {
+                houveAbastecimento: true,
+                km: this.kmAbastecimento,
+                fotoNota: urlNota,
+                fotoPainel: urlPainel,
+                data: new Date()
+                  .toISOString()
+              }
+            }
+          );
+      })
 
-  const fim =
-    inicio + this.itensPorPagina;
+      .then(() => {
 
-  return this.movimentacoes.slice(
-    inicio,
-    fim
-  );
-}
-trocarPagina(event: any) {
+        this.modalAbastecimento = false;
 
-  this.paginaAtual = event.page;
-}
+        this.messageService.add({
+
+          severity: 'success',
+
+          summary:
+            'Abastecimento registrado'
+        });
+      });
+  }
+
+  get movimentacoesPaginadas() {
+
+    const inicio =
+      this.paginaAtual * this.itensPorPagina;
+
+    const fim =
+      inicio + this.itensPorPagina;
+
+    return this.movimentacoes.slice(
+      inicio,
+      fim
+    );
+  }
+  trocarPagina(event: any) {
+
+    this.paginaAtual = event.page;
+  }
 
 }

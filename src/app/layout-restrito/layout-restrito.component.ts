@@ -9,17 +9,22 @@ import { of, switchMap } from 'rxjs';
 import { AvatarModule } from 'primeng/avatar';
 import { AvatarGroupModule } from 'primeng/avatargroup';
 import { Tooltip, TooltipModule } from "primeng/tooltip";
-import { ConfirmationService, MessageService } from 'primeng/api';
+import { ConfirmationService, MenuItem, MessageService } from 'primeng/api';
 import { ToastModule } from "primeng/toast";
 import { ConfirmDialogModule } from "primeng/confirmdialog";
 import { DialogModule } from "primeng/dialog";
 import { MovimentacaoService } from '../service/movimentacao.service';
 import { MessageModule } from "primeng/message";
+import { PanelMenuModule } from 'primeng/panelmenu';
 
 
 @Component({
   selector: 'app-layout-restrito',
-  imports: [RouterOutlet, CommonModule, ButtonModule, RouterLink, RouterLinkActive, AvatarModule, AvatarGroupModule, TooltipModule, ToastModule, ConfirmDialogModule, DialogModule, MessageModule],
+  imports: [
+    RouterOutlet, 
+    CommonModule, 
+    ButtonModule, 
+    RouterLink, RouterLinkActive, AvatarModule, AvatarGroupModule, TooltipModule, ToastModule, ConfirmDialogModule, DialogModule, MessageModule, PanelMenuModule],
   templateUrl: './layout-restrito.component.html',
   styleUrl: './layout-restrito.component.scss',
   providers: [ConfirmationService, MessageService]
@@ -35,6 +40,9 @@ private auth = inject(Auth);
 private motoristaService = inject(MotoristasService);
 constructor(private confirmationService: ConfirmationService, private messageService: MessageService) {}
 
+items: MenuItem[] | undefined;
+showSubmenu = false
+
 usuario: any;
   sidebarOpen = false;
    open: boolean = false;
@@ -45,6 +53,36 @@ usuario: any;
    
 
   ngOnInit(): void {
+
+     this.items = [
+            {
+              label: 'Dashboard',
+              icon: 'pi pi-chart-bar',
+              routerLink: '/restrito/dashboard'
+            },
+            {
+              label: 'Veículos',
+              icon: 'pi pi-car',
+              routerLink: '/restrito/veiculos'
+            },
+            {
+                label: 'Relatorios',
+                icon: 'pi pi-file',
+                items: [
+                    {
+                        label: 'Movimentações',
+                        icon: 'pi pi-objects-column',
+                        routerLink: '/restrito/relatorio'
+                    },
+                    {
+                        label: 'Manutenções',
+                        icon: 'pi pi-warehouse',
+                        routerLink: '/configuration'
+                    }
+                ]
+            },
+           
+     ]
 
   onAuthStateChanged(this.auth, (usuarioLogado) => {
 

@@ -1,0 +1,24 @@
+.infoCar{
+    display: flex;
+    padding: 20px;
+    justify-content: space-between;
+    div{
+        label{
+            font-weight: 600;
+        }
+        width: 24%;
+    }
+}
+.form-manutencao{
+    padding: 20px;
+    width: 100%;
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+    align-items: baseline;
+    flex-direction: column;
+    gap: 24px;
+}
+p-floatlabel{
+    width: 40% !important;
+}

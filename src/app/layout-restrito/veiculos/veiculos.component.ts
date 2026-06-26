@@ -374,7 +374,7 @@ kmRetirada?: number;
   const compressedFile =
     await imageCompression(file, {
 
-      maxSizeMB: 0.3,
+      maxSizeMB: 0.4,
 
       maxWidthOrHeight: 1280,
 

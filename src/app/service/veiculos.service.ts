@@ -6,6 +6,7 @@ import {
   collectionData,
   deleteDoc,
   doc,
+  docData,
   Firestore,
   setDoc,
   updateDoc
@@ -75,4 +76,17 @@ export class VeiculosService {
 
     return deleteDoc(veiculoDoc);
   }
+
+  buscarPorId(id: string) {
+
+  const veiculoDoc = doc(
+    this.firestore,
+    `veiculos/${id}`
+  );
+
+  return docData(
+    veiculoDoc,
+    { idField: 'id' }
+  ) as Observable<Veiculo>;
+}
 }

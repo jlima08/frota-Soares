@@ -1,0 +1,55 @@
+.movs{
+    width: 100%;
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin: 15px 0;
+    .card-mov{
+        background-color: #fafafa;
+        min-width: 332px;
+        width: 24.5%;
+        border: 1px solid #dfdfdf;
+        box-shadow: 1px 1px 10px #e0e0e0;
+        border-radius: 8px;
+        padding: 18px;
+        transition: all 0.5s;
+        .icone-card{
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px;
+            border-bottom: 1px solid #cacaca;
+            margin-bottom: 10px;
+            .icone{
+                background-color: #000000;
+                color: #fafafa;
+                border-radius: 50%;
+                // width: 60px;
+                // height: 60px;
+                padding: 18px;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                span{
+                    font-size: 36px;
+                }
+            }
+        }
+        
+    }
+    .card-mov:hover{
+        scale: 1.02;
+        box-shadow: 1px 1px 10px #cacaca;
+        border: 1px solid #000000;
+    }
+}
+p-floatlabel{
+    margin-top: 12px;
+    width: 100%;
+    input{
+        width: 100%;
+    }
+}
+.gastos{
+    margin-top: 20px;
+}

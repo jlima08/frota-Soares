@@ -76,10 +76,43 @@ footer {
         font-weight: 600;
     }
 }
+ ::ng-deep .p-panelmenu-header-link {
+  background: #000000;
+  color: #ffffff;
+  font-weight: 600;
+  border-radius: 8px;
+  border: none !important;
+}
+::ng-deep .p-panelmenu-panel {
+ background-color: #000000 !important;
+ color: #fff !important;
+ border: none;
+}
+
 
 
 /* SIDEBAR BASE */
 .sidebar {
+    .subItens{
+         padding: 8px;
+        width: 100%;
+        display: flex;
+        justify-content: start;
+        align-items: center;
+        gap: 6px;
+        font-weight: 500;
+        letter-spacing: 1px;
+        transition: all 0.2s;
+    }
+    .sub{
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        padding: 2px 14px;
+        a, i{
+            font-size: 14px;
+        }
+    }
     display: flex;
     flex-direction: column;
     gap: 20px;
@@ -109,8 +142,9 @@ footer {
         transition: all 0.2s;
         
         i{
-            padding: 4px;
+            padding: 0px;
         }
+        
     }
     }
     a:hover {
@@ -175,6 +209,8 @@ footer {
         display: none;
     }
 }
+
+
 
 /* MOBILE */
 @media (max-width: 767px) {

@@ -58,6 +58,18 @@ export const routes: Routes = [
           import('./layout-restrito/dashboard/dashboard.component')
             .then(m => m.DashboardComponent)
       },
+      {
+        path: 'manutencao/:id', canActivate: [ roleGuard ],
+        loadComponent: () =>
+          import('./layout-restrito/manutencao-veiculos/manutencao-veiculos.component')
+            .then(m => m.ManutencaoVeiculosComponent)
+      },
+      {
+        path: 'relatorio-manutencao', canActivate: [ roleGuard ],
+        loadComponent: () =>
+          import('./layout-restrito/relatorio-manutencao/relatorio-manutencao.component')
+            .then(m => m.RelatorioManutencaoComponent)
+      },
     ]
   }
 
