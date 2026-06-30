@@ -1,50 +1,122 @@
 import { Component, inject } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
+
 import { ManutencaoService } from '../../service/manutencao.service';
 import { Manutencao } from '../../interfaces/manutencao.interface';
-import { CommonModule } from '@angular/common';
 
 import { TagModule } from 'primeng/tag';
-import { FloatLabelModule } from "primeng/floatlabel";
+import { FloatLabelModule } from 'primeng/floatlabel';
 import { InputTextModule } from 'primeng/inputtext';
-import { CardPageComponent } from "../components/card-page/card-page.component";
-import { Message } from "primeng/message";
+import { MessageModule } from 'primeng/message';
 import { AccordionModule } from 'primeng/accordion';
+import { CardModule } from 'primeng/card';
+import { ButtonModule } from 'primeng/button';
+
+import { CardPageComponent } from '../components/card-page/card-page.component';
+import { SelectModule } from 'primeng/select';
+import { PaginatorModule } from 'primeng/paginator';
 
 @Component({
   selector: 'app-relatorio-manutencao',
-  imports: [CommonModule, TagModule, FloatLabelModule, InputTextModule, CardPageComponent, Message, AccordionModule],
+  standalone: true,
+  imports: [
+    CommonModule,
+    FormsModule,
+    TagModule,
+    FloatLabelModule,
+    InputTextModule,
+    MessageModule,
+    AccordionModule,
+    CardModule,
+    ButtonModule,
+    CardPageComponent,
+    SelectModule,
+    PaginatorModule
+  ],
   templateUrl: './relatorio-manutencao.component.html',
   styleUrl: './relatorio-manutencao.component.scss'
 })
 export class RelatorioManutencaoComponent {
+// filtros
+  pesquisa = '';
+tipoSelecionado = '';
+oficinaSelecionada = '';
+tipos = [
 
-    private manutencaoService = inject(ManutencaoService);
+  {
+    label: 'Todos',
+    value: ''
+  },
+
+  {
+    label: 'Troca de óleo',
+    value: 'Troca de óleo'
+  },
+
+  {
+    label: 'Troca de pneus',
+    value: 'Troca de pneus'
+  },
+
+  {
+    label: 'Outros',
+    value: 'Outros'
+  }
+
+];
+oficinas = [
+
+  {
+    label: 'Todas',
+    value: ''
+  },
+
+  {
+    label: 'Terceirizada',
+    value: 'Terceirizada'
+  },
+
+  {
+    label: 'Outras',
+    value: 'Outras'
+  }
+
+];
+
+  filtros = false
+  filtrosCards = false
+
+  private manutencaoService = inject(ManutencaoService);
 
   manutencoes: Manutencao[] = [];
+  manutencoesFiltradas: Manutencao[] = [];
+  first = 0;
 
-  // Cards do topo
+rows = 10;
 
-  totalCarros = 0;
-
-  totalMotos = 0;
-
-  totalGeral = 0;
-
-  totalOleo = 0;
-
-  totalPneus = 0;
-
-  totalOutros = 0;
-
-  quantidadeManutencoes = 0;
-
-  quantidadeCarros = 0;
-
-  quantidadeMotos = 0;
+manutencoesPaginadas: Manutencao[] = [];
 
   loading = true;
 
-  ngOnInit() {
+  dataInicio?: Date;
+  dataFim?: Date;
+
+  // Totais
+
+  totalCarros = 0;
+  totalMotos = 0;
+  totalGeral = 0;
+
+  totalOleo = 0;
+  totalPneus = 0;
+  totalOutros = 0;
+
+  quantidadeManutencoes = 0;
+  quantidadeCarros = 0;
+  quantidadeMotos = 0;
+
+  ngOnInit(): void {
 
     this.manutencaoService
       .listar()
@@ -52,72 +124,74 @@ export class RelatorioManutencaoComponent {
 
         this.manutencoes = resposta;
 
-        this.calcularResumo();
+        this.manutencoesFiltradas = [...resposta];
+
+        this.calcularIndicadores();
+        this.atualizarPaginacao();
 
         this.loading = false;
 
       });
 
   }
+  atualizarPaginacao() {
 
-  calcularResumo() {
+  this.manutencoesPaginadas =
+    this.manutencoesFiltradas.slice(
+      this.first,
+      this.first + this.rows
+    );
+
+}
+
+  calcularIndicadores(): void {
 
     this.totalCarros = 0;
-
     this.totalMotos = 0;
-
     this.totalGeral = 0;
 
     this.totalOleo = 0;
-
     this.totalPneus = 0;
-
     this.totalOutros = 0;
 
     this.quantidadeManutencoes = 0;
-
     this.quantidadeCarros = 0;
-
     this.quantidadeMotos = 0;
 
-    this.manutencoes.forEach(manutencao => {
+    this.manutencoesFiltradas.forEach(m => {
 
-      const valor = Number(manutencao.valor) || 0;
+      const valor = Number(m.valor) || 0;
 
       this.totalGeral += valor;
 
       this.quantidadeManutencoes++;
 
-      // Total por tipo de veículo
+      // Tipo do veículo
 
-      if (manutencao.tipoVeiculo === 'Carro') {
+      if (m.tipoVeiculo === 'Carro') {
 
         this.totalCarros += valor;
-
         this.quantidadeCarros++;
 
       } else {
 
         this.totalMotos += valor;
-
         this.quantidadeMotos++;
 
       }
 
-      // Total por tipo de manutenção
+      // Tipo da manutenção
 
-      switch (manutencao.tipo) {
+      switch (m.tipo) {
 
         case 'Troca de óleo':
 
           this.totalOleo += valor;
-
           break;
 
         case 'Troca de pneus':
 
           this.totalPneus += valor;
-
           break;
 
         default:
@@ -130,5 +204,124 @@ export class RelatorioManutencaoComponent {
 
   }
 
+  filtrarIndicadores(): void {
+
+    this.manutencoesFiltradas = this.manutencoes.filter(m => {
+
+      const data = new Date(m.data);
+
+      if (this.dataInicio) {
+
+        const inicio = new Date(this.dataInicio);
+
+        inicio.setHours(0, 0, 0, 0);
+
+        if (data < inicio) {
+
+          return false;
+
+        }
+
+      }
+
+      if (this.dataFim) {
+
+        const fim = new Date(this.dataFim);
+
+        fim.setHours(23, 59, 59, 999);
+
+        if (data > fim) {
+
+          return false;
+
+        }
+
+      }
+
+      return true;
+
+    });
+
+    this.calcularIndicadores();
+
+  }
+
+  limparFiltro(): void {
+
+    this.dataInicio = undefined;
+    this.dataFim = undefined;
+
+    this.manutencoesFiltradas = [...this.manutencoes];
+
+    this.calcularIndicadores();
+
+  }
+
+  aplicarFiltros() {
+
+  this.manutencoesFiltradas =
+    this.manutencoes.filter(m => {
+
+      // Pesquisa
+
+      const pesquisaOk =
+        !this.pesquisa ||
+
+        m.modelo
+          .toLowerCase()
+          .includes(this.pesquisa.toLowerCase()) ||
+
+        m.placa
+          .toLowerCase()
+          .includes(this.pesquisa.toLowerCase());
+
+      // Tipo
+
+      const tipoOk =
+
+        !this.tipoSelecionado ||
+
+        m.tipo === this.tipoSelecionado;
+
+      // Oficina
+
+      const oficinaOk =
+
+        !this.oficinaSelecionada ||
+
+        m.oficina === this.oficinaSelecionada;
+
+      return pesquisaOk && tipoOk && oficinaOk;
+
+    });
+    this.first = 0;
+
+this.atualizarPaginacao();
+
+}
+limparFiltrosCards() {
+
+  this.pesquisa = '';
+
+  this.tipoSelecionado = '';
+
+  this.oficinaSelecionada = '';
+
+  this.manutencoesFiltradas =
+    [...this.manutencoes];
+    this.first = 0;
+
+this.atualizarPaginacao();
+
+}
+onPageChange(event: any) {
+
+  this.first = event.first;
+
+  this.rows = event.rows;
+
+  this.atualizarPaginacao();
+
+}
 
 }

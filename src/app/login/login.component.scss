@@ -30,9 +30,10 @@
             transition: all 0.5s;
         }
         img:hover{
-            scale: 1.05;
+            scale: 1.03;
             // box-shadow: 1px 1px 10px 10px #3a3a3a;
             filter: drop-shadow(0 8px 16px #81818166);
+            transform: translateY(-10px);
         }
     }
     .cardRight{
@@ -78,7 +79,8 @@
         form:hover{
             box-shadow: 1px 1px 8px 5px #cfcfcf;
             border: 1px solid #616161;
-            scale: 1.02;
+            scale: 1.01;
+            transform: translateY(-10px);
         }
     }
 }

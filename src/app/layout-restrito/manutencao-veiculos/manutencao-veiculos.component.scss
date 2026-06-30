@@ -9,6 +9,19 @@
         width: 24%;
     }
 }
+.voltar{
+    i{
+        font-size: 12px;
+    }
+    font-size: 14px;
+    padding: 10px;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    justify-content: end;
+    gap: 2px;
+    
+}
 .form-manutencao{
     padding: 20px;
     width: 100%;
@@ -21,4 +34,18 @@
 }
 p-floatlabel{
     width: 40% !important;
+}
+
+@media screen and (max-width: 480px) {
+    .infoCar{
+        flex-direction: column;
+        div{
+            width: 90%;
+            gap: 10px;
+        }
+    }
+    p-floatlabel{
+    width: 90% !important;
+}
+    
 }

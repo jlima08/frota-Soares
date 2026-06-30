@@ -43,6 +43,40 @@
         border: 1px solid #000000;
     }
 }
+.btn-filtro{
+    padding: 8px;
+}
+.filtroCards{
+    display: flex;
+    // align-items: center;
+    overflow: hidden;
+    transition: all .35s ease;
+    gap: 6px;
+    width: 100%;
+}
+.filtros {
+    overflow: hidden;
+    transition: all .35s ease;
+    width: 100%;
+    display: flex;
+}
+
+.filtros-fechado {
+    max-height: 0;
+    opacity: 0;
+    transform: translateY(-15px);
+    pointer-events: none;
+    margin: 0;
+    padding: 0;
+}
+
+.filtros-aberto {
+    max-height: 300px;
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: auto;
+    padding: 1rem 0;
+}
 p-floatlabel{
     margin-top: 12px;
     width: 100%;
@@ -51,5 +85,12 @@ p-floatlabel{
     }
 }
 .gastos{
-    margin-top: 20px;
+    padding: 10px;
+}
+
+@media screen and (max-width: 480px) {
+    .filtros{
+        flex-direction: column;
+        gap: 10px;
+    }
 }

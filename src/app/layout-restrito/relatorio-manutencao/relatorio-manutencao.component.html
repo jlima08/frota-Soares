@@ -2,113 +2,269 @@
 
 <!-- DASHBOARD -->
 
-<div class="gastos grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
+<p-accordion value="1">
+    <p-accordion-panel value="0">
+        <p-accordion-header>
+            <span>
+                <i class="pi pi-wallet"></i>
+                Informações de gastos
 
-    <p-floatlabel>
+            </span>
+        </p-accordion-header>
+        <p-accordion-content>
+            <div class=" gastos w-full flex flex-col sm:flex-row flex-wrap gap-3 items-start ">
+                <p-button [label]="filtros ? 'Ocultar filtros' : 'Mostrar filtros'" icon="pi pi-filter" outlined="true" severity="contrast" (onClick)="filtros = !filtros"></p-button>
+                
+                <div class="filtros"  [ngClass]="{'filtros-aberto': filtros,'filtros-fechado': !filtros}">
 
-        <input
-            pInputText
-            disabled
-            [value]="(totalGeral | currency:'BRL') ?? ''">
+                    <div class="flex flex-col sm:flex-row sm:items-center gap-2 sm:w-[30%] w-full">
+                        <label class="mb-1 font-bold">Data inicial</label>
+                        <input class="w-[80%]" pInputText type="date" [(ngModel)]="dataInicio">
+                    </div>
+                    <div class="flex flex-col sm:flex-row sm:items-center gap-2 sm:w-[30%] w-full">
+                        <label class="mb-1 font-bold">Data final</label>
+                        <input class="w-[80%]" pInputText type="date" [(ngModel)]="dataFim">
+                    </div>
+                    <div class="flex-1 flex gap-1 justify-end">
+                        <p-button
+                            icon="pi pi-search"
+                            label="Filtrar"
+                            (onClick)="filtrarIndicadores()">
+                        </p-button>
+                        <p-button
+                            icon="pi pi-times"
+                            severity="secondary"
+                            label="Limpar"
+                            (onClick)="limparFiltro()">
+                        </p-button>
+                    </div>
+                </div>
+                
 
-        <label>Total gasto</label>
+            </div>
+            <div class="gastos grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4 ">
 
-    </p-floatlabel>
+                <p-card styleClass="shadow-2 border-round-xl transition delay-50 duration-200 ease-in-out hover:-translate-y-1 hover:scale-101 hover:shadow-xl">
+                    <div class="flex justify-between items-center">
+                        <div>
+                            <p class="text-500">
+                                Total gasto
+                            </p>
+                            <h2 class="text-3xl font-bold mt-2">
+                                {{ totalGeral | currency:'BRL' }}
+                            </h2>
+                        </div>
+                        <i
+                            class="pi pi-wallet text-5xl text-green-500">
+                        </i>
+                    </div>
+                </p-card>
 
-    <p-floatlabel>
 
-        <input
-            pInputText
-            disabled
-            [value]="(totalCarros | currency:'BRL') ?? ''">
+                <p-card styleClass="shadow-2 border-round-xl transition delay-50 duration-200 ease-in-out hover:-translate-y-1 hover:scale-101">
+                    <div class="flex justify-between items-center">
+                        <div>
+                            <p class="text-500">
+                                Gastos com carro
+                            </p>
+                            <h2 class="text-3xl font-bold mt-2">
+                                {{ totalCarros | currency:'BRL' }}
+                            </h2>
+                        </div>
+                        <i
+                            class="pi pi-wallet text-5xl text-green-500">
+                        </i>
+                    </div>
+                </p-card>
 
-        <label>Gasto com carros</label>
+                <p-card styleClass="shadow-2 border-round-xl transition delay-50 duration-200 ease-in-out hover:-translate-y-1 hover:scale-101">
+                    <div class="flex justify-between items-center">
+                        <div>
+                            <p class="text-500">
+                                Gastos com motos
+                            </p>
+                            <h2 class="text-3xl font-bold mt-2">
+                                {{ totalMotos | currency:'BRL' }}
+                            </h2>
+                        </div>
+                        <i
+                            class="pi pi-wallet text-5xl text-green-500">
+                        </i>
+                    </div>
+                </p-card>
 
-    </p-floatlabel>
+                <p-card styleClass="shadow-2 border-round-xl transition delay-50 duration-200 ease-in-out hover:-translate-y-1 hover:scale-101">
+                    <div class="flex justify-between items-center">
+                        <div>
+                            <p class="text-500">
+                                Troca de óleo
+                            </p>
+                            <h2 class="text-3xl font-bold mt-2">
+                                {{ totalOleo | currency:'BRL' }}
+                            </h2>
+                        </div>
+                        <i
+                            class="pi pi-wallet text-5xl text-green-500">
+                        </i>
+                    </div>
+                </p-card>
 
-    <p-floatlabel>
+                <p-card styleClass="shadow-2 border-round-xl transition delay-50 duration-200 ease-in-out hover:-translate-y-1 hover:scale-101">
+                    <div class="flex justify-between items-center">
+                        <div>
+                            <p class="text-500">
+                                Troca de pneus
+                            </p>
+                            <h2 class="text-3xl font-bold mt-2">
+                                {{ totalPneus | currency:'BRL' }}
+                            </h2>
+                        </div>
+                        <i
+                            class="pi pi-wallet text-5xl text-green-500">
+                        </i>
+                    </div>
+                </p-card>
 
-        <input
-            pInputText
-            disabled
-            [value]="(totalMotos | currency:'BRL') ?? ''">
+                <p-card styleClass="shadow-2 border-round-xl transition delay-50 duration-200 ease-in-out hover:-translate-y-1 hover:scale-101">
+                    <div class="flex justify-between items-center">
+                        <div>
+                            <p class="text-500">
+                                Serviços terceirizados
+                            </p>
+                            <h2 class="text-3xl font-bold mt-2">
+                                {{ totalOutros | currency:'BRL' }}
+                            </h2>
+                        </div>
+                        <i
+                            class="pi pi-wallet text-5xl text-green-500">
+                        </i>
+                    </div>
+                </p-card>
 
-        <label>Gasto com motos</label>
+                <p-card styleClass="shadow-2 border-round-xl transition delay-50 duration-200 ease-in-out hover:-translate-y-1 hover:scale-101">
+                    <div class="flex justify-between items-center">
+                        <div>
+                            <p class="text-500">
+                                Total de manutenções
+                            </p>
+                            <h2 class="text-3xl font-bold mt-2">
+                                {{ quantidadeManutencoes  }}
+                            </h2>
+                        </div>
+                        <i
+                            class="pi pi-wallet text-5xl text-green-500">
+                        </i>
+                    </div>
+                </p-card>
 
-    </p-floatlabel>
+            <p-card styleClass="shadow-2 border-round-xl transition delay-50 duration-200 ease-in-out hover:-translate-y-1 hover:scale-101">
+                    <div class="flex justify-between items-center">
+                        <div>
+                            <p class="text-500">
+                                Manutenções em carros
+                            </p>
+                            <h2 class="text-3xl font-bold mt-2">
+                                {{ quantidadeCarros  }}
+                            </h2>
+                        </div>
+                        <i
+                            class="pi pi-wallet text-5xl text-green-500">
+                        </i>
+                    </div>
+                </p-card>
 
-    <p-floatlabel>
+                <p-card styleClass="shadow-2 border-round-xl transition delay-50 duration-200 ease-in-out hover:-translate-y-1 hover:scale-101">
+                    <div class="flex justify-between items-center">
+                        <div>
+                            <p class="text-500">
+                                Manutenções em motos
+                            </p>
+                            <h2 class="text-3xl font-bold mt-2">
+                                {{ quantidadeMotos  }}
+                            </h2>
+                        </div>
+                        <i
+                            class="pi pi-wallet text-5xl text-green-500">
+                        </i>
+                    </div>
+                </p-card>
+                
+            </div>
+</p-accordion-content>
+</p-accordion-panel>
+</p-accordion>
 
-        <input
-            pInputText
-            disabled
-            [value]="(totalOleo | currency:'BRL') ?? ''">
-
-        <label>Troca de óleo</label>
-
-    </p-floatlabel>
-
-    <p-floatlabel>
-
-        <input
-            pInputText
-            disabled
-            [value]="(totalPneus | currency:'BRL') ?? ''">
-
-        <label>Troca de pneus</label>
-
-    </p-floatlabel>
-
-    <p-floatlabel>
-
-        <input
-            pInputText
-            disabled
-            [value]="(totalOutros | currency:'BRL') ?? ''">
-
-        <label>Outros serviços</label>
-
-    </p-floatlabel>
-
-    <p-floatlabel>
-
-        <input
-            pInputText
-            disabled
-            [value]="quantidadeManutencoes">
-
-        <label>Total de manutenções</label>
-
-    </p-floatlabel>
-
-    <p-floatlabel>
-
-        <input
-            pInputText
-            disabled
-            [value]="quantidadeCarros">
-
-        <label>Manutenções em carros</label>
-
-    </p-floatlabel>
-
-    <p-floatlabel>
-
-        <input
-            pInputText
-            disabled
-            [value]="quantidadeMotos">
-
-        <label>Manutenções em motos</label>
-
-    </p-floatlabel>
-
+<div class="btn-filtro">
+    <p-button [label]="filtrosCards ? 'Ocultar filtros' : 'Mostrar filtros'" icon="pi pi-filter" severity="contrast" (onClick)="filtrosCards = !filtrosCards"></p-button>
+    <div class="filtros gap-2 sm:items-end"  [ngClass]="{'filtros-aberto': filtrosCards,'filtros-fechado': !filtrosCards}">
+    
+        <!-- Pesquisa -->
+    
+        <div class="sm:w-[40%]">    
+            <p-floatlabel>    
+                <input
+                    pInputText
+                    id="pesquisa"
+                    [(ngModel)]="pesquisa"
+                    (input)="aplicarFiltros()">    
+                <label>
+                    Buscar por Modelo ou Placa
+                </label>    
+            </p-floatlabel>    
+        </div>
+    
+        <!-- Tipo -->
+    
+        <div class="w-80">    
+            <p-floatlabel>
+                <p-select
+                class="w-full"
+                    inputId="tipo"
+                    [options]="tipos"
+                    optionLabel="label"
+                    optionValue="value"
+                    [(ngModel)]="tipoSelecionado"
+                    appendTo="body"
+                    (onChange)="aplicarFiltros()">
+                </p-select>
+                <label>
+                    Tipo de manutenção
+                </label>    
+            </p-floatlabel>
+    
+        </div>    
+        <!-- Oficina -->    
+        <div class="w-60">    
+            <p-floatlabel>    
+                <p-select
+                class="w-full"
+                    inputId="oficina"
+                    appendTo="body"    
+                    [options]="oficinas"    
+                    optionLabel="label"   
+                    optionValue="value"    
+                    [(ngModel)]="oficinaSelecionada"    
+                    (onChange)="aplicarFiltros()">
+                </p-select>    
+                <label>
+                    Oficina
+                </label>    
+            </p-floatlabel>
+    
+        </div>    
+        <p-button
+            icon="pi pi-times"
+            severity="danger"
+            outlined="true"
+            label="Limpar"
+            (onClick)="limparFiltrosCards()">
+        </p-button>    
+    </div>
 </div>
-
 
 <div class="movs">
 
-@for (manutencao of manutencoes; track manutencao.id) {
+@for (manutencao of manutencoesPaginadas; track manutencao.id) {
 
 <div class="card-mov">
     <div class="icone-card ">
@@ -131,21 +287,21 @@
     </div>
     
     <p>
-        <strong>KM</strong>
+        <strong>KM:</strong>
         {{ manutencao.km }}
     </p>
     <p>
-        <strong>Oficina</strong>
+        <strong>Oficina:</strong>
         {{ manutencao.oficina }}
     </p>
 
     <p>
-        <strong>Valor</strong>
+        <strong>Valor:</strong>
         {{ manutencao.valor | currency:'BRL' }}
     </p>
 
     <p>
-        <strong>Data</strong>
+        <strong>Data:</strong>
         {{ manutencao.data | date:'dd/MM/yyyy HH:mm' }}
     </p>
 
@@ -188,4 +344,11 @@
 }
 
 </div>
+<p-paginator
+    [first]="first"
+    [rows]="rows"
+    [totalRecords]="manutencoesFiltradas.length"
+    [rowsPerPageOptions]="[5,10,20,50]"
+    (onPageChange)="onPageChange($event)">
+</p-paginator>
 </app-card-page>

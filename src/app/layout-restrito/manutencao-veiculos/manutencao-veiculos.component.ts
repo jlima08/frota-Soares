@@ -1,6 +1,6 @@
 //Angular
 import { Component, inject } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, RouterLink } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 
@@ -22,21 +22,26 @@ import { ButtonModule } from "primeng/button";
 import { SelectModule } from 'primeng/select';
 import { TextareaModule } from 'primeng/textarea';
 import { ToastModule } from 'primeng/toast';
+import { MessageModule } from "primeng/message";
+import { CardModule } from "primeng/card";
 
 @Component({
   selector: 'app-manutencao-veiculos',
   imports: [
-    CardPageComponent, 
-    InputText, 
-    CommonModule, 
-    FloatLabelModule, 
-    InputNumberModule, 
-    FormsModule, 
-    ButtonModule, 
-    SelectModule, 
-    TextareaModule, 
-    ToastModule
-  ],
+    CardPageComponent,
+    InputText,
+    CommonModule,
+    FloatLabelModule,
+    InputNumberModule,
+    FormsModule,
+    ButtonModule,
+    SelectModule,
+    TextareaModule,
+    ToastModule,
+    MessageModule,
+    CardModule,
+    RouterLink
+],
   templateUrl: './manutencao-veiculos.component.html',
   styleUrl: './manutencao-veiculos.component.scss',
   providers: [MessageService]
@@ -152,7 +157,7 @@ export class ManutencaoVeiculosComponent {
         modelo: this.veiculo.modelo,
 
         placa: this.veiculo.placa,
-        
+
         tipoVeiculo: this.veiculo.tipo,
 
         tipo: this.manutencao.tipo!,
