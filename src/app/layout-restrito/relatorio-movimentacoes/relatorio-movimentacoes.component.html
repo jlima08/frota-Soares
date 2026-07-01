@@ -787,26 +787,39 @@
 @for (mov of movimentacoesPaginadas; track mov.id){
     <div class="card-mov">
       <div class=" flex flex-col gap-2">
-         @if (mov.status === 'Em uso') {
+        
+        <div class="title-card flex w-full items-center gap-3">
+          @if (mov.tipo == 'Carro') {
+          <div class="icon-card">
+            <i class="pi pi-car"></i>
+          </div>
+        }@else {
+          <div class="icon-card">
+            <span class="material-symbols-outlined icone-moto ">two_wheeler</span>
+          </div>
+        }
+          
+          <div class="flex flex-col flex-1">
+            <span class="flex">
+              <!-- <strong>Modelo:   </strong> -->
+              <p class="text-base font-bold"> {{ mov.modelo | uppercase }} </p>
+            </span>
+            <span class="flex ">
+              <!-- <strong>Placa: </strong> -->
+              <p class="text-xs"> {{ mov.placa | uppercase }} </p>
+            </span>
+          </div>
+           @if (mov.status === 'Em uso') {
             <!-- <p-message styleClass="sm:w-[40%] min-w-[134px]"  severity="warn" icon="pi pi-exclamation-circle" variant="outlined"></p-message> -->
-            <span class="w-full flex justify-end">
+            <span class=" flex justify-end">
               <i pTooltip="Em uso" class="pi-yellow pi pi-exclamation-circle" ></i>
             </span>
           } @else {
             <!-- <p-message styleClass="sm:w-[12%] !border-none"  severity="info" icon="pi pi-check-circle" variant="outlined"></p-message>  -->
-            <span   class="w-full flex justify-end text-blue">
+            <span   class=" flex justify-end text-blue">
                <i class="pi-blue pi pi-check-circle " pTooltip="Finalizado" ></i>
              </span>
         }
-        <div class="flex w-full justify-between">
-          <span class="flex">
-            <strong>Modelo: </strong>
-            <p> {{ mov.modelo | uppercase }} </p>
-          </span>
-          <span class="flex ">
-            <strong>Placa: </strong>
-            <p> {{ mov.placa | uppercase }} </p>
-          </span>
         </div>
         <span class="flex gap-1">
           <strong>Motorista: </strong>

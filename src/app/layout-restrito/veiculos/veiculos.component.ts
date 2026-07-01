@@ -76,41 +76,31 @@ kmRetirada?: number;
   this.veiculoService
     .listar()
     .subscribe(resposta => {
-
       this.veiculos = resposta;
     });
 
-  const usuarioLogado =
-    this.auth.currentUser;
+  const usuarioLogado = this.auth.currentUser;
 
   if (usuarioLogado) {
 
-    this.motoristaService
-      .buscarPorUid(usuarioLogado.uid)
-      .subscribe(resposta => {
-
+    this.motoristaService.buscarPorUid(usuarioLogado.uid).subscribe(resposta => {
         this.usuario = resposta;
       });
   }
 }
-
-
 
   constructor(private confirmationService: ConfirmationService, private messageService: MessageService) { }
 
   abrirDialog(carro: Veiculo) {
 
     this.veiculoSelecionado = carro;
-
     this.dialogVisible = true;
   }
 
   loadingConfirmar = false;
 
   async confirmarSelecionado() {
-
   this.loadingConfirmar = true;
-
   const usuario = this.usuario;
 
   if (!usuario || !this.veiculoSelecionado) {
@@ -125,9 +115,7 @@ kmRetirada?: number;
     this.messageService.add({
 
       severity: 'error',
-
       summary: 'KM obrigatório',
-
       detail: 'Informe o KM atual do veículo'
     });
 
@@ -147,11 +135,8 @@ kmRetirada?: number;
     this.messageService.add({
 
       severity: 'error',
-
       summary: 'Fotos obrigatórias',
-
-      detail:
-        'Adicione todas as fotos do veículo'
+      detail:'Adicione todas as fotos do veículo'
     });
 
     this.loadingConfirmar = false;
@@ -281,6 +266,8 @@ kmRetirada?: number;
 
       status:
         'Em uso',
+
+      tipo: veiculo.tipo,
 
       fotosRetirada: {
 

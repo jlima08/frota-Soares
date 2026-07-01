@@ -1,6 +1,7 @@
-
+.gastos{
+    padding: 9px;
+}
 .cards{
-    margin-top: 20px;
     width: 100%;
     display: flex;
     gap: 10px;
@@ -25,20 +26,29 @@
             font-size: 14px;
         }
         a{
-            font-size: 10px;
+            font-size: 12px;
             text-decoration: underline;
         }
     }
 }
-.total-adm{
-    padding: 12px;
-    width: 100%;
-    text-align: center;
-    span{
-        font-size: 36px;
-        font-weight: 600;
-        text-indent: inherit;
-    }
+// .total-adm{
+//     padding: 12px;
+//     width: 100%;
+//     text-align: center;
+//     span{
+//         font-size: 36px;
+//         font-weight: 600;
+//         text-indent: inherit;
+//     }
+// }
+
+p-card{
+    transition: all 0.5s;
+}
+p-card:hover{
+    scale: 1.02;
+    transform: translateY(-2px)
+
 }
 
 @media screen and (max-width: 950px){

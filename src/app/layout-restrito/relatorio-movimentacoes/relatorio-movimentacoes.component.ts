@@ -20,6 +20,7 @@ import { FileUploadModule } from "primeng/fileupload";
 import { Textarea, TextareaModule } from "primeng/textarea";
 import { CheckboxModule } from 'primeng/checkbox';
 import { PaginatorModule } from "primeng/paginator";
+import { Veiculo } from '../../interfaces/veiculo.interface';
 
 
 
@@ -51,6 +52,7 @@ export class RelatorioMovimentacoesComponent {
 
   movimentacoes: Movimentacao[] = [];
   movimentacoesOriginais: Movimentacao[] = [];
+  veiculos: Veiculo[] = []
   usuario: any;
 
   modalObservacao = false;
@@ -117,24 +119,12 @@ export class RelatorioMovimentacoesComponent {
 
   movimentacaoSelecionada?: Movimentacao;
 
-  abrirAbastecimento(
-    mov: Movimentacao
-  ) {
-
+  abrirAbastecimento(mov: Movimentacao ) {
     this.movimentacaoAbastecimento = mov;
-
     this.modalAbastecimento = true;
   }
 
-  abrirComparacao(
-
-    titulo: string,
-
-    antes?: string,
-
-    depois?: string
-
-  ) {
+  abrirComparacao(titulo: string, antes?: string, depois?: string) {
 
     this.tituloComparacao =
       titulo;
@@ -169,16 +159,13 @@ export class RelatorioMovimentacoesComponent {
 
     if (!usuarioLogado) return;
 
-    this.motoristaService
-      .buscarPorUid(usuarioLogado.uid)
-      .subscribe(usuario => {
+    this.motoristaService.buscarPorUid(usuarioLogado.uid).subscribe(usuario => {
 
         this.usuario = usuario;
 
-        this.movimentacaoService
-          .listar()
-          .subscribe(resposta => {
-
+        this.movimentacaoService.listar().subscribe(resposta => {
+          console.log(resposta);
+          
             let movimentacoesFiltradas = resposta;
 
             // SE FOR MOTORISTA
@@ -192,7 +179,6 @@ export class RelatorioMovimentacoesComponent {
 
             // ORDENAR MAIS RECENTES
             movimentacoesFiltradas.sort((a, b) => {
-
               return new Date(b.dataRetirada).getTime()
                 - new Date(a.dataRetirada).getTime();
             });

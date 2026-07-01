@@ -148,24 +148,26 @@
                 <p-button icon="pi pi-times" severity="contrast"  ></p-button>
               }
             </button>
-             <div class="relative cursor-pointer">
-              @if (usuario.role == 'Administrador') {
-                <i
-                  class="pi pi-bell alerta"
-                  (click)="abrirAlertas()">
-                </i>
-                @if (quantidadeAlertas > 0) {
-                  <span
-                    class="absolute -top-2 -right-2
-                          bg-black text-white
-                          text-[10px] rounded-full
-                          w-4 h-4 flex
-                          items-center justify-center">
-                          {{ quantidadeAlertas }}
-                        </span>
+             <div class="div-alerta">
+               <div class=" relative cursor-pointer">
+                @if (usuario.role == 'Administrador') {
+                  <i
+                    class="pi pi-bell alerta"
+                    (click)="abrirAlertas()">
+                  </i>
+                  @if (quantidadeAlertas > 0) {
+                    <span
+                      class="absolute -top-2 -right-2
+                            bg-black text-white
+                            text-[10px] rounded-full
+                            w-4 h-4 flex
+                            items-center justify-center">
+                            {{ quantidadeAlertas }}
+                          </span>
+                        }
                       }
-                    }
-                  </div>
+                </div>
+             </div>
           </div>
           <p-button
           size="small"

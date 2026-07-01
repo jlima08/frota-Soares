@@ -17,6 +17,22 @@
 .pButton-sombra-azul{
     background-color: #2563eb !important;
 }
+.title-card{
+    padding: 10px;
+    border-bottom: 1px solid #bbbbbb;
+}
+.icon-card{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 18px;
+    color: #fff;
+    background-color: #000000;
+    border-radius: 50%;
+    i, span{
+        font-size: 25px;
+    }
+}
 
 .filtros{
     display: flex;

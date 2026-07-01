@@ -22,16 +22,18 @@ i{
 }
 
 p-card{
-    transition: all 0.3s;
+    transition: all 0.5s;
     border-radius: 12px;
     overflow: hidden;
     min-width: 300px;
-    width: 30%;
+    // width: 30%;
 }
 
 p-card:hover{
-    scale: 1.02;
-    box-shadow: 1px 1px 10px #cacaca;
+    scale: 1.01;
+    box-shadow: 1px 1px 10px #afafaf;
+    // border: 1px solid #888888;
+    
 }
 .file::file-selector-button {
   background: #3b82f6;
