@@ -25,15 +25,13 @@
         <div>
   <p-floatlabel>
 
-    <p-inputnumber
-
-      inputId="kmAtual"
-
-      [(ngModel)]="kmRetirada"
-
-      [useGrouping]="false">
-
-    </p-inputnumber>
+    <p-inputNumber
+    inputId="kmAtual"
+    [(ngModel)]="kmRetirada"
+    [useGrouping]="true"
+    locale="pt-BR"
+    suffix=" km">
+</p-inputNumber>
 
     <label for="kmAtual">
 
@@ -170,8 +168,8 @@
             </p>
 
             <p class="kms">
-                KM da última troca de óleo: <strong>{{ carro.kmUltimaTrocaOleo }} km</strong><br>
-                Km da proxima troca de óleo: <strong>{{ carro.kmProximaTrocaOleo }} km</strong>
+                KM da última troca de óleo: <strong>{{ carro.kmUltimaTrocaOleo | number:'1.0-0' }} km</strong><br>
+                Km da proxima troca de óleo: <strong>{{ carro.kmProximaTrocaOleo | number:'1.0-0' }} km</strong>
             </p>
            
             <ng-template #footer>

@@ -507,161 +507,104 @@
 
 <!-- modal abastecimento -->
  <p-dialog
-
+ (onHide)="resetarAbastecimento()"
   header="Registrar abastecimento"
-
   [(visible)]="modalAbastecimento"
-
   [modal]="true"
-
   [style]="{ width: '40rem' }">
 
   <div class="flex flex-col gap-4">
-
     <div class="flex items-center gap-2">
-
       <p-checkbox
-
         [(ngModel)]="houveAbastecimento"
-
         [binary]="true">
-
       </p-checkbox>
-
       <label>
-
         Houve abastecimento?
-
       </label>
-
     </div>
 
     @if (houveAbastecimento) {
-
-      <div>
-
+      <div class="flex flex-col">
         <label>
-
           KM do abastecimento
-
         </label>
-
-        <input
-
-          pInputText
-
-          type="number"
-
-          [(ngModel)]="kmAbastecimento"
-        />
+        <p-inputNumber
+      inputId="kmAbastecimento"
+      [(ngModel)]="kmAbastecimento"
+      [useGrouping]="true"
+      locale="pt-BR"
+      suffix=" km"
+      [min]="movimentacaoAbastecimento?.kmRetirada">
+  </p-inputNumber>
+      </div>
+      <div class="flex flex-col">
+        <label for="">Valor</label>
+        <p-inputNumber mode="currency" currency="BRL" locale="pt-BR" [(ngModel)]="valorAbastecidos" >
+        </p-inputNumber>
+      </div>
+      <div class="flex flex-col">
+        <label for="">Litros</label>
+        <input pInputText type="number" name="" id="" [(ngModel)]="litrosAbastecidos">
       </div>
 
       <div>
-
         <label>
-
           Nota fiscal
-
         </label>
-
         <p-fileupload
-
           accept="image/*"
-
           [customUpload]="true"
-
           [showUploadButton]="false"
-
           chooseLabel="Selecionar"
-
           cancelLabel="Remover"
-
-          (onSelect)="
-            selecionarImagemAbastecimento(
-              $event,
-              'nota'
-            )
-          ">
+          (onSelect)="selecionarImagemAbastecimento($event,'nota')">
         </p-fileupload>
-
       </div>
 
       @if (previewNota) {
-
         <img
-
           [src]="previewNota"
-
           class="w-full rounded-lg border"
         />
       }
 
       <div>
-
         <label>
-
           Painel no abastecimento
-
         </label>
-
         <p-fileupload
-
           accept="image/*"
-
           [customUpload]="true"
-
           [showUploadButton]="false"
-
           chooseLabel="Selecionar"
-
           cancelLabel="Remover"
-
-          (onSelect)="
-            selecionarImagemAbastecimento(
-              $event,
-              'painel'
-            )
-          ">
+          (onSelect)=" selecionarImagemAbastecimento($event,'painel')">
         </p-fileupload>
 
       </div>
-
       @if (previewPainelAbastecimento) {
-
         <img
-
           [src]="previewPainelAbastecimento"
-
           class="w-full rounded-lg border"
         />
       }
 
     }
-
   </div>
 
   <ng-template pTemplate="footer">
-
     <p-button
-
       label="Cancelar"
-
       severity="secondary"
-
       (onClick)="modalAbastecimento = false">
-
     </p-button>
-
     <p-button
-
       label="Salvar"
-
+      [loading]="loadAbastecimento"
       severity="success"
-
       (onClick)="salvarAbastecimento()">
-
     </p-button>
-
   </ng-template>
 
 </p-dialog>
@@ -697,6 +640,14 @@
         <strong>Data:</strong>
         {{ abastecimento.data | date:'dd/MM/yyyy HH:mm' }}
       </div>
+      <div>
+        <strong>Valor:</strong>
+        {{ abastecimento.valorAbastecido | currency: 'BRL'}}
+      </div>
+      <div>
+        <strong>Litros:</strong>
+        {{ abastecimento.litrosAbastecido }}
+      </div>
 
       <div>
         <p class="font-bold mb-2">
@@ -727,10 +678,12 @@
 }
 
 </p-dialog>
-
 <app-card-page title="Relatorios" icon="pi-file">
   <p-toast />
   <p-confirmdialog />
+  @if (usuario.role == 'Administrador') {
+    <app-gastos-combustivel [movimentacoes]="movimentacoes"></app-gastos-combustivel>
+  }
     <!-- <p-button styleClass="shadow-xl" label="Filtros anvaçados" severity="contrast" icon="pi pi-filter" cardPageRight /> -->
     <button class="pButton-sombra invisible sm:visible" (click)="FiltrosAvancados()" cardPageRight>
         @if (showFiltrosAvancados == false) {
@@ -782,6 +735,9 @@
     <i class="pi-blue pi pi-check-circle"></i>
     - Finalizado
   </span>
+</div>
+<div class="registro">
+  <p> {{ movimentacoes.length }} movimentações registradas </p>
 </div>
 <div class="movs">
 @for (mov of movimentacoesPaginadas; track mov.id){
@@ -845,21 +801,21 @@
         </span>
         <p>
           <strong>KM na retirada: </strong>
-          {{ mov.kmRetirada }}
+          {{ mov.kmRetirada | number:'1.0-0' }}
         </p>
         <div class="">
           <strong>Data e KM do último abasteciemento:</strong>
            @if (mov.abastecimento?.houveAbastecimento) {
           <span class="flex">
-            <p>KM:</p>
+            <p class="font-bold">KM: </p>
             <p>             
-                {{ mov.abastecimento?.km }} km               
+                {{ mov.abastecimento?.km | number:'1.0-0' }} km               
             </p>
           </span>
           <span class="flex">
-            <p>Data: </p>
+            <p class="font-bold">Data: </p>
             <p>
-              {{ mov.abastecimento?.data | date:'dd/MM/yyyy HH:mm' }}
+               {{ mov.abastecimento?.data | date:'dd/MM/yyyy HH:mm' }}
             </p>
           </span>
           }@else {
@@ -919,6 +875,7 @@
  styleClass="!font-bold"
   [rows]="itensPorPagina"
   [totalRecords]="movimentacoes.length"
-  (onPageChange)="trocarPagina($event)">
+  (onPageChange)="trocarPagina($event)"
+  >
 </p-paginator>
 </app-card-page>

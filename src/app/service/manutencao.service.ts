@@ -5,38 +5,32 @@ import {
   addDoc,
   collectionData,
   query,
-  where
+  where,
 } from '@angular/fire/firestore';
 
 import { Observable } from 'rxjs';
 import { Manutencao } from '../interfaces/manutencao.interface';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class ManutencaoService {
-
   private firestore = inject(Firestore);
 
   cadastrar(manutencao: Manutencao) {
-
-    const ref = collection(this.firestore,'manutencoes');
-    return addDoc(ref, manutencao );
+    const ref = collection(this.firestore, 'manutencoes');
+    return addDoc(ref, manutencao);
   }
 
   listar(): Observable<Manutencao[]> {
-    const ref = collection(
-      this.firestore, 'manutencoes');
+    const ref = collection(this.firestore, 'manutencoes');
 
-    return collectionData(ref,{idField: 'id'}) as Observable<Manutencao[]>;
-
+    return collectionData(ref, { idField: 'id' }) as Observable<Manutencao[]>;
   }
 
   listarPorVeiculo(veiculoId: string): Observable<Manutencao[]> {
-
-    const ref = collection(this.firestore,'manutencoes');
+    const ref = collection(this.firestore, 'manutencoes');
     const q = query(ref, where('veiculoId', '==', veiculoId));
-    return collectionData(q,{idField: 'id'}) as Observable<Manutencao[]>;
+    return collectionData(q, { idField: 'id' }) as Observable<Manutencao[]>;
   }
-
 }

@@ -8,186 +8,96 @@ import {
   updateDoc,
   query,
   where,
-  getDocs
+  getDocs,
 } from '@angular/fire/firestore';
 import {
   Storage,
   ref,
   uploadBytes,
-  getDownloadURL
+  getDownloadURL,
 } from '@angular/fire/storage';
 import { Observable } from 'rxjs';
 import { Movimentacao } from '../interfaces/movimentacao.interface';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class MovimentacaoService {
-
   private firestore = inject(Firestore);
   private storage = inject(Storage);
 
   cadastrar(movimentacao: Movimentacao) {
+    const movimentacaoRef = collection(this.firestore, 'movimentacoes');
 
-    const movimentacaoRef = collection(
-      this.firestore,
-      'movimentacoes'
-    );
-
-    return addDoc(
-      movimentacaoRef,
-      movimentacao
-    );
+    return addDoc(movimentacaoRef, movimentacao);
   }
 
   listar(): Observable<Movimentacao[]> {
+    const movimentacaoRef = collection(this.firestore, 'movimentacoes');
 
-    const movimentacaoRef = collection(
-      this.firestore,
-      'movimentacoes'
-    );
-
-    return collectionData(
-      movimentacaoRef,
-      {
-        idField: 'id'
-      }
-    ) as Observable<Movimentacao[]>;
+    return collectionData(movimentacaoRef, { idField: 'id' }) as Observable<
+      Movimentacao[]
+    >;
   }
 
   finalizarMovimentacao(id: string) {
+    const movimentacaoDoc = doc(this.firestore, `movimentacoes/${id}`);
 
-  const movimentacaoDoc = doc(
-    this.firestore,
-    `movimentacoes/${id}`
-  );
-
-  return updateDoc(
-    movimentacaoDoc,
-    {
-
+    return updateDoc(movimentacaoDoc, {
       status: 'Finalizado',
 
-      dataDevolucao:
-        new Date().toISOString()
-    }
-  );
-}
+      dataDevolucao: new Date().toISOString(),
+    });
+  }
 
-atualizar(
-  id: string,
-  dados: Partial<Movimentacao>
-) {
+  atualizar(id: string, dados: Partial<Movimentacao>) {
+    const movimentacaoDoc = doc(this.firestore, `movimentacoes/${id}`);
 
-  const movimentacaoDoc = doc(
+    return updateDoc(movimentacaoDoc, dados);
+  }
 
-    this.firestore,
+  async uploadImagem(file: File) {
+    const nomeArquivo = `movimentacoes/${Date.now()}_${file.name}`;
 
-    `movimentacoes/${id}`
-  );
+    const storageRef = ref(this.storage, nomeArquivo);
 
-  return updateDoc(
-    movimentacaoDoc,
-    dados
-  );
-}
+    await uploadBytes(storageRef, file);
 
-async uploadImagem(file: File) {
+    return await getDownloadURL(storageRef);
+  }
 
-  const nomeArquivo =
+  criarAlerta(alerta: any) {
+    const ref = collection(this.firestore, 'alertas');
 
-    `movimentacoes/${Date.now()}_${file.name}`;
+    return addDoc(ref, alerta);
+  }
+  listarAlertas() {
+    const ref = collection(this.firestore, 'alertas');
 
-  const storageRef = ref(
-    this.storage,
-    nomeArquivo
-  );
+    const q = query(ref, where('ativo', '==', true));
 
-  await uploadBytes(
-    storageRef,
-    file
-  );
+    return collectionData(q, { idField: 'id' });
+  }
 
-  return await getDownloadURL(
-    storageRef
-  );
-}
+  async verificarAlertaTrocaOleo(veiculoId: string): Promise<boolean> {
+    const ref = collection(this.firestore, 'alertas');
 
-criarAlerta(alerta: any) {
+    const q = query(
+      ref,
+      where('veiculoId', '==', veiculoId),
+      where('tipo', '==', 'troca_oleo'),
+      where('ativo', '==', true),
+    );
 
-  const ref = collection(
-    this.firestore,
-    'alertas'
-  );
+    const resultado = await getDocs(q);
 
-  return addDoc(
-    ref,
-    alerta
-  );
-}
-listarAlertas() {
+    return !resultado.empty;
+  }
+  async limparAlerta(id: string) {
+    const alertaDoc = doc(this.firestore, `alertas/${id}`);
 
-  const ref = collection(
-    this.firestore,
-    'alertas'
-  );
-
-  const q = query(
-    ref,
-    where('ativo', '==', true)
-  );
-
-  return collectionData(
-    q,
-    { idField: 'id' }
-  );
-}
-
-async verificarAlertaTrocaOleo(
-  veiculoId: string
-): Promise<boolean> {
-
-  const ref = collection(
-    this.firestore,
-    'alertas'
-  );
-
-  const q = query(
-    ref,
-    where(
-      'veiculoId',
-      '==',
-      veiculoId
-    ),
-    where(
-      'tipo',
-      '==',
-      'troca_oleo'
-    ),
-    where(
-      'ativo',
-      '==',
-      true
-    )
-  );
-
-  const resultado =
-    await getDocs(q);
-
-  return !resultado.empty;
-}
-async limparAlerta(id: string) {
-
-  const alertaDoc = doc(
-    this.firestore,
-    `alertas/${id}`
-  );
-
-  return updateDoc(
-    alertaDoc,
-    {
-      ativo: false
-    }
-  );
-}
+    return updateDoc(alertaDoc, {
+      ativo: false,
+    });
+  }
 }

@@ -33,5 +33,7 @@ observacaoDevolucao?: string;
     fotoNota?: string;
     fotoPainel?: string;
     data?: string;
+    valorAbastecido: number;
+    litrosAbastecido: number;
   };
 }

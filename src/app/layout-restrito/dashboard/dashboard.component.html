@@ -1,143 +1,133 @@
 <app-card-page title="Dashboard" icon="pi-chart-bar">
   <div class="gastos grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4">
-
     <!-- Total gasto -->
 
     <p-card styleClass="shadow-2 border-round-xl">
-        <div class="flex justify-between items-center">
-            <div>
-                <p class="text-500">
-                    Total gasto
-                </p>
-                <h2 class="text-3xl font-bold mt-2">
-                    {{ totalGastoManutencao | currency:'BRL' }}
-                </h2>
-                <a class="text-[12px] underline hover:font-bold" routerLink="/restrito/relatorio-manutencao">Ver detalhes</a>
-            </div>
-            <i class="pi pi-wallet text-5xl text-green-500"></i>
-            
+      <div class="flex justify-between items-center">
+        <div>
+          <p class="text-500">Total gasto</p>
+          <h2 class="text-3xl font-bold mt-2">
+            {{ totalGastoManutencao | currency: "BRL" }}
+          </h2>
+          <a
+            class="text-[12px] underline hover:font-bold"
+            routerLink="/restrito/relatorio-manutencao"
+            >Ver detalhes</a
+          >
         </div>
+        <i class="pi pi-wallet text-5xl text-green-500"></i>
+      </div>
     </p-card>
 
     <!-- Total manutenções -->
 
     <p-card styleClass="shadow-2 border-round-xl">
-        <div class="flex justify-between items-center">
-            <div>
-                <p class="text-500">
-                    Total de manutenções
-                </p>
-                <h2 class="text-3xl font-bold mt-2">
-                    {{ quantidadeManutencoes }}
-                </h2>
-                <a class="text-[12px] underline hover:font-bold" routerLink="/restrito/relatorio-manutencao">Ver detalhes</a>
-            </div>
-            <i class="pi pi-wrench text-5xl text-blue-500"></i>
+      <div class="flex justify-between items-center">
+        <div>
+          <p class="text-500">Total de manutenções</p>
+          <h2 class="text-3xl font-bold mt-2">
+            {{ quantidadeManutencoes }}
+          </h2>
+          <a
+            class="text-[12px] underline hover:font-bold"
+            routerLink="/restrito/relatorio-manutencao"
+            >Ver detalhes</a
+          >
         </div>
+        <i class="pi pi-wrench text-5xl text-blue-500"></i>
+      </div>
     </p-card>
 
     <!-- Carros -->
 
     <p-card styleClass="shadow-2 border-round-xl">
-        <div class="flex justify-between items-center">
-            <div>
-                <p class="text-500">
-                    Manutenções em carros
-                </p>
-                <h2 class="text-3xl font-bold mt-2">
-                    {{ quantidadeCarros }}
-                </h2>
-                <a class="text-[12px] hover:font-bold underline" routerLink="/restrito/relatorio-manutencao">Ver detalhes</a>
-            </div>
-            <i class="pi pi-car text-5xl text-orange-500"></i>
+      <div class="flex justify-between items-center">
+        <div>
+          <p class="text-500">Manutenções em carros</p>
+          <h2 class="text-3xl font-bold mt-2">
+            {{ quantidadeCarros }}
+          </h2>
+          <a
+            class="text-[12px] hover:font-bold underline"
+            routerLink="/restrito/relatorio-manutencao"
+            >Ver detalhes</a
+          >
         </div>
-
+        <i class="pi pi-car text-5xl text-orange-500"></i>
+      </div>
     </p-card>
 
     <!-- Motos -->
 
     <p-card styleClass="shadow-2 border-round-xl">
-        <div class="flex justify-between items-center">
-            <div>
-                <p class="text-500">
-                    Manutenções em motos
-                </p>
-                <h2 class="text-3xl font-bold mt-2">
-                    {{ quantidadeMotos }}
-                </h2>
-                <a class="text-[12px] underline hover:font-bold" routerLink="/restrito/relatorio-manutencao">Ver detalhes</a>
-            </div>
-            <span class="material-symbols-outlined text-5xl text-purple-500">
-                two_wheeler
-            </span>
+      <div class="flex justify-between items-center">
+        <div>
+          <p class="text-500">Manutenções em motos</p>
+          <h2 class="text-3xl font-bold mt-2">
+            {{ quantidadeMotos }}
+          </h2>
+          <a
+            class="text-[12px] underline hover:font-bold"
+            routerLink="/restrito/relatorio-manutencao"
+            >Ver detalhes</a
+          >
         </div>
+        <span class="material-symbols-outlined text-5xl text-purple-500">
+          two_wheeler
+        </span>
+      </div>
     </p-card>
+  </div>
 
-</div>
-
-  <div class="cards">    
-
+  <div class="cards">
     <app-card-dashboard class="md:w-[70%]" title="Movimentações" icon="pi-file">
-          
-            <p-chart
-              type="bar"
-              [data]="movimentacaoChart"
-              [options]="movimentacaoOptions">
-            </p-chart>            
-      </app-card-dashboard>
-    
+      <p-chart
+        type="bar"
+        [data]="movimentacaoChart"
+        [options]="movimentacaoOptions"
+      >
+      </p-chart>
+    </app-card-dashboard>
 
     <div class="flex flex-col gap-4 sm:gap-2 sm:w-[50%]">
-
       <app-card-dashboard class="" title="Veículos cadastrados" icon="pi-car">
         <div class="card-centro">
           <div class="total">
             <p>Total de veículos cadastrados:</p>
             <span class="text-center">
-            {{ veiculos.length }}          
+              {{ veiculos.length }}
             </span>
             <a routerLink="/restrito/gerenciar-veiculos">Ver detalhes</a>
           </div>
-          <p-chart type="doughnut" [data]="data" [options]="options"/>
+          <p-chart type="doughnut" [data]="data" [options]="options" />
         </div>
+      </app-card-dashboard>
 
-      </app-card-dashboard  >  
-
-      <div class="flex flex-col md:flex-row flex-wrap  gap-2 w-full">
-        
+      <div class="flex flex-col md:flex-row flex-wrap gap-2 w-full">
         <p-card class="sm:w-[49%] w-full">
           <div class="flex justify-between items-center">
-              <div>
-                  <p class="text-500">
-                      Administradores
-                  </p>
-                  <h2 class="text-3xl font-bold mt-2">
-                      {{ totalAdministradores }}
-                  </h2>
-              </div>
-              <i class="pi pi-users text-5xl text-orange-500"></i>
-          </div>
-        </p-card>
-        
-        <p-card class="sm:w-[49%] w-full">
-          <div class="flex justify-between items-center">
-              <div>
-                  <p class="text-500">
-                      Motoristas
-                  </p>
-                  <h2 class="text-3xl font-bold mt-2">
-                      {{ totalMotoristas }}
-                  </h2>
-              </div>
-              <i class="pi pi-users text-5xl text-orange-500"></i>
+            <div>
+              <p class="text-500">Administradores</p>
+              <h2 class="text-3xl font-bold mt-2">
+                {{ totalAdministradores }}
+              </h2>
+            </div>
+            <i class="pi pi-users text-5xl text-orange-500"></i>
           </div>
         </p-card>
 
+        <p-card class="sm:w-[49%] w-full">
+          <div class="flex justify-between items-center">
+            <div>
+              <p class="text-500">Motoristas</p>
+              <h2 class="text-3xl font-bold mt-2">
+                {{ totalMotoristas }}
+              </h2>
+            </div>
+            <i class="pi pi-users text-5xl text-orange-500"></i>
+          </div>
+        </p-card>
       </div>
-
-       
-                  
     </div>
-    
   </div>
 </app-card-page>

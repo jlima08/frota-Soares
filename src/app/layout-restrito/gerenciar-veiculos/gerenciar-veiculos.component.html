@@ -79,7 +79,9 @@
                 inputId="kmUltimaTroca"
                 [(ngModel)]="veiculo.kmUltimaTrocaOleo"
                 name="kmUltimaTrocaOleo"
-                [useGrouping]="false">
+                [useGrouping]="false"
+                locale="pt-BR"
+                suffix=" km">
                 </p-inputnumber>
                 <label for="kmUltimaTroca">
                 KM da última troca de óleo
@@ -94,7 +96,9 @@
                 inputId="kmProximaTroca"
                 [(ngModel)]="veiculo.kmProximaTrocaOleo"
                 name="kmProximaTrocaOleo"
-                [useGrouping]="false">
+                [useGrouping]="false"
+                locale="pt-BR"
+    suffix=" km">
                 </p-inputnumber>
                 <label for="kmProximaTroca">
                 KM da próxima troca de óleo
