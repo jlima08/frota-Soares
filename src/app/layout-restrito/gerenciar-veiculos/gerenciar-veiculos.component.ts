@@ -359,7 +359,10 @@ resetFormulario() {
     placa: '',
     cor: '',
     status: 'Ativo',
-    tipo: 'Carro'
+    tipo: 'Carro',
+    kmAtual: undefined,
+    kmProximaTrocaOleo: undefined,
+    kmUltimaTrocaOleo: undefined
   };
 
   this.editando = false;

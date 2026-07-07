@@ -89,15 +89,10 @@ export class ManutencaoVeiculosComponent {
   manutencao: Partial<Manutencao> = {
 
     tipo: '',
-
     km: undefined,
-
     servicoRealizado: '',
-
     produtosUtilizados: '',
-
     oficina: '',
-
     valor: undefined
 
   };
@@ -134,7 +129,6 @@ export class ManutencaoVeiculosComponent {
       this.messageService.add({
 
         severity: 'warn',
-
         summary: 'Preencha os campos obrigatórios'
 
       });
@@ -184,17 +178,11 @@ export class ManutencaoVeiculosComponent {
       // Atualiza automaticamente o KM do óleo
       if (this.manutencao.tipo === 'Troca de óleo') {
 
-        await this.veiculoService.atualizar(
+        await this.veiculoService.atualizar(this.veiculo.id!, {
 
-          this.veiculo.id!,
+            kmUltimaTrocaOleo:this.manutencao.km,
 
-          {
-
-            kmUltimaTrocaOleo:
-              this.manutencao.km,
-
-            kmProximaTrocaOleo:
-              Number(this.manutencao.km) + 10000
+            kmProximaTrocaOleo: Number(this.manutencao.km) + 10000
 
           }
 
@@ -203,37 +191,24 @@ export class ManutencaoVeiculosComponent {
       }
 
       this.messageService.add({
-
         severity: 'success',
-
         summary: 'Manutenção registrada'
-
       });
 
       this.manutencao = {
 
         tipo: '',
-
         km: undefined,
-
         servicoRealizado: '',
-
         produtosUtilizados: '',
-
         oficina: '',
-
         valor: 0
-
       };
 
     }
-
     finally {
-
       this.loading = false;
-
     }
-
   }
 
 }

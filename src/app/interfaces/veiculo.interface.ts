@@ -7,6 +7,7 @@ export interface Veiculo {
   status: 'Ativo' | 'Em uso' | 'Inativo';
   tipo: 'Carro' | 'Moto';
   foto?:string
+  kmAtual?: number;
   kmUltimaTrocaOleo?: number;
   kmProximaTrocaOleo?: number;
 }

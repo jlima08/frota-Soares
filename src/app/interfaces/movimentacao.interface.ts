@@ -11,6 +11,7 @@ export interface Movimentacao {
   dataDevolucao?: string | null;
   status: 'Em uso' | 'Finalizado';
   kmRetirada?: number;
+  kmDevolucao?: number;
   tipo: 'Carro' | 'Moto';
   fotosRetirada?: {
   painel?: string;

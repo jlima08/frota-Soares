@@ -33,7 +33,7 @@
             </div>
             <div>
                 <p-floatlabel>
-                    <input pInputText id="over_label" autocomplete="off" [(ngModel)]="veiculo.placa" name="placa" maxlength="7" />
+                    <input class="uppercase" pInputText id="over_label" autocomplete="off" [(ngModel)]="veiculo.placa" name="placa" maxlength="7" />
                     <label for="over_label">Placa</label>
                 </p-floatlabel>
             </div>
@@ -77,9 +77,25 @@
                 <p-inputnumber
                 class="w-full"
                 inputId="kmUltimaTroca"
+                [(ngModel)]="veiculo.kmAtual"
+                name="kmAtual"
+                [useGrouping]="true"
+                locale="pt-BR"
+                suffix=" km">
+                </p-inputnumber>
+                <label for="kmAtual">
+                KM atual
+                </label>
+            </p-floatlabel>
+            </div>
+            <div>
+            <p-floatlabel>
+                <p-inputnumber
+                class="w-full"
+                inputId="kmUltimaTroca"
                 [(ngModel)]="veiculo.kmUltimaTrocaOleo"
                 name="kmUltimaTrocaOleo"
-                [useGrouping]="false"
+                [useGrouping]="true"
                 locale="pt-BR"
                 suffix=" km">
                 </p-inputnumber>
@@ -96,9 +112,9 @@
                 inputId="kmProximaTroca"
                 [(ngModel)]="veiculo.kmProximaTrocaOleo"
                 name="kmProximaTrocaOleo"
-                [useGrouping]="false"
+                [useGrouping]="true"
                 locale="pt-BR"
-    suffix=" km">
+                 suffix=" km">
                 </p-inputnumber>
                 <label for="kmProximaTroca">
                 KM da próxima troca de óleo

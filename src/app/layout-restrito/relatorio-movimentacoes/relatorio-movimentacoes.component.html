@@ -332,6 +332,18 @@
         placeholder="Descreva avarias, combustível, quilometragem...">
       </textarea>
     </div>
+    <div class="flex flex-col gap-2">
+      <label class="font-bold">
+        KM da devolução
+      </label>
+      <p-inputNumber
+      inputId="kmDevolucao"
+      [(ngModel)]="kmDevolucao"
+      [useGrouping]="true"
+      locale="pt-BR"
+      suffix=" km">
+    </p-inputNumber>
+    </div>
 
     <!-- PAINEL -->
     <div class="flex flex-col gap-2">
@@ -530,13 +542,13 @@
           KM do abastecimento
         </label>
         <p-inputNumber
-      inputId="kmAbastecimento"
-      [(ngModel)]="kmAbastecimento"
-      [useGrouping]="true"
-      locale="pt-BR"
-      suffix=" km"
-      [min]="movimentacaoAbastecimento?.kmRetirada">
-  </p-inputNumber>
+            inputId="kmAbastecimento"
+            [(ngModel)]="kmAbastecimento"
+            [useGrouping]="true"
+            locale="pt-BR"
+            suffix=" km"
+            [min]="movimentacaoAbastecimento?.kmRetirada">
+        </p-inputNumber>
       </div>
       <div class="flex flex-col">
         <label for="">Valor</label>
@@ -802,6 +814,10 @@
         <p>
           <strong>KM na retirada: </strong>
           {{ mov.kmRetirada | number:'1.0-0' }}
+        </p>
+        <p>
+          <strong>KM na devolução: </strong>
+          {{ mov.kmDevolucao | number:'1.0-0' }}
         </p>
         <div class="">
           <strong>Data e KM do último abasteciemento:</strong>

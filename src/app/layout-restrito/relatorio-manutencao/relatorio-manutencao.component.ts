@@ -78,11 +78,17 @@ oficinas = [
   },
 
   {
-    label: 'Outras',
-    value: 'Outras'
+    label: 'Oficina interna',
+    value: 'Oficina interna'
   }
 
 ];
+veiculoSelecionado = '';
+
+veiculos: {
+  label: string;
+  value: string;
+}[] = [];
 
   filtros = false
   filtrosCards = false
@@ -125,6 +131,7 @@ manutencoesPaginadas: Manutencao[] = [];
         this.manutencoes = resposta;
 
         this.manutencoesFiltradas = [...resposta];
+        this.carregarVeiculos();
 
         this.calcularIndicadores();
         this.atualizarPaginacao();
@@ -141,6 +148,26 @@ manutencoesPaginadas: Manutencao[] = [];
       this.first,
       this.first + this.rows
     );
+
+}
+
+carregarVeiculos() {
+
+  const lista = this.manutencoes.map(m => ({
+    value: m.veiculoId,
+    label: `${m.modelo} - ${m.placa.toUpperCase()}`
+  }));
+
+  this.veiculos = [
+    {
+      label: 'Todos',
+      value: ''
+    },
+    ...lista.filter(
+      (item, index, self) =>
+        index === self.findIndex(v => v.value === item.value)
+    )
+  ];
 
 }
 
@@ -211,32 +238,23 @@ manutencoesPaginadas: Manutencao[] = [];
       const data = new Date(m.data);
 
       if (this.dataInicio) {
-
         const inicio = new Date(this.dataInicio);
-
         inicio.setHours(0, 0, 0, 0);
-
         if (data < inicio) {
-
           return false;
-
         }
-
       }
 
       if (this.dataFim) {
-
         const fim = new Date(this.dataFim);
-
         fim.setHours(23, 59, 59, 999);
-
         if (data > fim) {
-
           return false;
-
         }
-
       }
+       if (this.veiculoSelecionado && m.veiculoId !== this.veiculoSelecionado) {
+        return false;
+    }
 
       return true;
 
@@ -289,7 +307,11 @@ manutencoesPaginadas: Manutencao[] = [];
 
         !this.oficinaSelecionada ||
 
-        m.oficina === this.oficinaSelecionada;
+         (
+          this.oficinaSelecionada === 'Oficina interna'
+            ? m.oficina === 'Oficina interna'
+            : m.oficina !== 'Oficina interna'
+        );
 
       return pesquisaOk && tipoOk && oficinaOk;
 
@@ -302,6 +324,7 @@ this.atualizarPaginacao();
 limparFiltrosCards() {
 
   this.pesquisa = '';
+  this.veiculoSelecionado = '';
 
   this.tipoSelecionado = '';
 

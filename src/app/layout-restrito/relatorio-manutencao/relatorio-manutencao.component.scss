@@ -59,6 +59,8 @@
     transition: all .35s ease;
     width: 100%;
     display: flex;
+    align-items: end;
+    gap: 10px;
 }
 
 .filtros-fechado {
@@ -85,12 +87,16 @@ p-floatlabel{
     }
 }
 .gastos{
-    padding: 10px;
+    padding: 0px;
 }
 
 @media screen and (max-width: 480px) {
     .filtros{
         flex-direction: column;
         gap: 10px;
+        align-items: start;
+    }
+    .card-mov{
+        width: 100% !important;
     }
 }

@@ -116,6 +116,7 @@ export class RelatorioMovimentacoesComponent {
 
   showFiltrosAvancados = false;
   loading = false;
+  kmDevolucao?: number;
 
   modalDetalhesAbastecimento = false;
   abastecimentoSelecionado?: Movimentacao;
@@ -251,6 +252,7 @@ export class RelatorioMovimentacoesComponent {
 
   abrirDialogDevolucao(mov: Movimentacao) {
     this.movimentacaoDevolucao = mov;
+    this.kmDevolucao = undefined
     this.modalDevolucao = true;
   }
 
@@ -307,6 +309,34 @@ export class RelatorioMovimentacoesComponent {
       this.loading = false;
       return;
     }
+    if (!this.movimentacaoDevolucao) {
+  this.loading = false;
+  return;
+}
+
+if (this.kmDevolucao == null) {
+
+  this.messageService.add({
+    severity: 'error',
+    summary: 'KM obrigatório',
+    detail: 'Informe o KM da devolução.'
+  });
+
+  this.loading = false;
+  return;
+}
+
+if (this.kmDevolucao < this.movimentacaoDevolucao.kmRetirada!) {
+
+  this.messageService.add({
+    severity: 'error',
+    summary: 'KM inválido',
+    detail: 'O KM da devolução não pode ser menor que o KM da retirada.'
+  });
+
+  this.loading = false;
+  return;
+}
 
     Promise.all([
       this.movimentacaoService.uploadImagem(this.fotoPainelDevolucao),
@@ -330,6 +360,7 @@ export class RelatorioMovimentacoesComponent {
               status: 'Finalizado',
               dataDevolucao: new Date().toISOString(),
               observacaoDevolucao: this.observacaoDevolucao,
+               kmDevolucao: this.kmDevolucao,
               fotosDevolucao: {
                 painel: urlPainel,
                 frente: urlFrente,
@@ -347,6 +378,7 @@ export class RelatorioMovimentacoesComponent {
           this.movimentacaoDevolucao!.veiculoId!,
           {
             status: 'Ativo',
+            kmAtual: this.kmDevolucao
           },
         );
       })
@@ -516,6 +548,7 @@ export class RelatorioMovimentacoesComponent {
 
     return this.movimentacoes.slice(inicio, fim);
   }
+
   trocarPagina(event: any) {
     this.paginaAtual = event.page;
   }

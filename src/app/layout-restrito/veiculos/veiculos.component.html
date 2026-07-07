@@ -167,6 +167,10 @@
                 Ano: <b>{{ carro.ano }}</b>, Cor do veiculo: <b>{{ carro.cor }}</b>
             </p>
 
+            <p>
+                KM atual: <strong> {{ carro.kmAtual | number:'1.0-0' }} km </strong>
+            </p>
+
             <p class="kms">
                 KM da última troca de óleo: <strong>{{ carro.kmUltimaTrocaOleo | number:'1.0-0' }} km</strong><br>
                 Km da proxima troca de óleo: <strong>{{ carro.kmProximaTrocaOleo | number:'1.0-0' }} km</strong>
