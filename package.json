@@ -23,6 +23,7 @@
     "@tailwindcss/postcss": "^4.2.2",
     "browser-image-compression": "^2.0.2",
     "chart.js": "^4.5.1",
+    "file-saver": "^2.0.5",
     "firebase": "^11.10.0",
     "postcss": "^8.5.8",
     "primeicons": "^7.0.0",
@@ -30,6 +31,7 @@
     "rxjs": "~7.8.0",
     "tailwindcss": "^4.2.2",
     "tslib": "^2.3.0",
+    "xlsx": "^0.18.5",
     "zone.js": "~0.15.0"
   },
   "devDependencies": {

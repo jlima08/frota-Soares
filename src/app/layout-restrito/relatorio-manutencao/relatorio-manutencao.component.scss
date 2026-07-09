@@ -44,7 +44,7 @@
     }
 }
 .btn-filtro{
-    padding: 8px;
+    margin-top: 20px;
 }
 .filtroCards{
     display: flex;
@@ -85,6 +85,10 @@ p-floatlabel{
     input{
         width: 100%;
     }
+}
+p-accordion-panel{
+    margin-top: 10px;
+    box-shadow: 1px 1px 4px 1px #e7e7e7;
 }
 .gastos{
     padding: 0px;

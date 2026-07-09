@@ -11,6 +11,7 @@ import { InputTextModule } from 'primeng/inputtext';
 import { SelectModule } from 'primeng/select';
 
 import { Movimentacao } from '../../../interfaces/movimentacao.interface';
+import * as XLSX from 'xlsx';
 
 @Component({
   selector: 'app-gastos-combustivel',
@@ -185,4 +186,68 @@ export class GastosCombustivelComponent implements OnChanges {
       this.precoMedioLitro = this.totalGasto / this.totalLitros;
     }
   }
+
+
+exportarExcelGasolina(): void {
+
+  // Resumo dos cards
+  const resumo = [
+    { Indicador: 'Total gasto com combustível', Valor: this.totalGasto },
+    { Indicador: 'Gasto com carros', Valor: this.totalCarros },
+    { Indicador: 'Gasto com motos', Valor: this.totalMotos },
+    { Indicador: 'Quantidade de abastecimentos', Valor: this.quantidadeAbastecimentos },
+    { Indicador: 'Total de litros abastecidos', Valor: this.totalLitros },
+    { Indicador: 'Média R$/Litro', Valor: this.precoMedioLitro.toFixed(2) }
+  ];
+
+  // Lista de abastecimentos
+  const abastecimentos = this.movimentacoesFiltradas
+    .filter(m => m.abastecimento?.houveAbastecimento)
+    .map(m => ({
+
+      Data: new Date(m.abastecimento!.data!).toLocaleDateString('pt-BR'),
+      Modelo: m.modelo,
+      Placa: m.placa.toUpperCase(),
+      Veículo: m.tipo,
+      Motorista: m.motoristaNome,
+      KM: m.abastecimento!.km,
+      Litros: m.abastecimento!.litrosAbastecido,
+      Valor: m.abastecimento!.valorAbastecido,
+
+      'Preço/Litro':
+        (
+          Number(m.abastecimento!.valorAbastecido) /
+          Number(m.abastecimento!.litrosAbastecido)
+        ).toFixed(2)
+
+    }));
+
+
+  const workbook = XLSX.utils.book_new();
+
+  // Aba Resumo
+  const wsResumo = XLSX.utils.json_to_sheet(resumo);
+
+  // Aba Abastecimentos
+  const wsAbastecimentos =
+    XLSX.utils.json_to_sheet(abastecimentos);
+
+  XLSX.utils.book_append_sheet(
+    workbook,
+    wsResumo,
+    'Resumo'
+  );
+
+  XLSX.utils.book_append_sheet(
+    workbook,
+    wsAbastecimentos,
+    'Abastecimentos'
+  );
+
+  XLSX.writeFile(
+    workbook,
+    `relatorio-abastecimentos-${new Date().toLocaleDateString('pt-BR').replace(/\//g, '-')}.xlsx`
+  );
+
+}
 }

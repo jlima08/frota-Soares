@@ -1,6 +1,12 @@
 <p-accordion value="">
   <p-accordion-panel value="0">
-    <p-accordion-header> Informações de abastecimento </p-accordion-header>
+    <p-accordion-header>
+            <span>
+                <i class="pi pi-wallet"></i>
+                Gastos de abastecimento
+
+            </span>
+        </p-accordion-header>
 
     <p-accordion-content>
       <div class="btn-filtro flex justify-end">
@@ -217,6 +223,15 @@
             <i class="pi pi-dollar text-5xl text-green-500"></i>
           </div>
         </p-card>
+        <div></div>
+        <p-button
+        raised="true"
+        size="small"
+          label="Exportar Excel"
+          icon="pi pi-file-excel"
+          severity="success"
+          (onClick)="exportarExcelGasolina()">
+      </p-button>
       </div>
     </p-accordion-content>
   </p-accordion-panel>
