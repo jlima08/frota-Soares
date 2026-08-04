@@ -116,6 +116,7 @@ export class RelatorioManutencaoComponent {
   totalOleo = 0;
   totalPneus = 0;
   totalOutros = 0;
+  totalTerceirizados = 0;
 
   quantidadeManutencoes = 0;
   quantidadeCarros = 0;
@@ -167,6 +168,7 @@ export class RelatorioManutencaoComponent {
     this.totalOleo = 0;
     this.totalPneus = 0;
     this.totalOutros = 0;
+    this.totalTerceirizados = 0;
 
     this.quantidadeManutencoes = 0;
     this.quantidadeCarros = 0;
@@ -203,6 +205,10 @@ export class RelatorioManutencaoComponent {
         default:
           this.totalOutros += valor;
       }
+       // Total de serviços terceirizados
+    if (m.oficina !== 'Oficina interna') {
+      this.totalTerceirizados += valor;
+    }
     });
   }
 
@@ -270,6 +276,7 @@ export class RelatorioManutencaoComponent {
     this.first = 0;
 
     this.atualizarPaginacao();
+    this.calcularIndicadores();
   }
   limparFiltrosCards() {
     this.pesquisa = '';
@@ -283,6 +290,7 @@ export class RelatorioManutencaoComponent {
     this.first = 0;
 
     this.atualizarPaginacao();
+    this.calcularIndicadores();
   }
   onPageChange(event: any) {
     this.first = event.first;
@@ -291,6 +299,7 @@ export class RelatorioManutencaoComponent {
 
     this.atualizarPaginacao();
   }
+
   exportarExcel() {
     const dados = this.manutencoesFiltradas.map((m) => ({
       Data: new Date(m.data).toLocaleDateString('pt-BR'),
